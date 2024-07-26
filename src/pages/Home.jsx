@@ -2,38 +2,48 @@ import React from "react";
 import HomeNav from "./HomeNav";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import NaverMap from "./NaverMap";
 
 const Home = () => {
   const navigate = useNavigate();
 
-  const handleDiagnosis = () => {
-    navigate("/diagnosis");
+  const handleCurrentLocation = () => {
+    navigate("/");
+  };
+
+  const handleReport = () => {
+    navigate("/");
+  };
+
+  const handelMypage = () => {
+    navigate("/");
   };
 
   return (
-    <>
+    <Container>
       <HomeNav></HomeNav>
-      <DiagnosisContainer>
-        <Left>
-          <ExplanBox>
-            바쁜 현대 사회에서 번아웃을 느끼는 당신, 우울증과 불안감을 안고 살아
-            가는 당신, 웰니스 여행지 처방 받고 웰니스 여행 떠나보세요~
-          </ExplanBox>
-          <DiagnosisBtn onClick={handleDiagnosis}>버튼</DiagnosisBtn>
-        </Left>
-        <Rigth>사진</Rigth>
-      </DiagnosisContainer>
+      {/* 이 위치에 지도를 불러옵니다. */}
+      <NaverMap></NaverMap>
+      <BtnContainer>
+        <Btn onClick={handleCurrentLocation}>현위치</Btn>
+        <Btn onClick={handleReport}>제보하기</Btn>
+        <Btn onClick={handelMypage}>마이페이지</Btn>
+      </BtnContainer>
       <Nav>
         <NavItem></NavItem>
         <NavItem></NavItem>
         <NavItem></NavItem>
         <NavItem></NavItem>
       </Nav>
-    </>
+    </Container >
   );
 };
 
 export default Home;
+
+const Container = styled.div`
+  justify-content: center;
+`;
 
 const DiagnosisContainer = styled.div`
   margin-top: 1.8rem;
@@ -61,11 +71,16 @@ const ExplanBox = styled.div`
   width: 15rem;
 `;
 
-const DiagnosisBtn = styled.div`
+const BtnContainer = styled.div`
+  display: flex;
+  justify-content: space-around
+`;
+
+const Btn = styled.div`
   padding: 0.5rem 1.5rem;
   margin-top: 0.5rem;
   border-radius: 0.5rem;
-  background-color: gray;
+  background-color: white;
   cursor: pointer;
 `;
 
