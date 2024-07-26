@@ -7,9 +7,11 @@ import Home from "./pages/Home";
 function App() {
   return (
     <AppDom>
-      <Routes>
-        <Route path="/" element={<Home></Home>}></Route>
-      </Routes>
+      <AppBox>
+        <Routes>
+          <Route path="/" element={<Home></Home>}></Route>
+        </Routes>
+      </AppBox>
     </AppDom>
   );
 }
@@ -23,4 +25,8 @@ const AppDom = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: 2rem;
+`;
+
+const AppBox = styled.div`
+  width: 80%;
 `;

@@ -11,31 +11,18 @@ const HomeNav = () => {
     navigate("/login");
   };
 
-  // 처방화명으로 이동
-  const handlePrescription = () => {
-    navigate("/form");
-  };
+  const REST_API_KEY = "ea433a9cc57e376f3ef82abbd8076b67";
+  const REDIRECT_URI = "http://localhost:3000/oauth";
+  const link = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
-  const handleSearch = () => {
-    navigate("/search");
-  };
-
-  const handleHome = () => {
-    navigate("/");
-  };
-
-  const handleReview = () => {
-    navigate("/review");
-  };
-
-  const handleStamp = () => {
-    navigate("/stamp");
+  const loginHandler = () => {
+    window.location.href = link;
   };
 
   return (
     <Container>
       <LoginContainer>
-        <LoginBtn onClick={handleLogin}>로그인</LoginBtn>
+        <LoginBtn onClick={loginHandler}>로그인</LoginBtn>
       </LoginContainer>
       <HomeContainer>
         <LogoContainer>
@@ -43,13 +30,7 @@ const HomeNav = () => {
           Well-Scription
           <EmptyContainer></EmptyContainer>
         </LogoContainer>
-        <Navbar>
-          <NavItem onClick={handlePrescription}>여행 처방전</NavItem>
-          <NavItem onClick={handleSearch}>여행지 검색</NavItem>
-          <NavItem onClick={handleHome}>홈</NavItem>
-          <NavItem onClick={handleReview}>후기 작성</NavItem>
-          <NavItem onClick={handleStamp}>스탬프 현황</NavItem>
-        </Navbar>
+        <Navbar></Navbar>
       </HomeContainer>
     </Container>
   );
@@ -57,9 +38,7 @@ const HomeNav = () => {
 
 export default HomeNav;
 
-const Container = styled.div`
-  width: 80%;
-`;
+const Container = styled.div``;
 
 const HomeContainer = styled.div`
   display: flex;
@@ -114,4 +93,5 @@ const Navbar = styled.nav`
 
 const NavItem = styled.nav`
   width: 100%;
+  cursor: pointer;
 `;
