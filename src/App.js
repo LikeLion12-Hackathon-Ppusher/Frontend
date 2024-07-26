@@ -1,17 +1,18 @@
-import logo from "./logo.svg";
-import { Route, Routes } from "react-router-dom";
-import HomeNav from "./pages/HomeNav";
+import "./App.css";
 import styled from "styled-components";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import Login from "./pages/Login";
 import Home from "./pages/Home";
 
 function App() {
   return (
     <AppDom>
-      <AppBox>
-        <Routes>
-          <Route path="/" element={<Home></Home>}></Route>
-        </Routes>
-      </AppBox>
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" />} />{" "}
+        {/* 초기 경로를 /main으로 리다이렉트 */}
+        <Route path="/login" element={<Login></Login>}></Route>
+        <Route path="/home" element={<Home></Home>}></Route>
+      </Routes>
     </AppDom>
   );
 }
@@ -19,14 +20,11 @@ function App() {
 export default App;
 
 const AppDom = styled.div`
+  width: 600px;
+  height: 100vh;
+  margin: 0 auto;
+  background-color: gray;
   display: flex;
-  width: 100%;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 2rem;
-`;
-
-const AppBox = styled.div`
-  width: 80%;
 `;
