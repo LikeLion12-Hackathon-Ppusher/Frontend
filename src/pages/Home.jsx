@@ -1,40 +1,41 @@
-import React from "react";
+import React, { useState } from "react";
 import HomeNav from "./HomeNav";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import NaverMap from "./NaverMap";
-import KakaoMap from "./KakaoMap";
+import { Outlet, useNavigate } from "react-router-dom";
 
 const Home = () => {
   const navigate = useNavigate();
 
+  const [showNav, setShowNav] = useState(true);
+
   const handleCurrentLocation = () => {
+    setShowNav(true);
     navigate("/");
   };
 
   const handleReport = () => {
+    setShowNav(true);
     navigate("/");
   };
 
-  const handelMypage = () => {
-    navigate("/");
+  const handleMypage = () => {
+    setShowNav(false);
+    navigate("/home/mypage");
   };
 
   const handleMyMap = () => {
-    navigate("/kakao");
+    setShowNav(true);
+    navigate("/home/kakao");
   };
 
   return (
     <Container>
-      <HomeNav></HomeNav>
-      {/* 지도를 화면에 가득 채우자 */}
-      <MapContainer>
-        <KakaoMap></KakaoMap>
-      </MapContainer>
+      {showNav && <HomeNav />} {/* Conditional rendering */}
+      <Outlet /> {/* Nested routing */}
       <BtnContainer>
         <Btn onClick={handleCurrentLocation}>현위치</Btn>
         <Btn onClick={handleReport}>제보하기</Btn>
-        <Btn onClick={handelMypage}>마이페이지</Btn>
+        <Btn onClick={handleMypage}>마이페이지</Btn>
         <Btn onClick={handleMyMap}>카카오 지도보기</Btn>
       </BtnContainer>
       <Nav>
@@ -43,7 +44,7 @@ const Home = () => {
         <NavItem></NavItem>
         <NavItem></NavItem>
       </Nav>
-    </Container >
+    </Container>
   );
 };
 
@@ -54,18 +55,18 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 100%;
-  height: 100%
-`;
-
-const MapContainer = styled.div`
-  width: 100%;
-  height: 100vh;
+  height: 100%;
+  position: relative; /* Added */
 `;
 
 const BtnContainer = styled.div`
   display: flex;
   justify-content: space-evenly;
-  margin-bottom: 0.5rem;
+  padding: 0.5rem 0;
+  position: absolute; /* Added */
+  bottom: 0; /* Added */
+  width: 100%; /* Added */
+  background-color: white; /* Optional: Ensure it covers content beneath */
 `;
 
 const Btn = styled.div`

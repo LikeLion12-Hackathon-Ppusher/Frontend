@@ -41,7 +41,7 @@ const Redirection = () => {
       }
     };
 
-    fnGetKakaoOauthToken(); // Don't forget to call the function
+    fnGetKakaoOauthToken();
   }, [navigate, code]);
 
   return <div>로그인 중입니다.</div>;

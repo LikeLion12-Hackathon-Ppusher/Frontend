@@ -61,7 +61,6 @@ const KakaoMap = () => {
         style={{
           width: '100%',
           height: 'calc(100vh - 200px)',
-          marginTop: '48px',
           cursor: isReporting ? `url(${markerIcon}), auto` : 'default',
         }}
         level={3}
