@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
+
 const NaverMap = () => {
   const mapRef = useRef(null); // 지도를 표시할 DOM 요소의 참조
 
@@ -60,6 +61,6 @@ const NaverMap = () => {
 export default NaverMap;
 
 const MapContainer = styled.div`
-  width: 500px;
-  height: 500px;
+  width: 100%;
+  height: 100%;
 `;

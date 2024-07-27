@@ -1,18 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import LogoImgPng from "../logo.png";
+import LogoImgPng from '../assets/logo.png';
 
 const HomeNav = () => {
   const navigate = useNavigate();
 
-  // 로그인 화면으로 이동
-  const handleLogin = () => {
-    navigate("/login");
-  };
-
-  const REST_API_KEY = "ea433a9cc57e376f3ef82abbd8076b67";
-  const REDIRECT_URI = "http://localhost:3000/oauth";
+  const REST_API_KEY = process.env.REACT_APP_REST_API_KEY;
+  const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URL
   const link = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
   const loginHandler = () => {
@@ -21,16 +16,20 @@ const HomeNav = () => {
 
   return (
     <Container>
-      <LoginContainer>
-        <LoginBtn onClick={loginHandler}>로그인</LoginBtn>
-      </LoginContainer>
+      <AppBar>
+        <div>시간</div>
+        <div>샘플 로고</div>
+        <div>배터리</div>
+        {/* <LoginBtn onClick={loginHandler}>로그인</LoginBtn> */}
+      </AppBar>
       <HomeContainer>
         <LogoContainer>
-          <LogoImg src={LogoImgPng} alt="LogoImg"></LogoImg>
-          Well-Scription
+          <EmptyContainer></EmptyContainer>
+          제보 흡연구역
+          <EmptyContainer></EmptyContainer>
+          상습 흡연 제보구역
           <EmptyContainer></EmptyContainer>
         </LogoContainer>
-        <Navbar></Navbar>
       </HomeContainer>
     </Container>
   );
@@ -45,12 +44,18 @@ const HomeContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-left: 1.0rem;
+  margin-right: 1.0rem;
+  margin-bottom: 0.5rem;
 `;
 
-const LoginContainer = styled.div`
+const AppBar = styled.div`
   display: flex;
-  justify-content: end;
+  justify-content: space-between;
   align-items: center;
+  margin-top: 0.5rem;
+  margin-left: 1.0rem;
+  margin-right: 1.0rem;
 `;
 
 const LoginBtn = styled.div`
@@ -58,14 +63,17 @@ const LoginBtn = styled.div`
 `;
 
 const LogoContainer = styled.div`
-  height: 8.5rem;
+  height: 2.5rem;
   width: 100%;
-  margin-top: 0.3rem;
+  margin-top: 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   text-align: center;
-  background-color: #02d26b;
+  background-color: white;
+  border: 1px solid;
+  border-color: black;
+  border-radius: 6px;
 `;
 
 const LogoImg = styled.img`

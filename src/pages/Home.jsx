@@ -22,8 +22,10 @@ const Home = () => {
   return (
     <Container>
       <HomeNav></HomeNav>
-      {/* 이 위치에 지도를 불러옵니다. */}
-      <NaverMap></NaverMap>
+      {/* 지도를 화면에 가득 채우자 */}
+      <MapContainer>
+        <NaverMap />
+      </MapContainer>
       <BtnContainer>
         <Btn onClick={handleCurrentLocation}>현위치</Btn>
         <Btn onClick={handleReport}>제보하기</Btn>
@@ -42,38 +44,22 @@ const Home = () => {
 export default Home;
 
 const Container = styled.div`
-  justify-content: center;
-`;
-
-const DiagnosisContainer = styled.div`
-  margin-top: 1.8rem;
-  background-color: #02d26b;
-  height: 12rem;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-`;
-
-const Left = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  width: 100%;
+  height: 100%
 `;
 
-const Rigth = styled.div`
-  width: 150px;
-  height: 150px;
-  background-color: wheat;
-`;
-
-const ExplanBox = styled.div`
-  width: 15rem;
+const MapContainer = styled.div`
+  width: 100%;
+  height: 100vh;
 `;
 
 const BtnContainer = styled.div`
   display: flex;
-  justify-content: space-around
+  justify-content: space-evenly;
+  margin-bottom: 0.5rem;
 `;
 
 const Btn = styled.div`
