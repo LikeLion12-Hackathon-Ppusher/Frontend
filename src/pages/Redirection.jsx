@@ -3,24 +3,48 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Redirection = () => {
-    const code = window.location.search;
-    // 아래는 oauth?code=뒷 부분만 가져올 때 코드
-    // const code = new URL(window.location.href).searchParams.get("code");
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const code = new URLSearchParams(window.location.search).get("code");
 
-    useEffect(() => {
-        console.log(process.env.REACT_APP_URL);
+  useEffect(() => {
+    console.log(process.env.REACT_APP_URL);
 
-        axios.post(`https://kauth.kakao.com/oauth/token?${code}`).then((r) => {
-            console.log(r.data);
-
-            // 나중에 토큰을 받아서 localStorage같은 곳에 저장하는 코드를 여기에 씀
-            localStorage.setItem('name', r.data.user_name); // 일단 이름만 저장
-            navigate('/home');
+    const fnGetKakaoOauthToken = async () => {
+      const makeFormData = (params) => {
+        const searchParams = new URLSearchParams();
+        Object.keys(params).forEach(key => {
+          searchParams.append(key, params[key]);
         });
-    }, []);
+        return searchParams;
+      };
 
-    return <div>로그인 중입니다.</div>;
+      try {
+        const res = await axios({
+          method: 'POST',
+          headers: {
+            'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+          },
+          url: 'https://kauth.kakao.com/oauth/token',
+          data: makeFormData({
+            grant_type: 'authorization_code',
+            client_id: process.env.REACT_APP_REST_API_KEY,
+            redirect_uri: process.env.REACT_APP_REDIRECT_URL,
+            code
+          })
+        });
+
+        // localStorage에 accessToken 저장
+        localStorage.setItem('kakaoAccessToken', res.data.access_token);
+        navigate('/home');
+      } catch (err) {
+        console.warn(err);
+      }
+    };
+
+    fnGetKakaoOauthToken(); // Don't forget to call the function
+  }, [navigate, code]);
+
+  return <div>로그인 중입니다.</div>;
 };
 
 export default Redirection;

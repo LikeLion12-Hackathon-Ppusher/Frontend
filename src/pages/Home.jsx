@@ -3,6 +3,7 @@ import HomeNav from "./HomeNav";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import NaverMap from "./NaverMap";
+import KakaoMap from "./KakaoMap";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -19,17 +20,22 @@ const Home = () => {
     navigate("/");
   };
 
+  const handleMyMap = () => {
+    navigate("/kakao");
+  };
+
   return (
     <Container>
       <HomeNav></HomeNav>
       {/* 지도를 화면에 가득 채우자 */}
       <MapContainer>
-        <NaverMap />
+        <KakaoMap></KakaoMap>
       </MapContainer>
       <BtnContainer>
         <Btn onClick={handleCurrentLocation}>현위치</Btn>
         <Btn onClick={handleReport}>제보하기</Btn>
         <Btn onClick={handelMypage}>마이페이지</Btn>
+        <Btn onClick={handleMyMap}>카카오 지도보기</Btn>
       </BtnContainer>
       <Nav>
         <NavItem></NavItem>
