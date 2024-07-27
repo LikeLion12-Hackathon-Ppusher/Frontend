@@ -10,7 +10,7 @@ const Home = () => {
 
   const handleCurrentLocation = () => {
     setShowNav(true);
-    navigate("/");
+    navigate("/home/kakao");
   };
 
   const handleReport = () => {
@@ -23,11 +23,6 @@ const Home = () => {
     navigate("/home/mypage");
   };
 
-  const handleMyMap = () => {
-    setShowNav(true);
-    navigate("/home/kakao");
-  };
-
   return (
     <Container>
       {showNav && <HomeNav />} {/* Conditional rendering */}
@@ -36,7 +31,6 @@ const Home = () => {
         <Btn onClick={handleCurrentLocation}>현위치</Btn>
         <Btn onClick={handleReport}>제보하기</Btn>
         <Btn onClick={handleMypage}>마이페이지</Btn>
-        <Btn onClick={handleMyMap}>카카오 지도보기</Btn>
       </BtnContainer>
       <Nav>
         <NavItem></NavItem>
