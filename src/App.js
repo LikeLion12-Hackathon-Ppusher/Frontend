@@ -1,6 +1,6 @@
 import "./App.css";
 import styled from "styled-components";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Map from "./pages/Map";
