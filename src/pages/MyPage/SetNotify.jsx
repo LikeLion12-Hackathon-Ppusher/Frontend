@@ -12,6 +12,11 @@ const SetNotify = () => {
   return (
     <AccountContainer>
       <h2>알림설정</h2>
+      <div>
+        <div>알림사용</div>
+        <button>on</button>
+        <button>off</button>
+      </div>
       <BackBtn onClick={handleBack}>뒤로가기</BackBtn>
     </AccountContainer>
   );

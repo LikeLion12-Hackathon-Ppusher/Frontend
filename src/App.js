@@ -10,6 +10,7 @@ import Mypage from "./pages/MyPage/Mypage";
 import SelectSmoker from "./pages/SelectSmoker";
 import SelectNonSmoker from "./pages/SelectNonSmoker";
 import SetAccount from "./pages/MyPage/SetAccount";
+import SetType from "./pages/MyPage/SetType"
 import SetNotify from "./pages/MyPage/SetNotify";
 import SetReport from "./pages/MyPage/SetReport"
 
@@ -35,7 +36,7 @@ function App() {
           <Route path="/home/*" element={<Home></Home>}>
             <Route path="map" element={<Map></Map>}></Route>
             <Route path="mypage/*" element={<Mypage></Mypage>}></Route>
-            <Route path="select" element={<Select></Select>}></Route>
+            <Route path="type" element={<SetType></SetType>}></Route>
             <Route path="account" element={<SetAccount></SetAccount>}></Route>
             <Route path="notify" element={<SetNotify></SetNotify>}></Route>
             <Route path="report" element={<SetReport></SetReport>}></Route>

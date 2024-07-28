@@ -13,7 +13,7 @@ const Mypage = () => {
   };
 
   const handleUserType = () => {
-    navigate("/select");
+    navigate("/home/type");
   };
 
   const handleNotify = () => {
@@ -22,6 +22,11 @@ const Mypage = () => {
 
   const handleReport = () => {
     navigate("/home/report");
+  };
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/login");
   };
 
   return (
@@ -33,6 +38,7 @@ const Mypage = () => {
         <Outlet />
         <Btn onClick={handleNotify}>알림 설정</Btn>
         <Btn onClick={handleReport}>내 제보 내역</Btn>
+        <button onClick={handleLogout}>로그아웃</button>
       </MyPageBtnContainer>
     </MyPageContainer>
   );
@@ -74,4 +80,18 @@ const Btn = styled.button`
   border: 1px solid black;
   background-color: white;
   font-size: 18px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    background-color: #c0c0c0;
+    transform: scale(1.05);
+    outline: none; 
+  }
+
+  &.active {
+    background-color: gray;
+    transform: scale(1.05);
+  }
 `;
