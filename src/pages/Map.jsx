@@ -113,9 +113,21 @@ const Map = () => {
 
   // 새 마커를 지도에 추가하는 함수
   function createMarker(map, position, title, img) {
+    const smokeImageSrc =
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS69MQZEYC0jAcCQ4e3NXvcVeLR9e9rUbya7w&s";
+    const smokeImageSize = new kakao.maps.Size(24, 30); // 아이콘의 크기
+    const somkeImageOption = { offset: new kakao.maps.Point(12, 15) }; // 아이콘의 기준 위치 위의 아이콘의 크기에 따라 변동하자
+
+    const smokeMarkerImage = new kakao.maps.MarkerImage(
+      smokeImageSrc,
+      smokeImageSize,
+      somkeImageOption
+    );
+
     const marker = new kakao.maps.Marker({
       position,
       map,
+      image: smokeMarkerImage,
     });
 
     // 마커 클릭 시 마커 정보를 보여주는 이벤트 리스너 추가

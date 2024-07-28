@@ -1,13 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import LogoImgPng from '../assets/logo.png';
+import LogoImgPng from "../assets/logo.png";
 
 const HomeNav = () => {
   const navigate = useNavigate();
 
   const REST_API_KEY = process.env.REACT_APP_REST_API_KEY;
-  const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URL
+  const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URL;
   const link = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
   const loginHandler = () => {

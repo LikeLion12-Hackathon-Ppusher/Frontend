@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Map, MapMarker } from 'react-kakao-maps-sdk';
-import styled from 'styled-components';
-import markerIcon from '../assets/marker.png';
+import React, { useEffect, useState } from "react";
+import { Map, MapMarker } from "react-kakao-maps-sdk";
+import styled from "styled-components";
+import markerIcon from "../assets/marker.png";
 
 const KakaoMap = () => {
   const [state, setState] = useState({
@@ -35,12 +35,12 @@ const KakaoMap = () => {
             errMsg: err.message,
             isLoading: false,
           }));
-        },
+        }
       );
     } else {
       setState((prev) => ({
         ...prev,
-        errMsg: 'Geolocation을 사용할 수 없어요.',
+        errMsg: "Geolocation을 사용할 수 없어요.",
         isLoading: false,
       }));
     }
@@ -59,9 +59,9 @@ const KakaoMap = () => {
       <Map
         center={state.center}
         style={{
-          width: '100%',
-          height: 'calc(100vh - 200px)',
-          cursor: isReporting ? `url(${markerIcon}), auto` : 'default',
+          width: "100%",
+          height: "calc(100vh - 200px)",
+          cursor: isReporting ? `url(${markerIcon}), auto` : "default",
         }}
         level={3}
         onClick={handleMapClick}
@@ -69,7 +69,7 @@ const KakaoMap = () => {
         <MapMarker
           position={state.center}
           image={{
-            src: 'https://cdn-icons-png.flaticon.com/128/7124/7124723.png',
+            src: "https://cdn-icons-png.flaticon.com/128/7124/7124723.png",
             size: {
               width: 50,
               height: 50,
@@ -84,7 +84,7 @@ const KakaoMap = () => {
           />
         ))}
       </Map>
-      <div style={{ marginTop: '10px', textAlign: 'center' }}>
+      <div style={{ marginTop: "10px", textAlign: "center" }}>
         <button onClick={() => setIsReporting(true)}>제보하기</button>
       </div>
     </Container>
