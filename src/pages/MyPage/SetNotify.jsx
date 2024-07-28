@@ -11,7 +11,7 @@ const SetNotify = () => {
 
   return (
     <AccountContainer>
-      알림설정 탭
+      <h2>알림설정</h2>
       <BackBtn onClick={handleBack}>뒤로가기</BackBtn>
     </AccountContainer>
   );

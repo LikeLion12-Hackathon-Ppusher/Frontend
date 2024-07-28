@@ -6,12 +6,12 @@ import Home from "./pages/Home";
 import Map from "./pages/Map";
 import Select from "./pages/Select";
 import Redirection from "./pages/Redirection";
-import Mypage from "./pages/Mypage";
+import Mypage from "./pages/MyPage/Mypage";
 import SelectSmoker from "./pages/SelectSmoker";
 import SelectNonSmoker from "./pages/SelectNonSmoker";
-import SetAccount from "./pages/SetAccount";
-import SetNotify from "./pages/SetNotify";
-import SetReport from "./pages/SetReport"
+import SetAccount from "./pages/MyPage/SetAccount";
+import SetNotify from "./pages/MyPage/SetNotify";
+import SetReport from "./pages/MyPage/SetReport"
 
 function App() {
   return (
