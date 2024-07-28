@@ -16,6 +16,14 @@ const Mypage = () => {
     navigate("/select");
   };
 
+  const handleNotify = () => {
+    navigate("/home/notify");
+  };
+
+  const handleReport = () => {
+    navigate("/home/report");
+  };
+
   return (
     <MyPageContainer>
       <MyPageBtnContainer>
@@ -23,8 +31,8 @@ const Mypage = () => {
         <Btn onClick={handleAccount}>카카오 계정 관리</Btn>
         <Btn onClick={handleUserType}>사용자 유형 변경</Btn>
         <Outlet />
-        <Btn onClick={handleSample}>알림 설정</Btn>
-        <Btn onClick={handleSample}>내 제보 내역</Btn>
+        <Btn onClick={handleNotify}>알림 설정</Btn>
+        <Btn onClick={handleReport}>내 제보 내역</Btn>
       </MyPageBtnContainer>
     </MyPageContainer>
   );

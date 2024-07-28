@@ -9,7 +9,9 @@ import Redirection from "./pages/Redirection";
 import Mypage from "./pages/Mypage";
 import SelectSmoker from "./pages/SelectSmoker";
 import SelectNonSmoker from "./pages/SelectNonSmoker";
-import Account from "./pages/Account";
+import SetAccount from "./pages/SetAccount";
+import SetNotify from "./pages/SetNotify";
+import SetReport from "./pages/SetReport"
 
 function App() {
   return (
@@ -34,7 +36,9 @@ function App() {
             <Route path="map" element={<Map></Map>}></Route>
             <Route path="mypage/*" element={<Mypage></Mypage>}></Route>
             <Route path="select" element={<Select></Select>}></Route>
-            <Route path="account" element={<Account></Account>}></Route>
+            <Route path="account" element={<SetAccount></SetAccount>}></Route>
+            <Route path="notify" element={<SetNotify></SetNotify>}></Route>
+            <Route path="report" element={<SetReport></SetReport>}></Route>
           </Route>
           <Route path="/map" element={<Map></Map>}></Route>
         </Routes>

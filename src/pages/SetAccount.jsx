@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-const Account = () => {
+const SetAccount = () => {
   const navigate = useNavigate();
 
   const handleBack = () => {
@@ -17,7 +17,7 @@ const Account = () => {
   );
 };
 
-export default Account;
+export default SetAccount;
 
 const AccountContainer = styled.div`
   display: flex;
