@@ -10,7 +10,7 @@ const Home = () => {
 
   const handleCurrentLocation = () => {
     setShowNav(true);
-    navigate("/home/kakao");
+    navigate("/home/map");
   };
 
   const handleReport = () => {

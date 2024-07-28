@@ -1,13 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import LogoImgPng from '../assets/logo.png';
+import LogoImgPng from "../assets/logo.png";
 
 const HomeNav = () => {
   const navigate = useNavigate();
 
   const REST_API_KEY = process.env.REACT_APP_REST_API_KEY;
-  const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URL
+  const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URL;
   const link = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
   const loginHandler = () => {
@@ -44,8 +44,8 @@ const HomeContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-left: 1.0rem;
-  margin-right: 1.0rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
   margin-bottom: 0.5rem;
 `;
 
@@ -54,8 +54,8 @@ const AppBar = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-top: 0.5rem;
-  margin-left: 1.0rem;
-  margin-right: 1.0rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
 `;
 
 const LoginBtn = styled.div`
