@@ -8,10 +8,21 @@ const Redirection = () => {
   console.log(code);
 
   useEffect(() => {
-    console.log("Redirect URL:", process.env.REACT_APP_REDIRECT_URL);
-    console.log("REST API Key:", process.env.REACT_APP_REST_API_KEY);
-    console.log("Client Secret:", process.env.REACT_APP_CLIENT_SECRET);
-    console.log("Authorization Code:", code);
+    const REST_API_KEY = process.env.REACT_APP_REST_API_KEY;
+    const CLIENT_SECRET = process.env.REACT_APP_CLIENT_SECRET;
+    const REDIRECT_URI_LOCAL = process.env.REACT_APP_REDIRECT_URL_LOCAL;
+    const REDIRECT_URI_PRODUCTION =
+      process.env.REACT_APP_REDIRECT_URL_PRODUCTION;
+
+    // 현재 URL이 localhost인 경우 로컬 리다이렉트 URI를 사용
+    const REDIRECT_URI =
+      window.location.hostname === "localhost"
+        ? REDIRECT_URI_LOCAL
+        : REDIRECT_URI_PRODUCTION;
+
+    console.log("Redirect URL:", REDIRECT_URI);
+    console.log("REST API Key:", REST_API_KEY);
+    console.log("Client Secret:", CLIENT_SECRET);
 
     const fnGetKakaoOauthToken = async () => {
       const makeFormData = (params) => {
@@ -36,7 +47,7 @@ const Redirection = () => {
             grant_type: "authorization_code",
             client_id: process.env.REACT_APP_REST_API_KEY,
             client_secret: process.env.REACT_APP_CLIENT_SECRET,
-            redirect_uri: process.env.REACT_APP_REDIRECT_URL,
+            redirect_uri: REDIRECT_URI,
             code,
           }),
         });
