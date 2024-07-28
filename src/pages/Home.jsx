@@ -14,7 +14,7 @@ const Home = () => {
 
   const handleReport = () => {
     setShowNav(true);
-    navigate("/");
+    navigate("/home/map?report=true");
   };
 
   const handleMypage = () => {
