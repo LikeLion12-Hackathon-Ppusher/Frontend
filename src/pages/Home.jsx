@@ -57,9 +57,9 @@ const BtnContainer = styled.div`
   display: flex;
   justify-content: space-evenly;
   padding: 0.5rem 0;
-  position: absolute; 
+  position: absolute;
   bottom: 0;
-  width: 100%; 
+  width: 100%;
   background-color: white;
   z-index: 1000;
 `;

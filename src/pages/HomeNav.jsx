@@ -49,15 +49,15 @@ const AppBar = styled.div`
   display: flex;
   justify-content: space-between;
   margin-top: 0.4rem;
-  margin-left: 1.0rem;
-  margin-right: 1.0rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
   width: 100%;
 `;
 
 const HomeContainer = styled.div`
   display: flex;
-  margin-left: 1.0rem;
-  margin-right: 1.0rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
   margin-bottom: 0.5rem;
   margin-top: 20px;
   width: 90%;
