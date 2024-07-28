@@ -10,9 +10,22 @@ const Login = () => {
   const loginHandler = () => {
     window.location.href = link;
   };
-  return <LoginBtn src={LoginBtnImg} onClick={loginHandler}></LoginBtn>;
+  return (
+    <LoginBox>
+      <LoginBtn src={LoginBtnImg} onClick={loginHandler}></LoginBtn>
+    </LoginBox>
+  );
 };
 
 export default Login;
+
+const LoginBox = styled.div`
+  background-color: gray;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const LoginBtn = styled.img``;

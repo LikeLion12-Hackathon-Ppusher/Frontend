@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import LogoImgPng from "../assets/logo.png";
+import smokeImg from "../assets/free-icon-smoking-813800.png";
 
 const HomeNav = () => {
   const navigate = useNavigate();
@@ -17,15 +17,18 @@ const HomeNav = () => {
   return (
     <Container>
       <AppBar>
-        <div>시간</div>
-        <div>샘플 로고</div>
-        <div>배터리</div>
+        <LogoBox>샘플 로고</LogoBox>
         {/* <LoginBtn onClick={loginHandler}>로그인</LoginBtn> */}
       </AppBar>
       <HomeContainer>
         <LogoContainer>
-          <div>제보 흡연구역</div>
-          <div>상습 흡연 제보구역</div>
+          <ImgContainer>
+            <img src={smokeImg} alt="" />
+            <div>제보 흡연구역</div>
+          </ImgContainer>{" "}
+          <ImgContainer>
+            <div>상습 흡연 제보구역</div>{" "}
+          </ImgContainer>
         </LogoContainer>
       </HomeContainer>
     </Container>
@@ -47,11 +50,15 @@ const Container = styled.div`
 
 const AppBar = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   margin-top: 0.4rem;
   margin-left: 1rem;
   margin-right: 1rem;
   width: 100%;
+`;
+
+const LogoBox = styled.div`
+  background-color: gray;
 `;
 
 const HomeContainer = styled.div`
@@ -61,10 +68,6 @@ const HomeContainer = styled.div`
   margin-bottom: 0.5rem;
   margin-top: 20px;
   width: 90%;
-`;
-
-const LoginBtn = styled.div`
-  cursor: pointer;
 `;
 
 const LogoContainer = styled.div`
@@ -80,25 +83,12 @@ const LogoContainer = styled.div`
   border-radius: 6px;
 `;
 
-const LogoImg = styled.img`
-  object-fit: contain;
-  margin-left: 20px;
-  height: 100px;
-  width: 100px;
-`;
-
-const Navbar = styled.nav`
-  margin-top: 0.5rem;
-  width: 100%;
+const ImgContainer = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  text-align: center;
-  background-color: #02d26b;
-  padding: 0.8rem 0;
-`;
-
-const NavItem = styled.nav`
-  width: 100%;
-  cursor: pointer;
+  img {
+    width: 1rem;
+    height: 1rem;
+    margin-right: 0.5rem;
+  }
 `;
