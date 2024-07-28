@@ -24,11 +24,8 @@ const HomeNav = () => {
       </AppBar>
       <HomeContainer>
         <LogoContainer>
-          <EmptyContainer></EmptyContainer>
-          제보 흡연구역
-          <EmptyContainer></EmptyContainer>
-          상습 흡연 제보구역
-          <EmptyContainer></EmptyContainer>
+          <div>제보 흡연구역</div>
+          <div>상습 흡연 제보구역</div>
         </LogoContainer>
       </HomeContainer>
     </Container>
@@ -37,25 +34,33 @@ const HomeNav = () => {
 
 export default HomeNav;
 
-const Container = styled.div``;
-
-const HomeContainer = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-left: 1rem;
-  margin-right: 1rem;
-  margin-bottom: 0.5rem;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
 `;
 
 const AppBar = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-top: 0.5rem;
-  margin-left: 1rem;
-  margin-right: 1rem;
+  margin-top: 0.4rem;
+  margin-left: 1.0rem;
+  margin-right: 1.0rem;
+  width: 100%;
+`;
+
+const HomeContainer = styled.div`
+  display: flex;
+  margin-left: 1.0rem;
+  margin-right: 1.0rem;
+  margin-bottom: 0.5rem;
+  margin-top: 20px;
+  width: 90%;
 `;
 
 const LoginBtn = styled.div`
@@ -65,9 +70,8 @@ const LoginBtn = styled.div`
 const LogoContainer = styled.div`
   height: 2.5rem;
   width: 100%;
-  margin-top: 1.5rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   text-align: center;
   background-color: white;
@@ -80,11 +84,6 @@ const LogoImg = styled.img`
   object-fit: contain;
   margin-left: 20px;
   height: 100px;
-  width: 100px;
-`;
-
-// 이걸로 space-between 사용해서 텍스틑 중앙정렬
-const EmptyContainer = styled.div`
   width: 100px;
 `;
 

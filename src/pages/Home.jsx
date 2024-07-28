@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import HomeNav from "./HomeNav";
-import styled from "styled-components";
 import { Outlet, useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import HomeNav from "./HomeNav";
 
 const Home = () => {
   const navigate = useNavigate();
-
   const [showNav, setShowNav] = useState(true);
 
   const handleCurrentLocation = () => {
@@ -25,8 +24,8 @@ const Home = () => {
 
   return (
     <Container>
-      {showNav && <HomeNav />} {/* Conditional rendering */}
-      <Outlet /> {/* Nested routing */}
+      {showNav && <HomeNav />}
+      <Outlet />
       <BtnContainer>
         <Btn onClick={handleCurrentLocation}>현위치</Btn>
         <Btn onClick={handleReport}>제보하기</Btn>
@@ -48,19 +47,21 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   width: 100%;
   height: 100%;
-  position: relative; /* Added */
+  position: relative;
 `;
 
 const BtnContainer = styled.div`
   display: flex;
   justify-content: space-evenly;
   padding: 0.5rem 0;
-  position: absolute; /* Added */
-  bottom: 0; /* Added */
-  width: 100%; /* Added */
-  background-color: white; /* Optional: Ensure it covers content beneath */
+  position: absolute; 
+  bottom: 0;
+  width: 100%; 
+  background-color: white;
+  z-index: 1000;
 `;
 
 const Btn = styled.div`
