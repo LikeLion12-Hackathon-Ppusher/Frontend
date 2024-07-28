@@ -4,9 +4,6 @@ import styled from "styled-components";
 
 const Mypage = () => {
   const navigate = useNavigate();
-  const handleSample = () => {
-    navigate("/");
-  };
 
   const handleAccount = () => {
     navigate("/home/account")
@@ -58,11 +55,10 @@ const MyPageContainer = styled.div`
 `;
 
 const MyPageHeader = styled.h1`
+  width: 100%;
   display: flex;
-  justify-content: start;
-  position: absolute;
-  top: 6rem;
-  left: 2rem;
+  flex-direction: column;
+  justify-content: flex-start;
 `;
 
 const MyPageBtnContainer = styled.div`
