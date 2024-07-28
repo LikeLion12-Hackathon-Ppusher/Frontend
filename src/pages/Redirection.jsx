@@ -36,7 +36,7 @@ const Redirection = () => {
             grant_type: "authorization_code",
             client_id: process.env.REACT_APP_REST_API_KEY,
             client_secret: process.env.REACT_APP_CLIENT_SECRET,
-            redirect_uri: process.env.REACT_APP_REDIRECT_URL,
+            redirect_uri: "https://wellnesstour.netlify.app/oauth",
             code,
           }),
         });
