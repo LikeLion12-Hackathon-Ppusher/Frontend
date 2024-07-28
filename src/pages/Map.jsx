@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled, { css, keyframes } from "styled-components";
-import UserImg from "../free-icon-user-3686930.png";
+import UserImg from "../assets/free-icon-user-3686930.png";
+import smokeImg from "../assets/free-icon-smoking-813800.png";
 
 const { kakao } = window;
 
@@ -22,6 +23,9 @@ const Map = () => {
   const [newMarker, setNewMarker] = useState(null);
   const [title, setTitle] = useState("");
   const [img, setImg] = useState("");
+
+  // 지도 클릭한 위치 주소 변환 상태 변수
+  const [address, setAddress] = useState("");
 
   // useEffect로 렌더링 최초 1회 실행
   useEffect(() => {
@@ -91,7 +95,8 @@ const Map = () => {
         map,
         new kakao.maps.LatLng(markerData.position.Ma, markerData.position.La),
         markerData.title,
-        markerData.img
+        markerData.img,
+        markerData.address
       );
     });
 
@@ -106,15 +111,39 @@ const Map = () => {
 
       // 위도, 경도 저장
       setNewMarker(latlng);
+
+      // 주소 변환 함수 호출
+      getAddressFromCoords(latlng);
+
       // 모달창 오픈
       setIsModalOpen(true);
     });
   }
 
+  // 좌표를 주소로 변환하는 함수
+  const getAddressFromCoords = (latlng) => {
+    const geocoder = new kakao.maps.services.Geocoder();
+
+    geocoder.coord2Address(
+      latlng.getLng(),
+      latlng.getLat(),
+      (result, status) => {
+        if (status === kakao.maps.services.Status.OK) {
+          // 도로명 주소로 없으면 그냥 00동으로 표시된 주소를 가져옴
+          console.log(result);
+
+          const detailAddr = !!result[0].road_address
+            ? result[0].road_address.address_name
+            : result[0].address.address_name;
+          setAddress(detailAddr);
+        }
+      }
+    );
+  };
+
   // 새 마커를 지도에 추가하는 함수
-  function createMarker(map, position, title, img) {
-    const smokeImageSrc =
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS69MQZEYC0jAcCQ4e3NXvcVeLR9e9rUbya7w&s";
+  function createMarker(map, position, title, img, address) {
+    const smokeImageSrc = smokeImg;
     const smokeImageSize = new kakao.maps.Size(24, 30); // 아이콘의 크기
     const somkeImageOption = { offset: new kakao.maps.Point(12, 15) }; // 아이콘의 기준 위치 위의 아이콘의 크기에 따라 변동하자
 
@@ -132,7 +161,7 @@ const Map = () => {
 
     // 마커 클릭 시 마커 정보를 보여주는 이벤트 리스너 추가
     kakao.maps.event.addListener(marker, "click", function () {
-      setSelectedMarkerInfo({ title, img });
+      setSelectedMarkerInfo({ title, img, address });
     });
 
     return marker;
@@ -146,8 +175,9 @@ const Map = () => {
     console.log(newMarker.getLat());
 
     console.log(img);
+    console.log(address);
 
-    if (newMarker && title) {
+    if (newMarker && title && address) {
       const newMarkerData = {
         position: {
           Ma: newMarker.getLat(),
@@ -155,6 +185,7 @@ const Map = () => {
         },
         title,
         img,
+        address,
       };
 
       setMarkers((prev) => {
@@ -166,7 +197,9 @@ const Map = () => {
       createMarker(
         mapInstance,
         new kakao.maps.LatLng(newMarker.getLat(), newMarker.getLng()),
-        title
+        title,
+        img,
+        address
       );
 
       // 이게 있으면 모달창으로 마커 생성하면 화면에 바로 보이므로 일단 없애자
@@ -191,6 +224,7 @@ const Map = () => {
     setIsModalOpen(false);
     setTitle("");
     setNewMarker(null);
+    setAddress("");
   };
 
   return (
@@ -198,13 +232,24 @@ const Map = () => {
       <MapDiv ref={mapRef}></MapDiv>
       {selectedMarkerInfo && (
         <InfoPanel>
-          <CloseButton onClick={() => setSelectedMarkerInfo(null)}>
-            닫기
-          </CloseButton>
-          <h4>{selectedMarkerInfo.title}</h4>
-          {selectedMarkerInfo.img && (
-            <img src={selectedMarkerInfo.img} alt="Marker" />
-          )}
+          <CloseButtonBox>
+            <CloseButton onClick={() => setSelectedMarkerInfo(null)}>
+              닫기
+            </CloseButton>
+          </CloseButtonBox>
+          <InfoBox>
+            <Box>
+              <h5>제보 흡연 구역</h5>
+              <h3>주소</h3>
+              <h5>{selectedMarkerInfo.address}</h5>
+              <h4>{selectedMarkerInfo.title}</h4>
+            </Box>
+            <ImgBox>
+              {selectedMarkerInfo.img && (
+                <img src={selectedMarkerInfo.img} alt="Marker" />
+              )}
+            </ImgBox>
+          </InfoBox>
           <LikeButton>좋아요</LikeButton>
         </InfoPanel>
       )}
@@ -257,31 +302,67 @@ const MapDiv = styled.div`
 
 const InfoPanel = styled.div`
   position: absolute;
-  bottom: 0;
+  bottom: 15%;
   left: 50%;
   transform: translateX(-50%);
   z-index: 5;
-  width: 100%;
-  height: 200px;
+  width: 80%;
+
   background: white;
   border-top: 1px solid #ccc;
+  border-radius: 1rem;
   text-align: center;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  padding: 1rem 5%;
 
   img {
-    width: 100px;
-    height: 100px;
+    object-fit: contain;
+    width: 200px;
+    height: 150px;
   }
 `;
 
+const CloseButtonBox = styled.div`
+  display: flex;
+  justify-content: end;
+  margin-bottom: 0.5rem;
+`;
+
 const CloseButton = styled.button`
-  position: absolute;
-  top: 10px;
-  right: 10px;
+  // position: absolute;
+  // top: 10px;
+  // right: 10px;
   background: none;
   border: none;
   font-size: 16px;
   cursor: pointer;
+`;
+
+const InfoBox = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+`;
+
+const Box = styled.div`
+  text-align: start;
+  width: 50%;
+
+  h3 {
+    margin: 0;
+  }
+  h4 {
+    margin: 0;
+    margin-bottom: 5%;
+  }
+  h5 {
+    margin: 0;
+    margin-bottom: 5%;
+  }
+`;
+
+const ImgBox = styled.div`
+  width: 50%;
 `;
 
 const LikeButton = styled.button`
@@ -299,7 +380,7 @@ const LikeButton = styled.button`
 `;
 
 const Modal = styled.div`
-  z-index: 5;
+  z-index: 5000;
   position: fixed;
   top: 0;
   left: 0;

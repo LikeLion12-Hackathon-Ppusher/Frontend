@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <script
       type="text/javascript"
-      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=025dba703930f2b548abe5ce314d0c82"
+      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=025dba703930f2b548abe5ce314d0c82&libraries=services"
     ></script>
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -43,7 +43,11 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-  <!-- <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=paroogb90s&submodules=geocoder"></script> -->
-  <script type="text/javascript" strategy="beforeInteractive" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=<%= process.env.REACT_APP_KAKAOMAP_API_KEY%>"></script>
-</body>
+    <!-- <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=paroogb90s&submodules=geocoder"></script> -->
+    <script
+      type="text/javascript"
+      strategy="beforeInteractive"
+      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=<%= process.env.REACT_APP_KAKAOMAP_API_KEY%>"
+    ></script>
+  </body>
 </html>

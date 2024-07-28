@@ -31,12 +31,6 @@ const Home = () => {
         <Btn onClick={handleReport}>제보하기</Btn>
         <Btn onClick={handleMypage}>마이페이지</Btn>
       </BtnContainer>
-      <Nav>
-        <NavItem></NavItem>
-        <NavItem></NavItem>
-        <NavItem></NavItem>
-        <NavItem></NavItem>
-      </Nav>
     </Container>
   );
 };
@@ -55,23 +49,21 @@ const Container = styled.div`
 
 const BtnContainer = styled.div`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   padding: 0.5rem 0;
+  margin-bottom: 1rem;
   position: absolute;
   bottom: 0;
-  width: 100%;
-  background-color: white;
+  width: 90%;
   z-index: 1000;
 `;
 
 const Btn = styled.div`
-  padding: 0.5rem 1.5rem;
+  width: 120px;
+  padding: 1rem 1rem;
   margin-top: 0.5rem;
   border-radius: 0.5rem;
-  background-color: white;
+  background-color: gray;
   cursor: pointer;
+  text-align: center;
 `;
-
-const Nav = styled.nav``;
-
-const NavItem = styled.div``;
