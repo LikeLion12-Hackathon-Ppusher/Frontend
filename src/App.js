@@ -6,10 +6,10 @@ import Home from "./pages/Home";
 import Map from "./pages/Map";
 import Select from "./pages/Select";
 import Redirection from "./pages/Redirection";
-import KakaoMap from "./pages/KakaoMap";
 import Mypage from "./pages/Mypage";
 import SelectSmoker from "./pages/SelectSmoker";
 import SelectNonSmoker from "./pages/SelectNonSmoker";
+import Account from "./pages/Account";
 
 function App() {
   return (
@@ -32,7 +32,9 @@ function App() {
           ></Route>
           <Route path="/home/*" element={<Home></Home>}>
             <Route path="map" element={<Map></Map>}></Route>
-            <Route path="mypage" element={<Mypage></Mypage>}></Route>
+            <Route path="mypage/*" element={<Mypage></Mypage>}></Route>
+            <Route path="select" element={<Select></Select>}></Route>
+            <Route path="account" element={<Account></Account>}></Route>
           </Route>
           <Route path="/map" element={<Map></Map>}></Route>
         </Routes>

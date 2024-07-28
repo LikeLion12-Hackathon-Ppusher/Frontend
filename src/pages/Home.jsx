@@ -14,7 +14,7 @@ const Home = () => {
 
   const handleReport = () => {
     setShowNav(true);
-    navigate("/");
+    // 버튼 눌러야지 Map 기능 활성화
   };
 
   const handleMypage = () => {

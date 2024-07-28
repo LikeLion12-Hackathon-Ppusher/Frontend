@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Outlet } from "react-router-dom";
 import styled from "styled-components";
 
 const Mypage = () => {
@@ -8,12 +8,21 @@ const Mypage = () => {
     navigate("/");
   };
 
+  const handleAccount = () => {
+    navigate("/home/account")
+  };
+
+  const handleUserType = () => {
+    navigate("/select");
+  };
+
   return (
     <MyPageContainer>
       <MyPageBtnContainer>
         <MyPageHeader>마이페이지</MyPageHeader>
-        <Btn onClick={handleSample}>카카오 계정 관리</Btn>
-        <Btn onClick={handleSample}>사용자 유형 변경</Btn>
+        <Btn onClick={handleAccount}>카카오 계정 관리</Btn>
+        <Btn onClick={handleUserType}>사용자 유형 변경</Btn>
+        <Outlet />
         <Btn onClick={handleSample}>알림 설정</Btn>
         <Btn onClick={handleSample}>내 제보 내역</Btn>
       </MyPageBtnContainer>
