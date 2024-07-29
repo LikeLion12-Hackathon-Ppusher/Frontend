@@ -1,16 +1,19 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import backButtonImg from "../../assets/arrow-back.png";
 
 const SetTypeCheck = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { selectedType } = location.state || {};
 
   const handleCancel = () => {
     navigate(-1);
   };
 
   const handleConfirm = () => {
+    localStorage.setItem('userType', selectedType);
     navigate("/home/set-type-confirm");
   };
 

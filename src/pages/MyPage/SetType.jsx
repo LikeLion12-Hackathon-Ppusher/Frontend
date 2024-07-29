@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import smokeImg from "../../assets/free-icon-smoking-813800.png";
@@ -8,14 +8,22 @@ const SetType = () => {
   const [activeBox, setActiveBox] = useState(null);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    // 로컬 스토리지에서 사용자 유형을 가져와 상태를 초기화합니다.
+    const storedUserType = localStorage.getItem("userType");
+    if (storedUserType) {
+      setActiveBox(storedUserType);
+    }
+  }, []);
+
   const handleBoxClick = (box) => {
     setActiveBox(box);
   };
 
   const handleConfirmClick = () => {
     if (activeBox) {
-      localStorage.setItem('userType', activeBox);
-      navigate("/home/set-type-check");
+      localStorage.setItem("userType", activeBox);
+      navigate("/home/set-type-check", { state: { selectedType: activeBox } });
     } else {
       alert("유형을 선택해 주세요.");
     }
@@ -29,7 +37,7 @@ const SetType = () => {
       <TypeHeader>사용자 유형 변경</TypeHeader>
       <SmokeSelect>
         <Box
-          className={activeBox === "smoker" ? "active" : ""}
+          isActive={activeBox === "smoker"}
           onClick={() => handleBoxClick("smoker")}
         >
           <img src={smokeImg} alt="흡연자 이미지" />
@@ -40,7 +48,7 @@ const SetType = () => {
           </div>
         </Box>
         <Box
-          className={activeBox === "nonSmoker" ? "active" : ""}
+          isActive={activeBox === "nonSmoker"}
           onClick={() => handleBoxClick("nonSmoker")}
         >
           <img src={smokeImg} alt="비흡연자 이미지" />
@@ -97,7 +105,7 @@ const SmokeSelect = styled.div`
 `;
 
 const Box = styled.div`
-  background-color: #dedddd;
+  background-color: ${(props) => (props.isActive ? "#FFF100" : "#dedddd")};
   width: 48%;
   height: 18rem;
   border-radius: 0.5rem;
@@ -106,19 +114,13 @@ const Box = styled.div`
   justify-content: center;
   align-items: center;
   text-align: center;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition: transform 0.3s ease, background-color 0.3s ease;
   cursor: pointer;
 
   &:hover,
   &:focus {
-    background-color: #c0c0c0;
     transform: scale(1.05);
-    outline: none; 
-  }
-
-  &.active {
-    background-color: gray;
-    transform: scale(1.05);
+    outline: none;
   }
 
   img {
@@ -144,4 +146,5 @@ const SelectBtn = styled.div`
   text-align: center;
   cursor: pointer;
   font-size: 24px;
+  margin-top: 2rem;
 `;
