@@ -22,7 +22,6 @@ const SetType = () => {
 
   const handleConfirmClick = () => {
     if (activeBox) {
-      localStorage.setItem("userType", activeBox);
       navigate("/home/set-type-check", { state: { selectedType: activeBox } });
     } else {
       alert("유형을 선택해 주세요.");

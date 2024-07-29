@@ -14,6 +14,7 @@ import SetType from "./pages/MyPage/SetType"
 import SetTypeCheck from "./pages/MyPage/SetTypeCheck";
 import SetTypeConfirm from "./pages/MyPage/SetTypeConfirm";
 import SetNotify from "./pages/MyPage/SetNotify";
+import SetNotifyNonSmoker from "./pages/MyPage/SetNotifyNonSmoker";
 import SetReport from "./pages/MyPage/SetReport"
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
             <Route path="set-type-confirm" element={<SetTypeConfirm></SetTypeConfirm>}></Route>
             <Route path="account" element={<SetAccount></SetAccount>}></Route>
             <Route path="notify" element={<SetNotify></SetNotify>}></Route>
+            <Route path="set-notify-details" element={<SetNotifyNonSmoker></SetNotifyNonSmoker>}></Route>
             <Route path="report" element={<SetReport></SetReport>}></Route>
           </Route>
           <Route path="/map" element={<Map></Map>}></Route>
