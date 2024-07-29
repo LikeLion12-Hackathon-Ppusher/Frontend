@@ -11,6 +11,8 @@ import SelectSmoker from "./pages/SelectSmoker";
 import SelectNonSmoker from "./pages/SelectNonSmoker";
 import SetAccount from "./pages/MyPage/SetAccount";
 import SetType from "./pages/MyPage/SetType"
+import SetTypeCheck from "./pages/MyPage/SetTypeCheck";
+import SetTypeConfirm from "./pages/MyPage/SetTypeConfirm";
 import SetNotify from "./pages/MyPage/SetNotify";
 import SetReport from "./pages/MyPage/SetReport"
 
@@ -37,6 +39,8 @@ function App() {
             <Route path="map" element={<Map></Map>}></Route>
             <Route path="mypage/*" element={<Mypage></Mypage>}></Route>
             <Route path="type" element={<SetType></SetType>}></Route>
+            <Route path="set-type-check" element={<SetTypeCheck></SetTypeCheck>}></Route>
+            <Route path="set-type-confirm" element={<SetTypeConfirm></SetTypeConfirm>}></Route>
             <Route path="account" element={<SetAccount></SetAccount>}></Route>
             <Route path="notify" element={<SetNotify></SetNotify>}></Route>
             <Route path="report" element={<SetReport></SetReport>}></Route>

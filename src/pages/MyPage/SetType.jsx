@@ -15,7 +15,8 @@ const SetType = () => {
 
   const handleConfirmClick = () => {
     if (activeBox) {
-      setIsModalOpen(true);
+      navigate("/home/set-type-check")
+      // setIsModalOpen(true);
     } else {
       alert("유형을 선택해 주세요.");
     }
@@ -23,6 +24,7 @@ const SetType = () => {
 
   const confirmChange = () => {
     setIsModalOpen(false);
+
     if (activeBox === "smoker") {
       navigate("/select-smoker");
     } else if (activeBox === "nonSmoker") {
