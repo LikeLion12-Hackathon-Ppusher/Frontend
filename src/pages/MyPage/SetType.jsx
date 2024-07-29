@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import smokeImg from "../../assets/free-icon-smoking-813800.png";
-import backButtonImg from "../../assets/arrow-back.png";
+import SetHeader from "./SetHeader";
 
 const SetType = () => {
   const [activeBox, setActiveBox] = useState(null);
@@ -30,10 +30,7 @@ const SetType = () => {
 
   return (
     <SelectContainer>
-      <BackButton onClick={() => navigate(-1)}>
-        <img src={backButtonImg} alt="뒤로가기" />
-      </BackButton>
-      <TypeHeader>사용자 유형 변경</TypeHeader>
+      <SetHeader headerText="사용자 유형 변경"></SetHeader>
       <SmokeSelect>
         <Box
           isActive={activeBox === "smoker"}
@@ -73,26 +70,6 @@ const SelectContainer = styled.div`
   justify-content: center;
   align-items: center;
   background-color: white;
-`;
-
-const BackButton = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  position: absolute;
-  top: 6rem;
-  left: 1rem;
-  img {
-    width: 2rem;
-    height: 2rem;
-  }
-`;
-
-const TypeHeader = styled.h1`
-  width: 90%;
-  font-size: 32px;
-  position: absolute;
-  top: 9rem;
 `;
 
 const SmokeSelect = styled.div`

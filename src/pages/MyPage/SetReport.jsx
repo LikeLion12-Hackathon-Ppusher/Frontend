@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import backButtonImg from "../../assets/arrow-back.png";
 import bottomButtonImg from "../../assets/bottom_arrow.png";
 import upButtonImg from "../../assets/top_arrow.png";
+import SetHeader from './SetHeader';
 
 const reports = [
   { id: 1, address: '주소 어쩌구1', detail: '상세 위치 설명 썰라썰라' },
@@ -19,23 +20,15 @@ const reports = [
 ];
 
 const SetAccount = () => {
-  const navigate = useNavigate();
   const [openReportId, setOpenReportId] = useState(null);
 
   const handleToggle = (id) => {
     setOpenReportId(openReportId === id ? null : id);
   };
 
-  const handleBack = () => {
-    navigate("/home/mypage");
-  };
-
   return (
     <AccountContainer>
-      <BackButton onClick={handleBack}>
-        <img src={backButtonImg} alt="뒤로가기" />
-      </BackButton>
-      <TypeHeader>제보내역</TypeHeader>
+      <SetHeader headerText="제보 내역"></SetHeader>
       <ReportContainer>
         {reports.map(report => (
           <ReportItem key={report.id}>
@@ -85,26 +78,6 @@ const AccountContainer = styled.div`
   background-color: white;
   padding: 1rem;
   box-sizing: border-box;
-`;
-
-const BackButton = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  position: absolute;
-  top: 6rem;
-  left: 1rem;
-  img {
-    width: 2rem;
-    height: 2rem;
-  }
-`;
-
-const TypeHeader = styled.h1`
-  width: 90%;
-  font-size: 32px;
-  position: absolute;
-  top: 9rem;
 `;
 
 const ReportContainer = styled.div`
