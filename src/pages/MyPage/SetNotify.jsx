@@ -39,9 +39,6 @@ const AccountContainer = styled.div`
   background-color: white;
 `;
 
-const BackBtn = styled.button`
-`;
-
 const BackButton = styled.button`
   background: none;
   border: none;
