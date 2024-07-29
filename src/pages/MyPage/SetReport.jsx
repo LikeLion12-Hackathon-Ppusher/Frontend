@@ -117,7 +117,6 @@ const ReportContainer = styled.div`
   margin-bottom: 5rem;
   padding: 0 1rem;
   box-sizing: border-box;
-  cursor: pointer;
 
   &::-webkit-scrollbar {
     width: 8px;
@@ -151,6 +150,7 @@ const ReportHeader = styled.div`
   font-size: 21px;
   font-weight: bold;
   margin-bottom: 0.5rem;
+  cursor: pointer;
 `;
 
 const ReportContent = styled.div`
