@@ -11,8 +11,7 @@ const Redirection = () => {
     const REST_API_KEY = process.env.REACT_APP_REST_API_KEY;
     const CLIENT_SECRET = process.env.REACT_APP_CLIENT_SECRET;
     const REDIRECT_URI_LOCAL = process.env.REACT_APP_REDIRECT_URL_LOCAL;
-    const REDIRECT_URI_PRODUCTION =
-      process.env.REACT_APP_REDIRECT_URL_PRODUCTION;
+    const REDIRECT_URI_PRODUCTION = process.env.REACT_APP_REDIRECT_URL_PRODUCTION;
 
     // 현재 URL이 localhost인 경우 로컬 리다이렉트 URI를 사용
     const REDIRECT_URI =
@@ -23,6 +22,8 @@ const Redirection = () => {
     console.log("Redirect URL:", REDIRECT_URI);
     console.log("REST API Key:", REST_API_KEY);
     console.log("Client Secret:", CLIENT_SECRET);
+
+    const url = 'http://bbuhackathon.p-e.kr';
 
     const fnGetKakaoOauthToken = async () => {
       const makeFormData = (params) => {
@@ -37,6 +38,16 @@ const Redirection = () => {
       };
 
       try {
+        // const res = await axios.post(url, {
+        //   authorizationCode: code,
+        // },
+        //   {
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     },
+        //   });
+        // console.log(res);
+
         const res = await axios({
           method: "POST",
           headers: {

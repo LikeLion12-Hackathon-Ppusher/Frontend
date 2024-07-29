@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import backButtonImg from "../../assets/arrow-back.png";
 import bottomButtonImg from "../../assets/bottom_arrow.png";
 import upButtonImg from "../../assets/top_arrow.png";
 import SetHeader from './SetHeader';
