@@ -52,6 +52,8 @@ const Redirection = () => {
           }),
         });
 
+        console.log(res);
+
         // localStorage에 accessToken 저장
         localStorage.setItem("kakaoAccessToken", res.data.access_token);
         navigate("/home");

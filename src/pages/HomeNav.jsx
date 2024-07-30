@@ -15,9 +15,9 @@ const HomeNav = () => {
       </AppBar>
       <HomeContainer>
         <LogoContainer
-          fontColor={mode.font}
-          borderColor={mode.NavborderColor}
-          backgroundColor={mode.background}
+          fontcolor={mode.font}
+          bordercolor={mode.NavborderColor}
+          backgroundcolor={mode.background}
         >
           <ImgContainer>
             <img src={smokeImg} alt="" />
@@ -75,11 +75,11 @@ const LogoContainer = styled.div`
   justify-content: space-around;
   align-items: center;
   text-align: center;
-  background-color: ${(props) => props.backgroundColor};
+  background-color: ${(props) => props.backgroundcolor};
   border: 2px solid;
-  border-color: ${(props) => props.borderColor};
+  border-color: ${(props) => props.bordercolor};
   border-radius: 6px;
-  color: ${(props) => props.fontColor};
+  color: ${(props) => props.fontcolor};
 `;
 
 const ImgContainer = styled.div`
