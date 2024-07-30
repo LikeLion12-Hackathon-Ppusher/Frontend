@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import smokeImg from "../../assets/free-icon-smoking-813800.png";
 import SetHeader from "./SetHeader";
+import detailBackgroundImage from '../../assets/mypage_detail_background.png';
 
 const SetType = () => {
   const [activeBox, setActiveBox] = useState(null);
@@ -69,7 +70,11 @@ const SelectContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-image: url(${detailBackgroundImage}); 
   background-color: white;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 `;
 
 const SmokeSelect = styled.div`

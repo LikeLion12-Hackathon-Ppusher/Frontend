@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import SetHeader from './SetHeader';
 import SetNotifySmoker from './SetNotifySmoker';
 import SetNotifyNonSmoker from './SetNotifyNonSmoker';
+import detailBackgroundImage from '../../assets/mypage_detail_background.png';
 
 const SetNotify = () => {
   const [userType, setUserType] = useState(null);
@@ -32,5 +33,9 @@ const AccountContainer = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
+  background-image: url(${detailBackgroundImage}); 
   background-color: white;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 `;

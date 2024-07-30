@@ -66,7 +66,6 @@ const SelectContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: white;
 
   img {
     width: 10%;

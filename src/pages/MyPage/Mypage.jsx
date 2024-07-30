@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 import styled from "styled-components";
+import backgroundImage from '../../assets/mypage_background.png';
 
 const Mypage = () => {
   const navigate = useNavigate();
@@ -28,8 +29,8 @@ const Mypage = () => {
 
   return (
     <MyPageContainer>
+      <MyPageHeader>마이페이지</MyPageHeader>
       <MyPageBtnContainer>
-        <MyPageHeader>마이페이지</MyPageHeader>
         <Btn onClick={handleAccount}>카카오 계정 관리</Btn>
         <Btn onClick={handleUserType}>사용자 유형 변경</Btn>
         <Outlet />
@@ -50,15 +51,21 @@ const MyPageContainer = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
+  background-image: url(${backgroundImage}); 
   background-color: white;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   padding-bottom: 6rem;
 `;
 
-const MyPageHeader = styled.h1`
-  width: 100%;
+const MyPageHeader = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  margin-right: 24rem;
+  background: linear-gradient(to top, #FFF100 40%, transparent 40%);
+  font-size: 2.4rem;
+  font-weight: bold;
 `;
 
 const MyPageBtnContainer = styled.div`
@@ -69,25 +76,26 @@ const MyPageBtnContainer = styled.div`
 `;
 
 const Btn = styled.button`
-  padding: 1.2rem 0rem 1.2rem 0rem;
-  margin-top: 1.5rem;
+  padding: 1.8rem 0rem 1.8rem 0rem;
+  margin-top: 2rem;
   width: 100%;
   border-radius: 6px;
-  border: 1px solid black;
-  background-color: white;
-  font-size: 18px;
+  background-color: #000000;
+  font-size: 1.6rem;
+  color: #FFF100;
   transition: background-color 0.3s ease, transform 0.3s ease;
   cursor: pointer;
 
   &:hover,
   &:focus {
-    background-color: #c0c0c0;
-    transform: scale(1.05);
+    color: #000000;
+    background-color: #FFF100;
+    transform: scale(1.01);
     outline: none; 
   }
 
   &.active {
-    background-color: gray;
-    transform: scale(1.05);
+    background-color: white;
+    transform: scale(1.01);
   }
 `;

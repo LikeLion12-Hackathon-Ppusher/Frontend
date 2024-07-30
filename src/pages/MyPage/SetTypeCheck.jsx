@@ -2,6 +2,8 @@ import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import backButtonImg from "../../assets/arrow-back.png";
+import SetHeader from './SetHeader';
+import detailBackgroundImage from '../../assets/mypage_detail_background.png';
 
 const SetTypeCheck = () => {
   const navigate = useNavigate();
@@ -19,10 +21,7 @@ const SetTypeCheck = () => {
 
   return (
     <Container>
-      <BackButton onClick={() => navigate(-1)}>
-        <img src={backButtonImg} alt="뒤로가기" />
-      </BackButton>
-      <TypeHeader>사용자 유형 변경</TypeHeader>
+      <SetHeader headerText={"사용자 유형 변경"}></SetHeader>
       <Box>
         <p>정말 <strong>변경</strong>하시겠습니까?</p>
         <ButtonContainer>
@@ -44,6 +43,11 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-image: url(${detailBackgroundImage}); 
+  background-color: white;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 `;
 
 const BackButton = styled.button`

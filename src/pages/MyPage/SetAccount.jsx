@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import backButtonImg from "../../assets/arrow-back.png";
 import SetHeader from './SetHeader';
+import detailBackgroundImage from '../../assets/mypage_detail_background.png';
 
 const SetAccount = () => {
   const navigate = useNavigate();
@@ -51,7 +52,11 @@ const AccountContainer = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
+  background-image: url(${detailBackgroundImage}); 
   background-color: white;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 `;
 
 const UserInfo = styled.div`

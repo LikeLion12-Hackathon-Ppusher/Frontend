@@ -41,8 +41,9 @@ const BackButton = styled.button`
 `;
 
 const TypeHeader = styled.h1`
-  width: 90%;
-  font-size: 32px;
+  font-size: 2.1rem;
   position: absolute;
   top: 9rem;
+  left: 2rem;
+  background: linear-gradient(to top, #FFF100 40%, transparent 40%);
 `;
