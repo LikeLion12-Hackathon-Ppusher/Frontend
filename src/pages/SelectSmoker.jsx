@@ -16,7 +16,10 @@ const SelectSmoker = () => {
 
   const handleConfirmClick = () => {
     if (selectedTime !== null) {
-      navigate("/home/map", { state: { time: selectedTime } });
+      navigate("/home/map", {
+        state: { time: selectedTime, userType: "smoker" },
+      });
+      // window.location.reload();
     } else {
       alert("시간을 선택해 주세요.");
     }
@@ -69,7 +72,7 @@ const SelectContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: white;
+  background-color: black;
 
   img {
     width: 10%;
@@ -81,14 +84,15 @@ const TitleContainer = styled.div`
   display: flex;
   justify-content: start;
   align-items: center;
-
+  color: #f7f152;
   img {
+    background-color: #f7f152;
     margin-right: 2rem;
   }
 `;
 
 const Box = styled.div`
-  background-color: #dedddd;
+  background-color: white;
   width: 90%;
   height: 15rem;
   border-radius: 0.5rem;
@@ -113,28 +117,32 @@ const BtnBox = styled.div`
 
 const Btn = styled.div`
   padding: 1rem 1.5rem;
-  background-color: white;
+  background-color: black;
   border-radius: 0.4rem;
   cursor: pointer;
-
+  color: white;
+  border: 2px solid transparent;
   &:hover,
   &:focus {
-    background-color: #c0c0c0;
-    transform: scale(1.05);
+    background-color: #f7f152;
+    color: black;
+
     outline: none; /* 포커스 시에 기본 아웃라인을 없애기 위해 */
+    border: 2px solid black;
   }
 
   &.active {
-    background-color: gray;
-    transform: scale(1.05);
+    background-color: #f7f152;
+    color: black;
+    border: 2px solid black;
   }
 `;
 
 const SelectBtn = styled.div`
   width: 90%;
-  background-color: gray;
+  background-color: #f7f152;
   padding: 1rem 0;
-  border-radius: 0.4rem;
+  border-radius: 0.3rem;
   text-align: center;
   cursor: pointer;
   font-weight: bold;

@@ -64,6 +64,11 @@ const AppDom = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
+
+  @media (max-width: 600px) {
+    width: 100%;
+    height: 100vh;
+  }
 `;
 
 // 전체 배경을 밀 색으로 설정 그렇다면 다른 요소들에서 white를 직접 주든가 해야지?

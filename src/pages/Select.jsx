@@ -24,9 +24,9 @@ const Select = () => {
 
   return (
     <SelectContainer>
-      <h3>유형을 선택해 주세요</h3>
+      <h2>유형을 선택해 주세요</h2>
       <SmokeSelect>
-        <Box
+        <SmokerBox
           className={activeBox === "smoker" ? "active" : ""}
           onClick={() => handleBoxClick("smoker")}
         >
@@ -36,8 +36,8 @@ const Select = () => {
             흡연구역 위치 제공
             <br /> 흡연구역 제보
           </div>
-        </Box>
-        <Box
+        </SmokerBox>
+        <NonSmokerBox
           className={activeBox === "nonSmoker" ? "active" : ""}
           onClick={() => handleBoxClick("nonSmoker")}
         >
@@ -47,7 +47,7 @@ const Select = () => {
             상습 흡연구역 제보
             <br /> 간접흡연 위험구역 알림
           </div>
-        </Box>
+        </NonSmokerBox>
       </SmokeSelect>
       <SelectBtn onClick={handleConfirmClick}>확인</SelectBtn>
     </SelectContainer>
@@ -64,6 +64,11 @@ const SelectContainer = styled.div`
   justify-content: center;
   align-items: center;
   background-color: white;
+
+  h2 {
+    text-decoration: underline;
+    text-decoration-color: yellow;
+  }
 `;
 
 const SmokeSelect = styled.div`
@@ -74,10 +79,11 @@ const SmokeSelect = styled.div`
   margin: 10% 0;
 `;
 
-const Box = styled.div`
-  background-color: #dedddd;
+const SmokerBox = styled.div`
+  background-color: #212121;
   width: 48%;
-  height: 15rem;
+  height: 16rem;
+  border: 2px solid #f7f152;
   border-radius: 0.5rem;
   display: flex;
   flex-direction: column;
@@ -89,13 +95,56 @@ const Box = styled.div`
 
   &:hover,
   &:focus {
-    background-color: #c0c0c0;
+    // background-color: #c0c0c0;
     transform: scale(1.05);
     outline: none; /* 포커스 시에 기본 아웃라인을 없애기 위해 */
   }
 
   &.active {
-    background-color: gray;
+    // background-color: gray;
+    transform: scale(1.05);
+  }
+
+  img {
+    width: 30%;
+  }
+
+  h3 {
+    margin-top: 1rem;
+    color: #f7f152;
+  }
+
+  div {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.2rem;
+    color: #bbbbbb;
+  }
+`;
+
+const NonSmokerBox = styled.div`
+  background-color: #f7f152;
+  width: 48%;
+  height: 16rem;
+  border: 2px solid black;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    // background-color: #c0c0c0;
+    transform: scale(1.05);
+    outline: none; /* 포커스 시에 기본 아웃라인을 없애기 위해 */
+  }
+
+  &.active {
+    // background-color: gray;
     transform: scale(1.05);
   }
 
@@ -116,9 +165,10 @@ const Box = styled.div`
 
 const SelectBtn = styled.div`
   width: 90%;
-  background-color: gray;
+  background-color: white;
   padding: 1rem 0;
-  border-radius: 0.4rem;
+  border: 2px solid black;
+  border-radius: 0.3rem;
   text-align: center;
   cursor: pointer;
   font-weight: bold;

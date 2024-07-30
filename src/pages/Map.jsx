@@ -1,38 +1,77 @@
-import React, { useEffect, useRef, useState } from "react";
-import styled, { css, keyframes } from "styled-components";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import UserImg from "../assets/free-icon-user-3686930.png";
 import smokeImg from "../assets/free-icon-smoking-813800.png";
+import smokeImg2 from "../assets/상습흡연.png";
+import reportImg from "../assets/logo.png";
+import { ThemeColorContext } from "../Context/context";
+import Home from "./Home";
 
 const { kakao } = window;
 
 const Map = () => {
-  // 지도와 마커를 참조하기 위한 useRef 훅
   const mapRef = useRef(null);
   const markerRef = useRef(null);
+  const reportingMarkerRef = useRef(null);
 
   // 지도 객체 상태 추가
   // 여걸로 modal창의 handleSumbit에서의 마커 생성함수에 mapInstance를 넣는다
+  // mapInstance가 그냥 카카오 맵임
   const [mapInstance, setMapInstance] = useState(null);
-
   const [markers, setMarkers] = useState([]);
   const [selectedMarkerInfo, setSelectedMarkerInfo] = useState(null);
-
   // 모달창 true면 보이게
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const [newMarker, setNewMarker] = useState(null);
   const [title, setTitle] = useState("");
-  const [img, setImg] = useState("");
-
   // 지도 클릭한 위치 주소 변환 상태 변수
   const [address, setAddress] = useState("");
+  const [isReporting, setIsReporting] = useState(false);
 
-  // useEffect로 렌더링 최초 1회 실행
+  const location = useLocation();
+
+  const navigate = useNavigate();
+
+  const [userType, setUserType] = useState(
+    location.state?.userType || "smoker"
+  ); // 상태로 관리
+  // 이후 로그인 api와 정보를 저장할 수 있는 경우에는 다르게 useEffect에다가 axios.get으로 가져오거나 애초에
+  // 로그인 할때 받은 res 데이터 정보에 담겨있는 option에서의 값을 여기다가 갔다놓자 (로그인 했을 때 받은 데이터 객체를 어디다가 저장해야 됨)
+
+  const [hasAshtray, setHasAshtray] = useState("");
+  const [indoorOutdoor, setIndoorOutdoor] = useState(""); // 실내외 구분 상태 추가
+
+  // Home이 최상위라 home에서 바꿔야 한다
+  // const [mode, setMode] = useState(context.nonSmokeTheme);
+  const mode = useContext(ThemeColorContext);
+
   useEffect(() => {
     initializeMap();
+
+    console.log(mode);
+    console.log(userType);
   }, []);
 
-  // 초기 지도 생성 함수
+  //  location.search가 변경될 때마다 실행, location.search는 URL의 쿼리 문자열 부분(?report=ture) 부분
+  useEffect(() => {
+    console.log(location);
+    const queryParams = new URLSearchParams(location.search);
+    if (queryParams.get("report") === "true") {
+      setIsReporting(true);
+    } else {
+      setIsReporting(false);
+    }
+    console.log(userType);
+  }, [location.search]);
+
+  // isReporting이 true이고 mapInstance가 존재하면 startReporting 함수를 호출하여 제보기능 호출
+  useEffect(() => {
+    if (isReporting && mapInstance) {
+      startReporting();
+    }
+  }, [isReporting, mapInstance]);
+
   function initializeMap() {
     const container = mapRef.current;
     const options = {
@@ -40,87 +79,117 @@ const Map = () => {
       level: 3,
     };
 
-    // 지도 생성
     const map = new kakao.maps.Map(container, options);
     setMapInstance(map);
 
-    // 사용자 위치를 나타내는 아이콘 설정
-    const imageSrc = UserImg; // import한 이미지 사용
-    const imageSize = new kakao.maps.Size(24, 30); // 아이콘의 크기
-    const imageOption = { offset: new kakao.maps.Point(12, 15) }; // 아이콘의 기준 위치 위의 아이콘의 크기에 따라 변동하자
-
-    const markerImage = new kakao.maps.MarkerImage(
-      imageSrc,
-      imageSize,
-      imageOption
-    );
-
-    // 맨 처음 마커 위치 설정(제주도, 이미지는 유저 이미지(아이콘))
-    markerRef.current = new kakao.maps.Marker({
-      position: new kakao.maps.LatLng(33.4507, 126.570667),
-      image: markerImage,
-      map,
-    });
-
-    // 사용자의 위치추적
-    navigator.geolocation.watchPosition(
+    navigator.geolocation.getCurrentPosition(
       (position) => {
-        // position 객체에 위도, 경도 존재
         const { latitude, longitude } = position.coords;
-        const newLatLng = new kakao.maps.LatLng(latitude, longitude);
+        const userLatLng = new kakao.maps.LatLng(latitude, longitude);
 
-        // 마커(사용자 아이콘)이 존재하는 경우 그 아이콘의 위치를 업데이트 한다(이동이 있을경우 이동하겠지?)
-        if (markerRef.current) {
-          markerRef.current.setPosition(newLatLng); // 위치 업데이트
-        }
+        map.setCenter(userLatLng);
 
-        // 새로운 newLatLng를 가져오면 이걸 통해 map의 위치를 바꿈
-        map.setCenter(newLatLng);
+        const imageSrc = UserImg;
+        const imageSize = new kakao.maps.Size(24, 30);
+        const imageOption = { offset: new kakao.maps.Point(12, 15) };
+
+        const markerImage = new kakao.maps.MarkerImage(
+          imageSrc,
+          imageSize,
+          imageOption
+        );
+
+        markerRef.current = new kakao.maps.Marker({
+          position: userLatLng,
+          image: markerImage,
+          map,
+        });
+
+        navigator.geolocation.watchPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            const newLatLng = new kakao.maps.LatLng(latitude, longitude);
+
+            if (markerRef.current) {
+              markerRef.current.setPosition(newLatLng);
+            }
+
+            map.setCenter(newLatLng);
+          },
+          (error) => {
+            console.error("위치 정보를 가져오는 데 실패했습니다.", error);
+          },
+          {
+            enableHighAccuracy: true,
+            maximumAge: 0,
+            timeout: 10000,
+          }
+        );
+
+        const savedMarkers = JSON.parse(localStorage.getItem("markers")) || [];
+        setMarkers(savedMarkers);
+        console.log(savedMarkers);
+        savedMarkers.forEach((markerData) => {
+          // const markerImageSrc =
+          //   markerData.userType === "smoker" ? smokeImg : smokeImg2;
+          createMarker(
+            map,
+            new kakao.maps.LatLng(
+              markerData.position.Ma,
+              markerData.position.La
+            ),
+            markerData.title,
+            markerData.img,
+            markerData.address,
+            markerData.userType,
+            markerData.hasAshtray,
+            markerData.indoorOutdoor
+          );
+        });
       },
       (error) => {
-        console.error("위치 정보를 가져오는 데 실패했습니다.", error);
+        console.error("현재 위치를 가져오는 데 실패했습니다.", error);
       },
       {
         enableHighAccuracy: true,
         maximumAge: 0,
-        timeout: 5000,
+        timeout: 10000,
       }
     );
-
-    // 로컬스토리지에 있는 마커 데이터를 가져와 지도에 추가한다
-    const savedMarkers = JSON.parse(localStorage.getItem("markers")) || [];
-    setMarkers(savedMarkers);
-    savedMarkers.forEach((markerData) => {
-      createMarker(
-        map,
-        new kakao.maps.LatLng(markerData.position.Ma, markerData.position.La),
-        markerData.title,
-        markerData.img,
-        markerData.address
-      );
-    });
-
-    console.log(map);
-
-    // 지도를 클릭했을 때 새로운 마커를 추가할 수 있도록 설정
-    kakao.maps.event.addListener(map, "click", function (mouseEvent) {
-      const latlng = mouseEvent.latLng;
-
-      // {La: 126.88766982662986, Ma: 37.49129582020366} 와 같이 반환
-      console.log(latlng);
-
-      // 위도, 경도 저장
-      setNewMarker(latlng);
-
-      // 주소 변환 함수 호출
-      getAddressFromCoords(latlng);
-
-      // 모달창 오픈
-      setIsModalOpen(true);
-    });
   }
 
-  // 좌표를 주소로 변환하는 함수
+  const startReporting = () => {
+    const map = mapInstance;
+    const smokeImageSrc = userType === "smoker" ? smokeImg : smokeImg2;
+    const smokeImageSize = new kakao.maps.Size(24, 30);
+    const smokeImageOption = { offset: new kakao.maps.Point(12, 15) };
+
+    const smokeMarkerImage = new kakao.maps.MarkerImage(
+      reportImg,
+      smokeImageSize,
+      smokeImageOption
+    );
+
+    const reportingMarker = new kakao.maps.Marker({
+      position: map.getCenter(),
+      image: smokeMarkerImage,
+      map,
+    });
+
+    reportingMarkerRef.current = reportingMarker;
+    setNewMarker(reportingMarker.getPosition());
+    getAddressFromCoords(reportingMarker.getPosition());
+
+    kakao.maps.event.addListener(map, "dragend", function () {
+      const latlng = map.getCenter();
+      reportingMarker.setPosition(latlng);
+      getAddressFromCoords(latlng);
+      setNewMarker(latlng);
+    });
+
+    setIsModalOpen(true);
+  };
+
   const getAddressFromCoords = (latlng) => {
     const geocoder = new kakao.maps.services.Geocoder();
 
@@ -129,10 +198,7 @@ const Map = () => {
       latlng.getLat(),
       (result, status) => {
         if (status === kakao.maps.services.Status.OK) {
-          // 도로명 주소로 없으면 그냥 00동으로 표시된 주소를 가져옴
-          console.log(result);
-
-          const detailAddr = !!result[0].road_address
+          const detailAddr = result[0].road_address
             ? result[0].road_address.address_name
             : result[0].address.address_name;
           setAddress(detailAddr);
@@ -141,16 +207,23 @@ const Map = () => {
     );
   };
 
-  // 새 마커를 지도에 추가하는 함수
-  function createMarker(map, position, title, img, address) {
-    const smokeImageSrc = smokeImg;
-    const smokeImageSize = new kakao.maps.Size(24, 30); // 아이콘의 크기
-    const somkeImageOption = { offset: new kakao.maps.Point(12, 15) }; // 아이콘의 기준 위치 위의 아이콘의 크기에 따라 변동하자
+  function createMarker(
+    map,
+    position,
+    title,
+    img,
+    address,
+    userType,
+    hasAshtray = false, // 전달된 인수가 없을 떄 기본값
+    indoorOutdoor = "" // 전달된 인수가 없을 떄 기본값
+  ) {
+    const smokeImageSize = new kakao.maps.Size(24, 30);
+    const smokeImageOption = { offset: new kakao.maps.Point(12, 15) };
 
     const smokeMarkerImage = new kakao.maps.MarkerImage(
-      smokeImageSrc,
+      img,
       smokeImageSize,
-      somkeImageOption
+      smokeImageOption
     );
 
     const marker = new kakao.maps.Marker({
@@ -159,24 +232,22 @@ const Map = () => {
       image: smokeMarkerImage,
     });
 
-    // 마커 클릭 시 마커 정보를 보여주는 이벤트 리스너 추가
     kakao.maps.event.addListener(marker, "click", function () {
-      setSelectedMarkerInfo({ title, img, address });
+      setSelectedMarkerInfo({
+        title,
+        img,
+        address,
+        userType,
+        hasAshtray,
+        indoorOutdoor,
+      });
     });
 
     return marker;
   }
 
-  // 모달에서 마커 정보를 제출할 때 호출되는 함수
+  // 제보 제출
   const handleSubmit = () => {
-    // setTitle은 잘 작동된다, newMarker의 위치 정보(경도,위도)도 저장됨
-    console.log(title);
-    console.log(newMarker);
-    console.log(newMarker.getLat());
-
-    console.log(img);
-    console.log(address);
-
     if (newMarker && title && address) {
       const newMarkerData = {
         position: {
@@ -184,8 +255,13 @@ const Map = () => {
           La: newMarker.getLng(),
         },
         title,
-        img,
+        img: userType === "smoker" ? smokeImg : smokeImg2, // 마커의 이미지 설정 (기본값은 smokeImg)
         address,
+        userType,
+        ...(userType === "smoker" && {
+          hasAshtray,
+          indoorOutdoor,
+        }),
       };
 
       setMarkers((prev) => {
@@ -198,25 +274,14 @@ const Map = () => {
         mapInstance,
         new kakao.maps.LatLng(newMarker.getLat(), newMarker.getLng()),
         title,
-        img,
-        address
+        userType === "smoker" ? smokeImg : smokeImg2,
+        address,
+        userType,
+        hasAshtray,
+        indoorOutdoor
       );
 
-      // 이게 있으면 모달창으로 마커 생성하면 화면에 바로 보이므로 일단 없애자
-      // setSelectedMarkerInfo({ title });
-
       handleCloseModal();
-    }
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImg(reader.result); // 이미지 URL을 상태에 저장
-      };
-      reader.readAsDataURL(file);
     }
   };
 
@@ -225,15 +290,29 @@ const Map = () => {
     setTitle("");
     setNewMarker(null);
     setAddress("");
+    setIsReporting(false);
+    setHasAshtray(false);
+
+    if (reportingMarkerRef.current) {
+      reportingMarkerRef.current.setMap(null); // 마커를 지도에서 제거
+      reportingMarkerRef.current = null; // 레퍼런스를 초기화
+    }
+    navigate("/home/map");
   };
 
   return (
     <Container>
       <MapDiv ref={mapRef}></MapDiv>
       {selectedMarkerInfo && (
-        <InfoPanel>
+        <InfoPanel
+          infoboxcolor={mode.infoBoxColor}
+          infofontbordercolor={mode.infoFontBorderColor}
+        >
           <CloseButtonBox>
-            <CloseButton onClick={() => setSelectedMarkerInfo(null)}>
+            <CloseButton
+              infofontbordercolor={mode.infoFontBorderColor}
+              onClick={() => setSelectedMarkerInfo(null)}
+            >
               닫기
             </CloseButton>
           </CloseButtonBox>
@@ -243,44 +322,99 @@ const Map = () => {
               <h3>주소</h3>
               <h5>{selectedMarkerInfo.address}</h5>
               <h4>{selectedMarkerInfo.title}</h4>
+              {selectedMarkerInfo.userType === "smoker" && (
+                <PlusInfo>
+                  <InfosmokerBox infofontbordercolor={mode.infoFontBorderColor}>
+                    재떨이
+                    {selectedMarkerInfo.hasAshtray}
+                  </InfosmokerBox>
+                  <InfosmokerBox infofontbordercolor={mode.infoFontBorderColor}>
+                    {selectedMarkerInfo.indoorOutdoor}
+                  </InfosmokerBox>
+                </PlusInfo>
+              )}
             </Box>
             <ImgBox>
               {selectedMarkerInfo.img && (
-                <img src={selectedMarkerInfo.img} alt="Marker" />
+                <img src={selectedMarkerInfo.img} alt="Uploaded" />
               )}
             </ImgBox>
           </InfoBox>
-          <LikeButton>좋아요</LikeButton>
+          <LikeButton onClick={() => alert("좋아요 클릭!")}>좋아요</LikeButton>
         </InfoPanel>
       )}
       {isModalOpen && (
-        <Modal>
-          <ModalContent>
-            <h2>흡연 장소</h2>
+        <ModalOverlay>
+          <ModalContent
+            modalboxcolor={mode.reportBackground}
+            fontcolor={mode.font}
+          >
+            <h4>제보하기</h4>
             <Form>
-              <label>
-                장소 설명:
-                <input
-                  type="text"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                />
-              </label>
-              <label>
-                사진:
-                <input
+              <h3>주소</h3>
+              <h5>{address}</h5>
+
+              {/* <Label>
+                이미지 업로드:
+                <Input
                   type="file"
                   accept="image/*"
                   onChange={handleImageChange}
                 />
-              </label>
+              </Label>
+              {img && <ImagePreview src={img} alt="Preview" />} */}
+              {userType === "smoker" && (
+                <ModalBtnBox>
+                  <Label>
+                    *재떨이
+                    <Button
+                      active={hasAshtray === "O"}
+                      onClick={() => setHasAshtray("O")}
+                    >
+                      유
+                    </Button>
+                    <Button
+                      active={hasAshtray === "X"}
+                      onClick={() => setHasAshtray("X")}
+                    >
+                      무
+                    </Button>
+                  </Label>
+                  <Label>
+                    *실내외
+                    <Button
+                      active={indoorOutdoor === "실내"}
+                      onClick={() => setIndoorOutdoor("실내")}
+                    >
+                      실내
+                    </Button>
+                    <Button
+                      active={indoorOutdoor === "실외"}
+                      onClick={() => setIndoorOutdoor("실외")}
+                    >
+                      실외
+                    </Button>
+                  </Label>
+                </ModalBtnBox>
+              )}
+              <TextConatiner>
+                <Input
+                  type="text"
+                  value={title}
+                  placeholder="상세 위치(최대 20자)"
+                  placeholdercolor={mode.placeholder}
+                  textboxcolor={mode.reportTextBox}
+                  onChange={(e) => setTitle(e.target.value)}
+                  maxLength={20}
+                />
+              </TextConatiner>
+              <ButtonBox>
+                <Button onClick={handleSubmit}>제출</Button>
+                <Button onClick={handleCloseModal}>취소</Button>
+              </ButtonBox>
             </Form>
-            <ButtonContainer>
-              <ModalButton onClick={handleSubmit}>확인</ModalButton>
-              <ModalButton onClick={handleCloseModal}>취소</ModalButton>
-            </ButtonContainer>
           </ModalContent>
-        </Modal>
+        </ModalOverlay>
       )}
     </Container>
   );
@@ -289,15 +423,17 @@ const Map = () => {
 export default Map;
 
 const Container = styled.div`
-  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
+  height: 100%;
+  position: relative;
 `;
 
 const MapDiv = styled.div`
-  width: 600px;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
 `;
 
 const InfoPanel = styled.div`
@@ -307,8 +443,9 @@ const InfoPanel = styled.div`
   transform: translateX(-50%);
   z-index: 5;
   width: 80%;
-
-  background: white;
+  opacity: 95%;
+  background-color: ${(props) => props.infoboxcolor};
+  color: ${(props) => props.infofontbordercolor};
   border-top: 1px solid #ccc;
   border-radius: 1rem;
   text-align: center;
@@ -322,115 +459,159 @@ const InfoPanel = styled.div`
   }
 `;
 
+const InfoBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const PlusInfo = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const InfosmokerBox = styled.div`
+  border: 2px solid ${(props) => props.infofontbordercolor};
+  color: ${(props) => props.infofontbordercolor};
+  border-radius: 0.2rem;
+  padding: 0.2rem 0.3rem;
+  margin-right: 0.5rem;
+  font-weight: bold;
+`;
+
 const CloseButtonBox = styled.div`
   display: flex;
-  justify-content: end;
-  margin-bottom: 0.5rem;
+  justify-content: flex-end;
 `;
 
 const CloseButton = styled.button`
-  // position: absolute;
-  // top: 10px;
-  // right: 10px;
   background: none;
   border: none;
-  font-size: 16px;
+  color: ${(props) => props.infofontbordercolor};
+  font-size: 1rem;
+  font-weight: bold;
   cursor: pointer;
-`;
-
-const InfoBox = styled.div`
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
 `;
 
 const Box = styled.div`
   text-align: start;
-  width: 50%;
-
-  h3 {
+  flex: 1;
+  h3,
+  h4,
+  h5,
+  h6 {
     margin: 0;
-  }
-  h4 {
-    margin: 0;
-    margin-bottom: 5%;
-  }
-  h5 {
-    margin: 0;
-    margin-bottom: 5%;
   }
 `;
 
 const ImgBox = styled.div`
-  width: 50%;
-`;
-
-const LikeButton = styled.button`
-  margin-top: 10px;
-  padding: 5px 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #0056b3;
+  flex: 1;
+  img {
+    width: 50%;
+    height: auto;
   }
 `;
 
-const Modal = styled.div`
-  z-index: 5000;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+const LikeButton = styled.button`
+  width: 100%;
+  padding: 1rem;
+  background: green;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  margin-top: 1rem;
+`;
+
+const ModalOverlay = styled.div`
+  position: absolute;
+  bottom: 15%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+  h4,
+  h3,
+  h5,
+  h6 {
+    margin: 0;
+  }
+  h4 {
+    margin-bottom: 0.2rem;
+  }
+`;
+
+const ModalContent = styled.div`
+  background: white;
+  padding: 1rem 2rem;
+  border-radius: 0.5rem;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: ${(props) => props.modalboxcolor};
+  color: ${(props) => props.fontcolor};
+
+  @media (max-width: 600px) {
+    width: 70%;
+  }
+`;
+
+const Form = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Label = styled.label`
+  // margin-bottom: 1rem;
+  font-weight: bold;
+`;
+const TextConatiner = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
-const ModalContent = styled.div`
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  width: 400px;
-  text-align: center;
-`;
-
-const Form = styled.div`
-  margin-bottom: 20px;
-
-  label {
-    display: block;
-    margin-bottom: 10px;
-  }
-
-  input {
-    width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-  }
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: space-around;
-`;
-
-const ModalButton = styled.button`
-  padding: 10px 20px;
+const Input = styled.input`
+  width: 95%;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
   border: none;
-  border-radius: 5px;
+  border-radius: 0.5rem;
+  background-color: ${(props) => props.textboxcolor};
+
+  &:focus {
+    outline: none;
+  }
+  &::placeholder {
+    color: ${(props) => props.placeholdercolor};
+  }
+`;
+
+const ModalBtnBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.4rem 0;
+`;
+
+const ButtonBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+`;
+
+const Button = styled.button`
+  background-color: ${(props) => (props.active ? "#F7F152" : "#252424")};
+  color: ${(props) => (props.active ? "#000000" : "#F7F152")};
+  border: 2px solid #f7f152;
+  padding: 0.1rem 0.5em;
+  margin: 0rem 0.3rem;
+  border-radius: 4px;
   cursor: pointer;
-  background-color: #007bff;
-  color: white;
 
   &:hover {
-    background-color: #0056b3;
+    background-color: ${(props) => (props.active ? "#c3bf4e" : "#626262")};
   }
 `;

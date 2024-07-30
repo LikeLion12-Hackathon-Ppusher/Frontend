@@ -5,13 +5,14 @@ import axios from "axios";
 const Redirection = () => {
   const navigate = useNavigate();
   const code = new URLSearchParams(window.location.search).get("code");
-  console.log("code:", code);
+  console.log(code);
 
   useEffect(() => {
     const REST_API_KEY = process.env.REACT_APP_REST_API_KEY;
     const CLIENT_SECRET = process.env.REACT_APP_CLIENT_SECRET;
     const REDIRECT_URI_LOCAL = process.env.REACT_APP_REDIRECT_URL_LOCAL;
-    const REDIRECT_URI_PRODUCTION = process.env.REACT_APP_REDIRECT_URL_PRODUCTION;
+    const REDIRECT_URI_PRODUCTION =
+      process.env.REACT_APP_REDIRECT_URL_PRODUCTION;
 
     // 현재 URL이 localhost인 경우 로컬 리다이렉트 URI를 사용
     const REDIRECT_URI =
@@ -23,20 +24,18 @@ const Redirection = () => {
     console.log("REST API Key:", REST_API_KEY);
     console.log("Client Secret:", CLIENT_SECRET);
 
-    const url = `http://bbuhackathon.p-e.kr:8000/oauth/kakao/callback/`;
-
-    const makeFormData = (params) => {
-      const searchParams = new URLSearchParams();
-
-      Object.keys(params).forEach((key) => {
-        searchParams.append(key, params[key]);
-      });
-
-      console.log(searchParams);
-      return searchParams;
-    };
-
     const fnGetKakaoOauthToken = async () => {
+      const makeFormData = (params) => {
+        const searchParams = new URLSearchParams();
+
+        Object.keys(params).forEach((key) => {
+          searchParams.append(key, params[key]);
+        });
+
+        console.log(searchParams);
+        return searchParams;
+      };
+
       try {
         const res = await axios({
           method: "POST",
@@ -55,16 +54,14 @@ const Redirection = () => {
 
         // localStorage에 accessToken 저장
         localStorage.setItem("kakaoAccessToken", res.data.access_token);
-        console.log(res);
         navigate("/home");
       } catch (err) {
-        console.log(err);
+        console.warn(err);
       }
     };
 
     fnGetKakaoOauthToken();
   }, [navigate, code]);
-
 
   return <div>로그인 중입니다.</div>;
 };
@@ -126,4 +123,3 @@ export default Redirection;
 // };
 
 // export default Redirection;
-

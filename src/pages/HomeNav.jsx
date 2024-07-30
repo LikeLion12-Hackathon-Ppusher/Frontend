@@ -1,19 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import smokeImg from "../assets/free-icon-smoking-813800.png";
+import smokeImg2 from "../assets/상습흡연.png";
+import { ThemeColorContext } from "../Context/context";
 
 const HomeNav = () => {
-  const navigate = useNavigate();
-
-  const REST_API_KEY = process.env.REACT_APP_REST_API_KEY;
-  const REDIRECT_URI = process.env.REACT_APP_REDIRECT_URL;
-  const link = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-
-  const loginHandler = () => {
-    window.location.href = link;
-  };
-
+  const mode = useContext(ThemeColorContext);
   return (
     <Container>
       <AppBar>
@@ -21,12 +14,17 @@ const HomeNav = () => {
         {/* <LoginBtn onClick={loginHandler}>로그인</LoginBtn> */}
       </AppBar>
       <HomeContainer>
-        <LogoContainer>
+        <LogoContainer
+          fontColor={mode.font}
+          borderColor={mode.NavborderColor}
+          backgroundColor={mode.background}
+        >
           <ImgContainer>
             <img src={smokeImg} alt="" />
             <div>제보 흡연구역</div>
           </ImgContainer>{" "}
           <ImgContainer>
+            <img src={smokeImg2} alt="" />
             <div>상습 흡연 제보구역</div>{" "}
           </ImgContainer>
         </LogoContainer>
@@ -77,15 +75,17 @@ const LogoContainer = styled.div`
   justify-content: space-around;
   align-items: center;
   text-align: center;
-  background-color: white;
-  border: 1px solid;
-  border-color: black;
+  background-color: ${(props) => props.backgroundColor};
+  border: 2px solid;
+  border-color: ${(props) => props.borderColor};
   border-radius: 6px;
+  color: ${(props) => props.fontColor};
 `;
 
 const ImgContainer = styled.div`
   display: flex;
   align-items: center;
+  font-weight: bold;
   img {
     width: 1rem;
     height: 1rem;
