@@ -26,7 +26,6 @@ const Container = styled.div`
   width: 100%;
 `;
 
-
 const BackButton = styled.button`
   background: none;
   border: none;
@@ -41,9 +40,9 @@ const BackButton = styled.button`
 `;
 
 const TypeHeader = styled.h1`
-  font-size: 2.1rem;
+  font-size: 2.4rem;
   position: absolute;
-  top: 9rem;
-  left: 2rem;
+  top: 8rem;
+  left: 1.8rem;
   background: linear-gradient(to top, #FFF100 40%, transparent 40%);
 `;

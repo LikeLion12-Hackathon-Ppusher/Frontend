@@ -27,10 +27,11 @@ const SetNotifySmoker = () => {
       <SetNotifyHeader></SetNotifyHeader>
       <Box>
         <h2>금연구역 알림 설정</h2>
-        <div>
-          금연구역에 <strong>얼마나 머문 경우</strong>부터
-          <br /> 알림을 받으시겠습니까?
-        </div>
+        <Guide>
+          금연구역에서 알림을 통해
+          <br />
+          <strong>가까운 흡연구역 정보</strong>를 확인할 수 있습니다.
+        </Guide>
         <BtnBox>
           <Btn
             className={activeBox === "immediate" ? "active" : ""}
@@ -73,16 +74,16 @@ const SelectContainer = styled.div`
 `;
 
 const Box = styled.div`
-  background-color: #dedddd;
+  background-color: #FFF100;
   width: 90%;
-  height: 15rem;
+  height: 18rem;
   border-radius: 0.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin: 10% 0;
+  margin: 6% 0;
 
   h3 {
     margin-top: 1rem;
@@ -90,37 +91,55 @@ const Box = styled.div`
 `;
 
 const BtnBox = styled.div`
-  margin-top: 1rem;
   display: flex;
   justify-content: space-evenly;
   width: 90%;
+  margin-top: 5%;
 `;
 
 const Btn = styled.div`
   padding: 1rem 1.5rem;
-  background-color: white;
-  border-radius: 0.4rem;
+  color: white;
+  background-color: black;
+  border: 2px solid transparent;
+  border-radius: 0.8rem;
+  font-size: 1.5rem;
   cursor: pointer;
-
   &:hover,
   &:focus {
-    background-color: #c0c0c0;
-    transform: scale(1.05);
+    background-color: #f7f152;
+    color: black;
+
     outline: none; /* 포커스 시에 기본 아웃라인을 없애기 위해 */
+    border: 2px solid black;
   }
 
   &.active {
-    background-color: gray;
-    transform: scale(1.05);
+    background-color: #f7f152;
+    color: black;
+    border: 2px solid black;
   }
 `;
 
 const SelectBtn = styled.div`
   width: 90%;
-  background-color: gray;
-  padding: 1rem 0;
-  border-radius: 0.4rem;
+  height: 2rem;
+  color: white;
+  background-color: black;
+  margin-top: 4rem;
+  padding: 1.8rem 0rem 1.8rem 0rem;
+  border-radius: 0.5rem;
   text-align: center;
   cursor: pointer;
-  font-weight: bold;
+  font-size: 1.6rem;
+  &:hover,
+  &:focus {
+    color: black;
+    background-color: #FFF100;
+    outline: none;
+  }
+`;
+
+const Guide = styled.div`
+  font-size: 1.2rem;
 `;

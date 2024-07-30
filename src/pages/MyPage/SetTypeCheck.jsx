@@ -50,37 +50,17 @@ const Container = styled.div`
   background-repeat: no-repeat;
 `;
 
-const BackButton = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  position: absolute;
-  top: 6rem;
-  left: 1rem;
-  img {
-    width: 2rem;
-    height: 2rem;
-  }
-`;
-
-const TypeHeader = styled.h1`
-  width: 90%;
-  font-size: 32px;
-  position: absolute;
-  top: 9rem;
-`;
-
 const Box = styled.div`
-  background-color: #D9D9D9;
+  background-color: #FFF100;
   border: 1px solid #dee2e6;
   border-radius: 6px;
-  padding: 6rem 0rem 3rem 0rem;
+  padding: 5rem 0rem 2.5rem 0rem;
   margin-bottom: 6rem;
   text-align: center;
   width: 90%;
 
   p {
-    font-size: 27px;
+    font-size: 1.8rem;
   }
 `;
 
@@ -96,13 +76,15 @@ const Button = styled.button`
   width: 150px;
   height: 36px;
   margin-top: 0.5rem;
-  border-radius: 0.5rem;
-  background-color: #D9D9D9;
+  border-radius: 0.4rem;
+  color: #FFFFFF;
+  background-color: #000000;
   font-size: 18px;
   cursor: pointer;
   text-align: center;
 
   &:hover {
-    background-color: gray;
+    color: #000000;
+    background-color: white;
   }
 `;
