@@ -31,9 +31,9 @@ const SetAccount = () => {
       <SetHeader headerText="카카오 계정 관리"></SetHeader>
       {userInfo && (
         <UserInfo>
-          <p>이름: {userInfo.kakao_account.profile.nickname}</p>
+          {/* <p>이름: {userInfo.kakao_account.profile.nickname}</p> */}
           <p>이메일: {userInfo.kakao_account.email}</p>
-          <ProfileImage src={userInfo.kakao_account.profile.profile_image_url} alt="Profile" />
+          {/* <ProfileImage src={userInfo.kakao_account.profile.profile_image_url} alt="Profile" /> */}
           {/* <ThumbnailImage src={userInfo.kakao_account.profile.thumbnail_image_url} alt="Thumbnail" /> */}
         </UserInfo>
       )}
