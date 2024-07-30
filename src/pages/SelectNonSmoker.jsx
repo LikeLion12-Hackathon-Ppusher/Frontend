@@ -17,7 +17,10 @@ const SelectNonSmoker = () => {
   const handleConfirmClick = () => {
     if (selectedDistance) {
       // 비흡연자 설정 페이지로 이동 (경로는 예시로 작성했습니다. 필요에 맞게 수정하세요.)
-      navigate("/home/map", { state: { distance: selectedDistance } });
+      navigate("/home/map", {
+        state: { distance: selectedDistance, userType: "nonSmoker" },
+      });
+      // window.location.reload();
     } else {
       alert("거리를 선택해 주세요.");
     }
@@ -88,7 +91,7 @@ const TitleContainer = styled.div`
 `;
 
 const Box = styled.div`
-  background-color: #dedddd;
+  background-color: #f7f152;
   width: 90%;
   height: 15rem;
   border-radius: 0.5rem;
@@ -116,25 +119,29 @@ const Btn = styled.div`
   background-color: white;
   border-radius: 0.4rem;
   cursor: pointer;
-
+  color: black;
+  border: 2px solid black;
   &:hover,
   &:focus {
-    background-color: #c0c0c0;
-    transform: scale(1.05);
+    background-color: black;
+    color: white;
     outline: none; /* 포커스 시에 기본 아웃라인을 없애기 위해 */
+    border: 2px solid black;
   }
 
   &.active {
-    background-color: gray;
-    transform: scale(1.05);
+    background-color: black;
+    color: white;
+    border: 2px solid black;
   }
 `;
 
 const SelectBtn = styled.div`
   width: 90%;
-  background-color: gray;
+  background-color: black;
+  color: white;
   padding: 1rem 0;
-  border-radius: 0.4rem;
+  border-radius: 0.3rem;
   text-align: center;
   cursor: pointer;
   font-weight: bold;

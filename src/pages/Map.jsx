@@ -1,8 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import UserImg from "../assets/free-icon-user-3686930.png";
 import smokeImg from "../assets/free-icon-smoking-813800.png";
+import smokeImg2 from "../assets/상습흡연.png";
+import reportImg from "../assets/logo.png";
+import { ThemeColorContext } from "../Context/context";
+import Home from "./Home";
 
 const { kakao } = window;
 
@@ -29,8 +33,24 @@ const Map = () => {
 
   const navigate = useNavigate();
 
+  const [userType, setUserType] = useState(
+    location.state?.userType || "smoker"
+  ); // 상태로 관리
+  // 이후 로그인 api와 정보를 저장할 수 있는 경우에는 다르게 useEffect에다가 axios.get으로 가져오거나 애초에
+  // 로그인 할때 받은 res 데이터 정보에 담겨있는 option에서의 값을 여기다가 갔다놓자 (로그인 했을 때 받은 데이터 객체를 어디다가 저장해야 됨)
+
+  const [hasAshtray, setHasAshtray] = useState("");
+  const [indoorOutdoor, setIndoorOutdoor] = useState(""); // 실내외 구분 상태 추가
+
+  // Home이 최상위라 home에서 바꿔야 한다
+  // const [mode, setMode] = useState(context.nonSmokeTheme);
+  const mode = useContext(ThemeColorContext);
+
   useEffect(() => {
     initializeMap();
+
+    console.log(mode);
+    console.log(userType);
   }, []);
 
   //  location.search가 변경될 때마다 실행, location.search는 URL의 쿼리 문자열 부분(?report=ture) 부분
@@ -42,6 +62,7 @@ const Map = () => {
     } else {
       setIsReporting(false);
     }
+    console.log(userType);
   }, [location.search]);
 
   // isReporting이 true이고 mapInstance가 존재하면 startReporting 함수를 호출하여 제보기능 호출
@@ -101,13 +122,16 @@ const Map = () => {
           {
             enableHighAccuracy: true,
             maximumAge: 0,
-            timeout: 5000,
+            timeout: 10000,
           }
         );
 
         const savedMarkers = JSON.parse(localStorage.getItem("markers")) || [];
         setMarkers(savedMarkers);
+        console.log(savedMarkers);
         savedMarkers.forEach((markerData) => {
+          // const markerImageSrc =
+          //   markerData.userType === "smoker" ? smokeImg : smokeImg2;
           createMarker(
             map,
             new kakao.maps.LatLng(
@@ -115,8 +139,11 @@ const Map = () => {
               markerData.position.La
             ),
             markerData.title,
-            smokeImg,
-            markerData.address
+            markerData.img,
+            markerData.address,
+            markerData.userType,
+            markerData.hasAshtray,
+            markerData.indoorOutdoor
           );
         });
       },
@@ -126,19 +153,19 @@ const Map = () => {
       {
         enableHighAccuracy: true,
         maximumAge: 0,
-        timeout: 5000,
+        timeout: 10000,
       }
     );
   }
 
   const startReporting = () => {
     const map = mapInstance;
-    const smokeImageSrc = smokeImg;
+    const smokeImageSrc = userType === "smoker" ? smokeImg : smokeImg2;
     const smokeImageSize = new kakao.maps.Size(24, 30);
     const smokeImageOption = { offset: new kakao.maps.Point(12, 15) };
 
     const smokeMarkerImage = new kakao.maps.MarkerImage(
-      smokeImageSrc,
+      reportImg,
       smokeImageSize,
       smokeImageOption
     );
@@ -180,13 +207,21 @@ const Map = () => {
     );
   };
 
-  function createMarker(map, position, title, img, address) {
-    const smokeImageSrc = smokeImg;
+  function createMarker(
+    map,
+    position,
+    title,
+    img,
+    address,
+    userType,
+    hasAshtray = false, // 전달된 인수가 없을 떄 기본값
+    indoorOutdoor = "" // 전달된 인수가 없을 떄 기본값
+  ) {
     const smokeImageSize = new kakao.maps.Size(24, 30);
     const smokeImageOption = { offset: new kakao.maps.Point(12, 15) };
 
     const smokeMarkerImage = new kakao.maps.MarkerImage(
-      smokeImageSrc,
+      img,
       smokeImageSize,
       smokeImageOption
     );
@@ -198,7 +233,14 @@ const Map = () => {
     });
 
     kakao.maps.event.addListener(marker, "click", function () {
-      setSelectedMarkerInfo({ title, img, address });
+      setSelectedMarkerInfo({
+        title,
+        img,
+        address,
+        userType,
+        hasAshtray,
+        indoorOutdoor,
+      });
     });
 
     return marker;
@@ -213,8 +255,13 @@ const Map = () => {
           La: newMarker.getLng(),
         },
         title,
-        img: smokeImg, // 항상 smokeImg를 사용합니다.
+        img: userType === "smoker" ? smokeImg : smokeImg2, // 마커의 이미지 설정 (기본값은 smokeImg)
         address,
+        userType,
+        ...(userType === "smoker" && {
+          hasAshtray,
+          indoorOutdoor,
+        }),
       };
 
       setMarkers((prev) => {
@@ -227,8 +274,11 @@ const Map = () => {
         mapInstance,
         new kakao.maps.LatLng(newMarker.getLat(), newMarker.getLng()),
         title,
-        smokeImg,
-        address
+        userType === "smoker" ? smokeImg : smokeImg2,
+        address,
+        userType,
+        hasAshtray,
+        indoorOutdoor
       );
 
       handleCloseModal();
@@ -241,6 +291,8 @@ const Map = () => {
     setNewMarker(null);
     setAddress("");
     setIsReporting(false);
+    setHasAshtray(false);
+
     if (reportingMarkerRef.current) {
       reportingMarkerRef.current.setMap(null); // 마커를 지도에서 제거
       reportingMarkerRef.current = null; // 레퍼런스를 초기화
@@ -252,9 +304,15 @@ const Map = () => {
     <Container>
       <MapDiv ref={mapRef}></MapDiv>
       {selectedMarkerInfo && (
-        <InfoPanel>
+        <InfoPanel
+          infoboxcolor={mode.infoBoxColor}
+          infofontbordercolor={mode.infoFontBorderColor}
+        >
           <CloseButtonBox>
-            <CloseButton onClick={() => setSelectedMarkerInfo(null)}>
+            <CloseButton
+              infofontbordercolor={mode.infoFontBorderColor}
+              onClick={() => setSelectedMarkerInfo(null)}
+            >
               닫기
             </CloseButton>
           </CloseButtonBox>
@@ -264,6 +322,17 @@ const Map = () => {
               <h3>주소</h3>
               <h5>{selectedMarkerInfo.address}</h5>
               <h4>{selectedMarkerInfo.title}</h4>
+              {selectedMarkerInfo.userType === "smoker" && (
+                <PlusInfo>
+                  <InfosmokerBox infofontbordercolor={mode.infoFontBorderColor}>
+                    재떨이
+                    {selectedMarkerInfo.hasAshtray}
+                  </InfosmokerBox>
+                  <InfosmokerBox infofontbordercolor={mode.infoFontBorderColor}>
+                    {selectedMarkerInfo.indoorOutdoor}
+                  </InfosmokerBox>
+                </PlusInfo>
+              )}
             </Box>
             <ImgBox>
               {selectedMarkerInfo.img && (
@@ -276,19 +345,15 @@ const Map = () => {
       )}
       {isModalOpen && (
         <ModalOverlay>
-          <ModalContent>
+          <ModalContent
+            modalboxcolor={mode.reportBackground}
+            fontcolor={mode.font}
+          >
             <h4>제보하기</h4>
             <Form>
               <h3>주소</h3>
-              <div>{address}</div>
-              <Label>
-                제목:
-                <Input
-                  type="text"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                />
-              </Label>
+              <h5>{address}</h5>
+
               {/* <Label>
                 이미지 업로드:
                 <Input
@@ -298,6 +363,51 @@ const Map = () => {
                 />
               </Label>
               {img && <ImagePreview src={img} alt="Preview" />} */}
+              {userType === "smoker" && (
+                <ModalBtnBox>
+                  <Label>
+                    *재떨이
+                    <Button
+                      active={hasAshtray === "O"}
+                      onClick={() => setHasAshtray("O")}
+                    >
+                      유
+                    </Button>
+                    <Button
+                      active={hasAshtray === "X"}
+                      onClick={() => setHasAshtray("X")}
+                    >
+                      무
+                    </Button>
+                  </Label>
+                  <Label>
+                    *실내외
+                    <Button
+                      active={indoorOutdoor === "실내"}
+                      onClick={() => setIndoorOutdoor("실내")}
+                    >
+                      실내
+                    </Button>
+                    <Button
+                      active={indoorOutdoor === "실외"}
+                      onClick={() => setIndoorOutdoor("실외")}
+                    >
+                      실외
+                    </Button>
+                  </Label>
+                </ModalBtnBox>
+              )}
+              <TextConatiner>
+                <Input
+                  type="text"
+                  value={title}
+                  placeholder="상세 위치(최대 20자)"
+                  placeholdercolor={mode.placeholder}
+                  textboxcolor={mode.reportTextBox}
+                  onChange={(e) => setTitle(e.target.value)}
+                  maxLength={20}
+                />
+              </TextConatiner>
               <ButtonBox>
                 <Button onClick={handleSubmit}>제출</Button>
                 <Button onClick={handleCloseModal}>취소</Button>
@@ -333,8 +443,9 @@ const InfoPanel = styled.div`
   transform: translateX(-50%);
   z-index: 5;
   width: 80%;
-
-  background: white;
+  opacity: 95%;
+  background-color: ${(props) => props.infoboxcolor};
+  color: ${(props) => props.infofontbordercolor};
   border-top: 1px solid #ccc;
   border-radius: 1rem;
   text-align: center;
@@ -354,6 +465,20 @@ const InfoBox = styled.div`
   align-items: center;
 `;
 
+const PlusInfo = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const InfosmokerBox = styled.div`
+  border: 2px solid ${(props) => props.infofontbordercolor};
+  color: ${(props) => props.infofontbordercolor};
+  border-radius: 0.2rem;
+  padding: 0.2rem 0.3rem;
+  margin-right: 0.5rem;
+  font-weight: bold;
+`;
+
 const CloseButtonBox = styled.div`
   display: flex;
   justify-content: flex-end;
@@ -362,18 +487,27 @@ const CloseButtonBox = styled.div`
 const CloseButton = styled.button`
   background: none;
   border: none;
-  font-size: 1.5rem;
+  color: ${(props) => props.infofontbordercolor};
+  font-size: 1rem;
+  font-weight: bold;
   cursor: pointer;
 `;
 
 const Box = styled.div`
+  text-align: start;
   flex: 1;
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+  }
 `;
 
 const ImgBox = styled.div`
   flex: 1;
   img {
-    width: 70%;
+    width: 50%;
     height: auto;
   }
 `;
@@ -391,7 +525,7 @@ const LikeButton = styled.button`
 
 const ModalOverlay = styled.div`
   position: absolute;
-  bottom: 12%;
+  bottom: 15%;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -404,15 +538,24 @@ const ModalOverlay = styled.div`
   h6 {
     margin: 0;
   }
+  h4 {
+    margin-bottom: 0.2rem;
+  }
 `;
 
 const ModalContent = styled.div`
   background: white;
-  padding: 2rem;
+  padding: 1rem 2rem;
   border-radius: 0.5rem;
   width: 90%;
   max-width: 500px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: ${(props) => props.modalboxcolor};
+  color: ${(props) => props.fontcolor};
+
+  @media (max-width: 600px) {
+    width: 70%;
+  }
 `;
 
 const Form = styled.div`
@@ -421,16 +564,36 @@ const Form = styled.div`
 `;
 
 const Label = styled.label`
-  margin-bottom: 1rem;
+  // margin-bottom: 1rem;
   font-weight: bold;
+`;
+const TextConatiner = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Input = styled.input`
-  width: 100%;
+  width: 95%;
   padding: 0.5rem;
-  margin-top: 0.5rem;
-  border: 1px solid #ccc;
+  margin-bottom: 0.5rem;
+  border: none;
   border-radius: 0.5rem;
+  background-color: ${(props) => props.textboxcolor};
+
+  &:focus {
+    outline: none;
+  }
+  &::placeholder {
+    color: ${(props) => props.placeholdercolor};
+  }
+`;
+
+const ModalBtnBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.4rem 0;
 `;
 
 const ButtonBox = styled.div`
@@ -440,13 +603,15 @@ const ButtonBox = styled.div`
 `;
 
 const Button = styled.button`
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 0.5rem;
+  background-color: ${(props) => (props.active ? "#F7F152" : "#252424")};
+  color: ${(props) => (props.active ? "#000000" : "#F7F152")};
+  border: 2px solid #f7f152;
+  padding: 0.1rem 0.5em;
+  margin: 0rem 0.3rem;
+  border-radius: 4px;
   cursor: pointer;
-  background: #007bff;
-  color: white;
-  &:last-child {
-    background: #dc3545;
+
+  &:hover {
+    background-color: ${(props) => (props.active ? "#c3bf4e" : "#626262")};
   }
 `;

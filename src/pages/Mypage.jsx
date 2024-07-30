@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 const Mypage = () => {
   const navigate = useNavigate();
+
   const handleSample = () => {
     navigate("/");
   };
