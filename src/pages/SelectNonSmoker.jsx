@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import smokeImg from "../assets/free-icon-smoking-813800.png";
+import nonSmokerImg from "../assets/nonSmoker.png";
 
 const SelectNonSmoker = () => {
   const [activeBox, setActiveBox] = useState(null);
@@ -28,7 +28,7 @@ const SelectNonSmoker = () => {
   return (
     <SelectContainer>
       <TitleContainer>
-        <img src={smokeImg} alt="흡연자 이미지" />
+        <img src={nonSmokerImg} alt="흡연자 이미지" />
         <h1>비흡연자</h1>
       </TitleContainer>
       <Box>
@@ -76,6 +76,10 @@ const SelectContainer = styled.div`
 
   img {
     width: 10%;
+  }
+
+  h1 {
+    background: linear-gradient(to top, #fff100 40%, transparent 40%);
   }
 `;
 

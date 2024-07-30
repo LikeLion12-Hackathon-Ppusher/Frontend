@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import smokeImg from "../assets/free-icon-smoking-813800.png";
-import smokeImg2 from "../assets/상습흡연.png";
+import smokerReport from "../assets/제보흡연구역.png";
+import nonSmokerReport from "../assets/상습흡연구역.png";
 import { ThemeColorContext } from "../Context/context";
 
 const HomeNav = () => {
@@ -20,11 +20,11 @@ const HomeNav = () => {
           backgroundcolor={mode.background}
         >
           <ImgContainer>
-            <img src={smokeImg} alt="" />
+            <img src={smokerReport} alt="" />
             <div>제보 흡연구역</div>
           </ImgContainer>{" "}
           <ImgContainer>
-            <img src={smokeImg2} alt="" />
+            <img src={nonSmokerReport} alt="" />
             <div>상습 흡연 제보구역</div>{" "}
           </ImgContainer>
         </LogoContainer>

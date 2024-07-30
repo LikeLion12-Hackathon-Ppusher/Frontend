@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled, { css, keyframes } from "styled-components";
-import UserImg from "../assets/free-icon-user-3686930.png";
-import smokeImg from "../assets/free-icon-smoking-813800.png";
-import smokeImg2 from "../assets/상습흡연.png";
+import UserImg from "../assets/UserIcon.png";
+import smokeImg from "../assets/제보흡연구역.png";
+import smokeImg2 from "../assets/상습흡연구역.png";
 import reportImg from "../assets/logo.png";
 import { ThemeColorContext } from "../Context/context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -245,8 +245,8 @@ const Map = () => {
     hasAshtray = false, // 전달된 인수가 없을 떄 기본값
     indoorOutdoor = "" // 전달된 인수가 없을 떄 기본값
   ) {
-    const smokeImageSize = new kakao.maps.Size(24, 30);
-    const smokeImageOption = { offset: new kakao.maps.Point(12, 15) };
+    const smokeImageSize = new kakao.maps.Size(16, 16);
+    const smokeImageOption = { offset: new kakao.maps.Point(8, 8) };
 
     const smokeMarkerImage = new kakao.maps.MarkerImage(
       img,
@@ -665,16 +665,10 @@ const ThankYouModal = styled.div`
   z-index: 100;
   border-radius: 0.5rem;
   text-align: center;
-  ${({ isvisible }) =>
-    isvisible
-      ? css`
-          animation: ${fadeIn} 1s forwards;
-          pointer-events: auto; /* Ensure the modal is clickable */
-        `
-      : css`
-          animation: ${fadeOut} 1s forwards;
-          pointer-events: none; /* Ensure the modal is not clickable when hidden */
-        `}
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+  opacity: ${({ isvisible }) => (isvisible ? "1" : "0")};
+  visibility: ${({ isvisible }) => (isvisible ? "visible" : "hidden")};
+  display: block;
 `;
 
 const IconBox = styled.div`
@@ -705,27 +699,5 @@ const Button = styled.button`
 
   &:hover {
     background-color: ${(props) => (props.active ? "#c3bf4e" : "#626262")};
-  }
-`;
-
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-
-  }
-  to {
-    opacity: 1;
-
-  }
-`;
-
-const fadeOut = keyframes`
-  from {
-    opacity: 1;
-
-  }
-  to {
-    opacity: 0;
-  
   }
 `;

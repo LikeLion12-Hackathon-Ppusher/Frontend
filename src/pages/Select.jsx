@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import smokeImg from "../assets/free-icon-smoking-813800.png";
+import smokerImg from "../assets/smoker.png";
+import nonSmokerImg from "../assets/nonSmoker.png";
 
 const Select = () => {
   const [activeBox, setActiveBox] = useState(null);
@@ -30,7 +31,7 @@ const Select = () => {
           className={activeBox === "smoker" ? "active" : ""}
           onClick={() => handleBoxClick("smoker")}
         >
-          <img src={smokeImg} alt="흡연자 이미지" />
+          <img src={smokerImg} alt="흡연자 이미지" />
           <h3>흡연자</h3>
           <div>
             흡연구역 위치 제공
@@ -41,7 +42,7 @@ const Select = () => {
           className={activeBox === "nonSmoker" ? "active" : ""}
           onClick={() => handleBoxClick("nonSmoker")}
         >
-          <img src={smokeImg} alt="비흡연자 이미지" />
+          <img src={nonSmokerImg} alt="비흡연자 이미지" />
           <h3>비흡연자</h3>
           <div>
             상습 흡연구역 제보
@@ -66,8 +67,7 @@ const SelectContainer = styled.div`
   background-color: white;
 
   h2 {
-    text-decoration: underline;
-    text-decoration-color: yellow;
+    background: linear-gradient(to top, #fff100 40%, transparent 40%);
   }
 `;
 

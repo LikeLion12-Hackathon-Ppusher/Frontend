@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
 import { faFileExport } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
+import reportSvg from "../assets/제보.svg";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -54,7 +55,7 @@ const Home = () => {
             onClick={handleCurrentLocation}
           >
             현위치&nbsp;
-            <FontAwesomeIcon icon={faRotateRight} />
+            <FontAwesomeIcon icon={faRotateRight} size="lg" />
           </Btn>
           <Btn
             btncolor={mode.background}
@@ -63,7 +64,7 @@ const Home = () => {
             onClick={handleReport}
           >
             제보&nbsp;
-            <FontAwesomeIcon icon={faFileExport} />
+            <FontAwesomeIcon icon={faFileExport} size="lg" />
           </Btn>
           <Btn
             btncolor={mode.background}
@@ -72,7 +73,7 @@ const Home = () => {
             onClick={handleMypage}
           >
             마이&nbsp;
-            <FontAwesomeIcon icon={faUser} />
+            <FontAwesomeIcon icon={faUser} size="lg" />
           </Btn>
         </BtnContainer>
       </Container>
