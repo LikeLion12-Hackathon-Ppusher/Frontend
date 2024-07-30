@@ -3,6 +3,10 @@ import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import HomeNav from "./HomeNav";
 import { ThemeColorContext } from "../Context/context";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
+import { faFileExport } from "@fortawesome/free-solid-svg-icons";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -10,7 +14,7 @@ const Home = () => {
 
   // Home에서 테마를 받아서 저장해야됨
   const context = useContext(ThemeColorContext);
-  const [mode, setMode] = useState(context.nonSmokeTheme);
+  const [mode, setMode] = useState(context.smokeTheme);
 
   console.log(mode);
 
@@ -44,28 +48,31 @@ const Home = () => {
         <Outlet />
         <BtnContainer>
           <Btn
-            btnColor={mode.background}
-            fontColor={mode.font}
-            borderColor={mode.borderColor}
+            btncolor={mode.background}
+            fontcolor={mode.font}
+            bordercolor={mode.borderColor}
             onClick={handleCurrentLocation}
           >
-            현위치
+            현위치&nbsp;
+            <FontAwesomeIcon icon={faRotateRight} />
           </Btn>
           <Btn
-            btnColor={mode.background}
-            fontColor={mode.font}
-            borderColor={mode.borderColor}
+            btncolor={mode.background}
+            fontcolor={mode.font}
+            bordercolor={mode.borderColor}
             onClick={handleReport}
           >
-            제보
+            제보&nbsp;
+            <FontAwesomeIcon icon={faFileExport} />
           </Btn>
           <Btn
-            btnColor={mode.background}
-            fontColor={mode.font}
-            borderColor={mode.borderColor}
+            btncolor={mode.background}
+            fontcolor={mode.font}
+            bordercolor={mode.borderColor}
             onClick={handleMypage}
           >
-            마이
+            마이&nbsp;
+            <FontAwesomeIcon icon={faUser} />
           </Btn>
         </BtnContainer>
       </Container>
@@ -101,11 +108,11 @@ const Btn = styled.div`
   padding: 1rem 1rem;
   margin-top: 0.5rem;
   border-radius: 0.5rem;
-  background-color: ${(props) => props.btnColor};
-  color: ${(props) => props.fontColor};
+  background-color: ${(props) => props.btncolor};
+  color: ${(props) => props.fontcolor};
   cursor: pointer;
   text-align: center;
   font-weight: bold;
   border: 2px solid;
-  border-color: ${(props) => props.borderColor};
+  border-color: ${(props) => props.bordercolor};
 `;

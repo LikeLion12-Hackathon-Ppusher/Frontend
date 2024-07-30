@@ -1,11 +1,13 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import UserImg from "../assets/free-icon-user-3686930.png";
 import smokeImg from "../assets/free-icon-smoking-813800.png";
 import smokeImg2 from "../assets/상습흡연.png";
 import reportImg from "../assets/logo.png";
 import { ThemeColorContext } from "../Context/context";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faThumbsUp } from "@fortawesome/free-regular-svg-icons";
 
 const { kakao } = window;
 
@@ -27,6 +29,8 @@ const Map = () => {
   // 지도 클릭한 위치 주소 변환 상태 변수
   const [address, setAddress] = useState("");
   const [isReporting, setIsReporting] = useState(false);
+
+  const [showThankYouModal, setShowThankYouModal] = useState(false); // 감사 모달 상태 추가
 
   const location = useLocation();
 
@@ -62,6 +66,7 @@ const Map = () => {
       setIsReporting(false);
     }
 
+    // 현위치 누르면 밑에 함수 실행 그리고 새로고침 ㅠ
     if (queryParams.get("currentLocation") === "true") {
       moveToCurrentLocation();
     }
@@ -305,6 +310,13 @@ const Map = () => {
       );
 
       handleCloseModal();
+
+      // 감사 모달 창 설정
+      setShowThankYouModal(true); // 감사 모달 상태 변경
+
+      setTimeout(() => {
+        setShowThankYouModal(false); // 2초 후 감사 모달 숨기기
+      }, 2000);
     }
   };
 
@@ -420,6 +432,7 @@ const Map = () => {
                   </Label>
                 </ModalBtnBox>
               )}
+
               <TextConatiner>
                 <Input
                   type="text"
@@ -439,6 +452,28 @@ const Map = () => {
           </ModalContent>
         </ModalOverlay>
       )}
+
+      <ThankYouModal isvisible={showThankYouModal}>
+        <IconBox>
+          <FontAwesomeIcon icon={faThumbsUp} size="3x" />
+        </IconBox>
+        {userType === "smoker" && (
+          <>
+            <h3>흡연구역 제보 완료</h3>
+            <div>
+              비흡연자들의 간접흡연 위험을 줄이기 위해
+              <br />
+              지정된 흡연구역에서 흡연해주세요:&#41;
+            </div>
+          </>
+        )}
+        {userType === "nonSmoker" && (
+          <>
+            <h3>상습 흡연구역 제보 완료</h3>
+            <div>간접흡연 방지를 위해 힘써주셔서 감사합니다!</div>
+          </>
+        )}
+      </ThankYouModal>
     </Container>
   );
 };
@@ -619,6 +654,40 @@ const ModalBtnBox = styled.div`
   margin: 0.4rem 0;
 `;
 
+const ThankYouModal = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 2rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+  border-radius: 0.5rem;
+  text-align: center;
+  ${({ isvisible }) =>
+    isvisible
+      ? css`
+          animation: ${fadeIn} 1s forwards;
+          pointer-events: auto; /* Ensure the modal is clickable */
+        `
+      : css`
+          animation: ${fadeOut} 1s forwards;
+          pointer-events: none; /* Ensure the modal is not clickable when hidden */
+        `}
+`;
+
+const IconBox = styled.div`
+  display: flex;
+  width: 20%;
+  margin: 0 auto;
+  justify-content: center;
+  background-color: #f7f152;
+  padding: 0.5rem 2rem;
+  border-radius: 0.5rem;
+  border: 2px solid black;
+`;
+
 const ButtonBox = styled.div`
   display: flex;
   justify-content: space-between;
@@ -636,5 +705,27 @@ const Button = styled.button`
 
   &:hover {
     background-color: ${(props) => (props.active ? "#c3bf4e" : "#626262")};
+  }
+`;
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+
+  }
+  to {
+    opacity: 1;
+
+  }
+`;
+
+const fadeOut = keyframes`
+  from {
+    opacity: 1;
+
+  }
+  to {
+    opacity: 0;
+  
   }
 `;
