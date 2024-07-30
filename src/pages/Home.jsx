@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import HomeNav from "./HomeNav";
@@ -7,6 +7,11 @@ const Home = () => {
   const navigate = useNavigate();
   const [showNav, setShowNav] = useState(true);
 
+  useEffect(() => {
+    setShowNav(true);
+    handleCurrentLocation();
+  }, []);
+
   const handleCurrentLocation = () => {
     setShowNav(true);
     navigate("/home/map");
@@ -14,7 +19,7 @@ const Home = () => {
 
   const handleReport = () => {
     setShowNav(true);
-    navigate("/");
+    navigate("/home/map");
   };
 
   const handleMypage = () => {

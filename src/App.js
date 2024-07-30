@@ -6,10 +6,16 @@ import Home from "./pages/Home";
 import Map from "./pages/Map";
 import Select from "./pages/Select";
 import Redirection from "./pages/Redirection";
-import KakaoMap from "./pages/KakaoMap";
-import Mypage from "./pages/Mypage";
+import Mypage from "./pages/MyPage/Mypage";
 import SelectSmoker from "./pages/SelectSmoker";
 import SelectNonSmoker from "./pages/SelectNonSmoker";
+import SetAccount from "./pages/MyPage/SetAccount";
+import SetType from "./pages/MyPage/SetType"
+import SetTypeCheck from "./pages/MyPage/SetTypeCheck";
+import SetTypeConfirm from "./pages/MyPage/SetTypeConfirm";
+import SetNotify from "./pages/MyPage/SetNotify";
+import SetNotifyNonSmoker from "./pages/MyPage/SetNotifyNonSmoker";
+import SetReport from "./pages/MyPage/SetReport"
 
 function App() {
   return (
@@ -32,7 +38,14 @@ function App() {
           ></Route>
           <Route path="/home/*" element={<Home></Home>}>
             <Route path="map" element={<Map></Map>}></Route>
-            <Route path="mypage" element={<Mypage></Mypage>}></Route>
+            <Route path="mypage/*" element={<Mypage></Mypage>}></Route>
+            <Route path="type" element={<SetType></SetType>}></Route>
+            <Route path="set-type-check" element={<SetTypeCheck></SetTypeCheck>}></Route>
+            <Route path="set-type-confirm" element={<SetTypeConfirm></SetTypeConfirm>}></Route>
+            <Route path="account" element={<SetAccount></SetAccount>}></Route>
+            <Route path="notify" element={<SetNotify></SetNotify>}></Route>
+            <Route path="set-notify-details" element={<SetNotifyNonSmoker></SetNotifyNonSmoker>}></Route>
+            <Route path="report" element={<SetReport></SetReport>}></Route>
           </Route>
           <Route path="/map" element={<Map></Map>}></Route>
         </Routes>

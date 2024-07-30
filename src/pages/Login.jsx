@@ -21,6 +21,7 @@ const Login = () => {
   const loginHandler = () => {
     window.location.href = link;
   };
+
   return (
     <LoginBox>
       <LoginBtn src={LoginBtnImg} onClick={loginHandler}></LoginBtn>
