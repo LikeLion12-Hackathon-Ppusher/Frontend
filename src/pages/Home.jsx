@@ -10,7 +10,7 @@ const Home = () => {
 
   // Home에서 테마를 받아서 저장해야됨
   const context = useContext(ThemeColorContext);
-  const [mode, setMode] = useState(context.smokeTheme);
+  const [mode, setMode] = useState(context.nonSmokeTheme);
 
   console.log(mode);
 
@@ -19,26 +19,23 @@ const Home = () => {
     handleCurrentLocation();
   }, []);
 
-  const handleCurrentLocation = () => {
-    setShowNav(true);
+  useEffect(() => {
     navigate("/home/map");
-    // 일단 이렇게 하면 Select으로 지정했던 smoker / nonSmoker라는 userType이 초기화되서 기본값인 smoker가 되버림
-    window.location.reload(); // 현 위치 누르면 안되서 그냥 새로 고침으로 대체
+  }, []);
+
+  const handleCurrentLocation = () => {
+    navigate("/home/map?currentLocation=true");
   };
 
   const handleReport = () => {
     setShowNav(true);
-    navigate("/");
+    navigate("/home/map?report=true");
   };
 
   const handleMypage = () => {
     setShowNav(false);
     navigate("/home/mypage");
   };
-
-  useEffect(() => {
-    navigate("/home/map");
-  }, []);
 
   return (
     <ThemeColorContext.Provider value={mode}>

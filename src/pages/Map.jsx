@@ -6,7 +6,6 @@ import smokeImg from "../assets/free-icon-smoking-813800.png";
 import smokeImg2 from "../assets/상습흡연.png";
 import reportImg from "../assets/logo.png";
 import { ThemeColorContext } from "../Context/context";
-import Home from "./Home";
 
 const { kakao } = window;
 
@@ -62,6 +61,11 @@ const Map = () => {
     } else {
       setIsReporting(false);
     }
+
+    if (queryParams.get("currentLocation") === "true") {
+      moveToCurrentLocation();
+    }
+
     console.log(userType);
   }, [location.search]);
 
@@ -157,6 +161,25 @@ const Map = () => {
       }
     );
   }
+
+  const moveToCurrentLocation = () => {
+    window.location.reload();
+    // navigator.geolocation.getCurrentPosition(
+    //   (position) => {
+    //     const { latitude, longitude } = position.coords;
+    //     const userLatLng = new kakao.maps.LatLng(latitude, longitude);
+    //     mapInstance.setCenter(userLatLng);
+    //   },
+    //   (error) => {
+    //     console.error("현재 위치를 가져오는 데 실패했습니다.", error);
+    //   },
+    //   {
+    //     enableHighAccuracy: true,
+    //     maximumAge: 0,
+    //     timeout: 10000,
+    //   }
+    // );
+  };
 
   const startReporting = () => {
     const map = mapInstance;
