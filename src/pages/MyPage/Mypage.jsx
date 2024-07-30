@@ -62,7 +62,7 @@ const MyPageContainer = styled.div`
 const MyPageHeader = styled.div`
   display: flex;
   flex-direction: column;
-  margin-right: 24rem;
+  margin-right: 23rem;
   background: linear-gradient(to top, #FFF100 40%, transparent 40%);
   font-size: 2.4rem;
   font-weight: bold;

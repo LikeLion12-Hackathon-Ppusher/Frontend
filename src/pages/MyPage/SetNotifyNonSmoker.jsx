@@ -73,16 +73,16 @@ const SelectContainer = styled.div`
 `;
 
 const Box = styled.div`
-  background-color: #dedddd;
+  background-color: #FFF100;
   width: 90%;
-  height: 15rem;
+  height: 18rem;
   border-radius: 0.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin: 10% 0;
+  margin: 6% 0;
 
   h3 {
     margin-top: 1rem;
@@ -98,29 +98,43 @@ const BtnBox = styled.div`
 
 const Btn = styled.div`
   padding: 1rem 1.5rem;
-  background-color: white;
-  border-radius: 0.4rem;
+  color: white;
+  background-color: black;
+  border: 2px solid transparent;
+  border-radius: 0.8rem;
+  font-size: 1.5rem;
   cursor: pointer;
-
   &:hover,
   &:focus {
-    background-color: #c0c0c0;
-    transform: scale(1.05);
-    outline: none;
+    background-color: #f7f152;
+    color: black;
+
+    outline: none; /* 포커스 시에 기본 아웃라인을 없애기 위해 */
+    border: 2px solid black;
   }
 
   &.active {
-    background-color: gray;
-    transform: scale(1.05);
+    background-color: #f7f152;
+    color: black;
+    border: 2px solid black;
   }
 `;
 
 const SelectBtn = styled.div`
   width: 90%;
-  background-color: gray;
-  padding: 1rem 0;
-  border-radius: 0.4rem;
+  height: 2rem;
+  color: white;
+  background-color: black;
+  margin-top: 4rem;
+  padding: 1.8rem 0rem 1.8rem 0rem;
+  border-radius: 0.5rem;
   text-align: center;
   cursor: pointer;
-  font-weight: bold;
+  font-size: 1.6rem;
+  &:hover,
+  &:focus {
+    color: black;
+    background-color: #FFF100;
+    outline: none;
+  }
 `;

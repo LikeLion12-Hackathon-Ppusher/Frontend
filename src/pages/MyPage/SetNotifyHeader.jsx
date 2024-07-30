@@ -28,19 +28,21 @@ const SetNotifyHeader = () => {
 
   return (
     <TitleContainer>
-      <p>알림 사용</p>
-      <TitleButton
-        isActive={isNotificationEnabled}
-        onClick={() => handleNotificationToggle(true)}
-      >
-        ON
-      </TitleButton>
-      <TitleButton
-        isActive={!isNotificationEnabled}
-        onClick={() => handleNotificationToggle(false)}
-      >
-        OFF
-      </TitleButton>
+      <Title>알림사용</Title>
+      <TitleBtnContainer>
+        <TitleButton
+          isActive={isNotificationEnabled}
+          onClick={() => handleNotificationToggle(true)}
+        >
+          ON
+        </TitleButton>
+        <TitleButton
+          isActive={!isNotificationEnabled}
+          onClick={() => handleNotificationToggle(false)}
+        >
+          OFF
+        </TitleButton>
+      </TitleBtnContainer>
     </TitleContainer>
   );
 };
@@ -48,28 +50,42 @@ const SetNotifyHeader = () => {
 export default SetNotifyHeader;
 
 const TitleContainer = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
   width: 90%;
+  height: 4.5rem;
+  border: 0.1rem solid black;
+  border-radius: 0.4rem;
+  font-size: 24px;
+`;
+
+const Title = styled.div`
+  margin-left: 2rem;
+`;
+
+const TitleBtnContainer = styled.div`
+  width: 60%;
+  height: 100%;
   display: flex;
   justify-content: space-around;
+  margin-left: 3rem;
   align-items: center;
-  font-size: 24px;
-
-  img {
-    margin-right: 2rem;
-  }
 `;
 
 const TitleButton = styled.button`
-  width: 150px;
-  height: 36px;
+  width: 48%;
+  height: 60%;
   border-radius: 4px;
-  background-color: ${(props) => (props.isActive ? "#ddd" : "white")};
-  font-size: 18px;
-  cursor: pointer;
+  color: ${(props) => (props.isActive ? "#FFF100" : "#000000")};
+  background-color: ${(props) => (props.isActive ? "#000000" : "#D9D9D9")};
+  font-size: 1.2rem;
   text-align: center;
-  border: 1px solid #ddd;
+  border-radius: 0.4rem;
+  cursor: pointer;
 
   &:hover {
+    color: #000000;
     background-color: #FFF100;
   }
 `;
