@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import HomeNav from "./HomeNav";
@@ -39,6 +39,7 @@ const Home = () => {
   useEffect(() => {
     navigate("/home/map");
   }, []);
+
   return (
     <ThemeColorContext.Provider value={mode}>
       <Container>
