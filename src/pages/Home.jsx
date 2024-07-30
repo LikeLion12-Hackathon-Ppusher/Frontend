@@ -21,10 +21,6 @@ const Home = () => {
 
   useEffect(() => {
     setShowNav(true);
-    handleCurrentLocation();
-  }, []);
-
-  useEffect(() => {
     navigate("/home/map");
   }, []);
 

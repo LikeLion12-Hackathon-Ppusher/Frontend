@@ -56,7 +56,7 @@ const Redirection = () => {
 
         // localStorage에 accessToken 저장
         localStorage.setItem("kakaoAccessToken", res.data.access_token);
-        navigate("/home");
+        navigate("/home/map");
       } catch (err) {
         console.warn(err);
       }
