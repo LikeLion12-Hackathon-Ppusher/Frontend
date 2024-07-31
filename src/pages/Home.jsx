@@ -25,6 +25,7 @@ const Home = () => {
   }, []);
 
   const handleCurrentLocation = () => {
+    setShowNav(true);
     navigate("/home/map?currentLocation=true");
   };
 

@@ -52,7 +52,6 @@ const Container = styled.div`
 
 const Box = styled.div`
   background-color: #FFF100;
-  border: 1px solid #dee2e6;
   border-radius: 6px;
   padding: 4rem 0rem 2rem 0rem;
   margin-bottom: 6rem;
@@ -68,14 +67,14 @@ const Box = styled.div`
 `;
 
 const ButtonContainer = styled.div`
-  margin-top: 0.5rem;
+  margin-top: 0.4rem;
   display: flex;
   justify-content: space-around;
   width: 60%;
 `;
 
 const Button = styled.button`
-  width: 8rem;
+  width: 45%;
   height: 2rem;
   margin-top: 0.5rem;
   border-radius: 0.4rem;
