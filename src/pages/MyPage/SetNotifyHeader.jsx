@@ -54,10 +54,10 @@ const TitleContainer = styled.div`
   justify-content: space-evenly;
   align-items: center;
   width: 90%;
-  height: 4.5rem;
-  border: 0.1rem solid black;
+  height: 3rem;
+  border: 0.08rem solid black;
   border-radius: 0.4rem;
-  font-size: 24px;
+  font-size: 1.2rem;
 `;
 
 const Title = styled.div`
@@ -66,7 +66,7 @@ const Title = styled.div`
 
 const TitleBtnContainer = styled.div`
   width: 60%;
-  height: 100%;
+  height: 90%;
   display: flex;
   justify-content: space-around;
   margin-left: 3rem;
@@ -74,13 +74,13 @@ const TitleBtnContainer = styled.div`
 `;
 
 const TitleButton = styled.button`
-  width: 48%;
-  height: 60%;
-  border-radius: 4px;
+  width: 45%;
+  height: 80%;
   color: ${(props) => (props.isActive ? "#FFF100" : "#000000")};
   background-color: ${(props) => (props.isActive ? "#000000" : "#D9D9D9")};
-  font-size: 1.2rem;
+  font-size: 1rem;
   text-align: center;
+  border: 0.08rem;
   border-radius: 0.4rem;
   cursor: pointer;
 
