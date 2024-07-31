@@ -32,7 +32,7 @@ const Mypage = () => {
       }
 
       // 로그아웃 요청 보내기
-      const res = await axios.post('https://wellnesstour.netlify.app/oauth/logout', { access_token: accessToken });
+      const res = await axios.post('http://bbuhackathon.p-e.kr:8000/oauth/logout', { access_token: accessToken });
       console.log(res);
       // // 로컬 스토리지 비우기
       // localStorage.clear();
