@@ -25,14 +25,19 @@ const Mypage = () => {
     navigate("/home/report");
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     try {
       const kakaoAccessToken = localStorage.getItem('kakaoAccessToken');
-      const response = logOut(kakaoAccessToken);
-      alert('로그아웃 성공:', response.message);
-      console.log(response.message);
-      localStorage.setItem("response", response.message);
-      navigate("/login");
+      const res = await logOut(kakaoAccessToken);
+      if (res) {
+        const msg = res.data.message;
+        alert('로그아웃 성공:', msg);
+        console.log(msg);
+        localStorage.setItem("response", msg);
+        navigate("/login");
+      } else {
+        throw new Error('응답 메세지가 업습니다.');
+      }
     } catch (err) {
       alert('API 호출 실패. 로컬에서 로그아웃됩니다.');
       console.log('로그아웃 에러:', err);
