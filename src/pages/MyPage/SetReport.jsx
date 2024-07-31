@@ -29,8 +29,8 @@ const SetAccount = () => {
       <SetHeader headerText="제보 내역"></SetHeader>
       <ReportContainer>
         {reports.map(report => (
-          <ReportItem key={report.id} onClick={() => handleToggle(report.id)} isOpen={openReportId === report.id}>
-            <ReportHeader isOpen={openReportId === report.id}>
+          <ReportItem key={report.id} isOpen={openReportId === report.id}>
+            <ReportHeader onClick={() => handleToggle(report.id)} isOpen={openReportId === report.id}>
               <span>{report.address}</span>
               <DropdownArrow>
                 <img src={openReportId === report.id ? upButtonImg : bottomButtonImg} alt="토글" />
@@ -171,14 +171,15 @@ const StatusGroup = styled.div`
   display: flex;
   border: 1px solid black;
   border-radius: 6px;
-  padding: 0.2rem 0.5rem;
+  padding: 0.2rem 0.4rem;
   background-color: #FFFDE2;
   margin-right: 0.5rem;
+  font-size: 0.8rem;
 `;
 
 const StatusCircle = styled.div`
-  width: 1rem;
-  height: 1rem;
+  width: 0.8rem;
+  height: 0.8rem;
   margin-right: 0.3rem;
   border-radius: 50%;
   background-color: ${props => (props.filled ? '#FFF100' : 'lightgray')};
@@ -186,12 +187,12 @@ const StatusCircle = styled.div`
 
 const ButtonGroup = styled.div`
   display: flex;
-  gap: 0.5rem;
+  gap: 0.4rem;
 `;
 
 const ActionButton = styled.button`
-  padding: 0.2rem 1rem;
-  font-size: 16px;
+  padding: 0.2rem 0.8rem;
+  font-size: 0.8rem;
   background-color: #FFFDE2;
   border: 1px solid #000;
   border-radius: 6px;
