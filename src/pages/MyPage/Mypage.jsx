@@ -25,10 +25,10 @@ const Mypage = () => {
     navigate("/home/report");
   };
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     try {
       const kakaoAccessToken = localStorage.getItem('kakaoAccessToken');
-      const response = await logOut(kakaoAccessToken);
+      const response = logOut(kakaoAccessToken);
       alert('로그아웃 성공:', response.message);
       console.log(response.message);
       localStorage.setItem("response", response.message);
