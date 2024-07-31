@@ -34,7 +34,7 @@ const Mypage = () => {
         alert('로그아웃 성공:', msg);
         console.log(msg);
         localStorage.setItem("response", msg);
-        navigate("/login");
+        // navigate("/login");
       } else {
         throw new Error('응답 메세지가 업습니다.');
       }
