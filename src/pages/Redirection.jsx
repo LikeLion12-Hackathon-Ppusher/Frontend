@@ -103,7 +103,7 @@ const Redirection = () => {
 
       // 인가 코드를 백엔드로 전달
       const res = await axios.post(url, {
-        authorizationCode: code,
+        authorization: code,
       });
 
       console.log("응답 정보: ", res.data);
