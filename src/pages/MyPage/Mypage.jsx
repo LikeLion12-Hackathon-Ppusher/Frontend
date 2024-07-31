@@ -36,7 +36,7 @@ const Mypage = () => {
       alert('서버가 닫혀있습니다, 로컬에서 로그아웃됩니다.');
       console.log('로그아웃 에러:', err);
       localStorage.clear();
-      navigate("/login");
+      navigate("/home/mypage");
     }
   };
 
