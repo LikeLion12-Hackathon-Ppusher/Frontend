@@ -92,7 +92,7 @@ const Redirection = () => {
   // 쿼리 스트링에서 인가 코드 추출
   const code = new URLSearchParams(window.location.search).get("code");
 
-  const url = 'http://bbuhackathon.p-e.kr:8000/oauth/kakao/callback/';
+  const url = 'https://bbuhackathon.p-e.kr:8000/oauth/kakao/callback/';
 
   const fnGetKakaoOauthToken = async () => {
     try {
