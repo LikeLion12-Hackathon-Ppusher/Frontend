@@ -107,7 +107,7 @@ const Redirection = () => {
       });
 
       console.log("응답 정보: ", res.data);
-      console.log("쿠키 정보: ", documnet.cookie);
+      console.log("쿠키 정보: ", document.cookie);
       // 필요시 res.data에서 accessToken을 추출하여 localStorage에 저장
       localStorage.setItem("kakaoAccessToken", res.data.access_token);
       navigate("/home");
