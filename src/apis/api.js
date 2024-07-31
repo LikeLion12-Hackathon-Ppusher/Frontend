@@ -5,7 +5,6 @@ import axios from 'axios';
 // 기본 설정
 const instance = axios.create({
   baseURL: 'https://bbuhackathon.p-e.kr:8000', // API의 기본 URL
-  timeout: 1000, // 요청 시간 초과 설정
   headers: { 'Content-Type': 'application/json' },
 });
 
