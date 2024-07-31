@@ -1,17 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import SetNotifyHeader from "./SetNotifyHeader";
 
 const SetNotifyNonSmoker = () => {
+  const navigate = useNavigate();
   const [activeBox, setActiveBox] = useState(null);
   const [selectedDistance, setSelectedDistance] = useState(null);
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    const selectedDistance = localStorage.getItem('distance') + 'm';
+    console.log(selectedDistance);
+    if (selectedDistance) {
+      setActiveBox(selectedDistance);
+      setSelectedDistance(selectedDistance);
+    }
+  }, []);
 
   const handleBoxClick = (box, distance) => {
     setActiveBox(box);
     setSelectedDistance(distance);
+    localStorage.setItem('distance', distance);
   };
 
   const handleConfirmClick = () => {

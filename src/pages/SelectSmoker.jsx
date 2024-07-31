@@ -17,6 +17,7 @@ const SelectSmoker = () => {
 
   const handleConfirmClick = () => {
     if (selectedTime !== null) {
+      localStorage.setItem('time', selectedTime);
       navigate("/home/map", {
         state: { time: selectedTime, userType: "smoker" },
       });

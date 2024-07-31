@@ -18,6 +18,7 @@ const SelectNonSmoker = () => {
   const handleConfirmClick = () => {
     if (selectedDistance) {
       // 비흡연자 설정 페이지로 이동 (경로는 예시로 작성했습니다. 필요에 맞게 수정하세요.)
+      localStorage.setItem('distance', selectedDistance);
       navigate("/home/map", {
         state: { distance: selectedDistance, userType: "nonSmoker" },
       });
