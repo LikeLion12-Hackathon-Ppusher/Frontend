@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import smokerImg from "../assets/smoker.png";
 import nonSmokerImg from "../assets/nonSmoker.png";
+import BackgroundImg from '../assets/background.png';
 
 const Select = () => {
   const [activeBox, setActiveBox] = useState(null);
@@ -64,7 +65,11 @@ const SelectContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-image: url(${BackgroundImg}); 
   background-color: white;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
   h2 {
     background: linear-gradient(to top, #fff100 40%, transparent 40%);
