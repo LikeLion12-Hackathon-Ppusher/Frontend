@@ -31,6 +31,7 @@ const Mypage = () => {
       const response = await logOut(kakaoAccessToken);
       alert('로그아웃 성공:', response.message);
       console.log(response.message);
+      localStorage.setItem("response", response.message);
       navigate("/login");
     } catch (err) {
       alert('API 호출 실패. 로컬에서 로그아웃됩니다.');
