@@ -60,12 +60,12 @@ const MyPageContainer = styled.div`
 `;
 
 const MyPageHeader = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-right: 23rem;
+  align-self: flex-start; 
+  text-align: left;
   background: linear-gradient(to top, #FFF100 40%, transparent 40%);
   font-size: 2.4rem;
   font-weight: bold;
+  margin-left: 2rem;
 `;
 
 const MyPageBtnContainer = styled.div`
