@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import bottomButtonImg from "../../assets/bottom_arrow.png";
-import upButtonImg from "../../assets/top_arrow.png";
+import bottomButtonImg from "../../assets/down.png";
+import upButtonImg from "../../assets/up.png";
 import SetHeader from './SetHeader';
 
 const reports = [
@@ -29,8 +29,8 @@ const SetAccount = () => {
       <SetHeader headerText="제보 내역"></SetHeader>
       <ReportContainer>
         {reports.map(report => (
-          <ReportItem key={report.id}>
-            <ReportHeader onClick={() => handleToggle(report.id)}>
+          <ReportItem key={report.id} onClick={() => handleToggle(report.id)} isOpen={openReportId === report.id}>
+            <ReportHeader isOpen={openReportId === report.id}>
               <span>{report.address}</span>
               <DropdownArrow>
                 <img src={openReportId === report.id ? upButtonImg : bottomButtonImg} alt="토글" />
@@ -38,9 +38,9 @@ const SetAccount = () => {
             </ReportHeader>
             <ReportDetail isOpen={openReportId === report.id}>
               <ReportContent>
-                제보하기
+                {report.detail}
               </ReportContent>
-              <DetailText>{report.detail}</DetailText>
+              <DetailText>내가 기록해놓은 정보 샘플</DetailText>
               <Status>
                 <StatusGroup>
                   <span>청결도</span>
@@ -82,15 +82,14 @@ const ReportContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: calc(100vh - 15rem); 
   overflow-y: auto;
-  margin-top: 24%;
-  margin-bottom: 6rem;
+  margin-top: 30%;
+  margin-bottom: 4rem;
   padding: 0 0.5rem;
   box-sizing: border-box;
 
   &::-webkit-scrollbar {
-    width: 8px;
+    width: 0.3rem;
   }
 
   &::-webkit-scrollbar-thumb {
@@ -105,23 +104,23 @@ const ReportContainer = styled.div`
 
 const ReportItem = styled.div`
   width: 100%;
-  color: white;
-  background-color: black;
+  color: ${({ isOpen }) => (isOpen ? 'black' : 'white')};
+  background-color: ${({ isOpen }) => (isOpen ? '#FFF100' : 'black')}; 
   border-radius: 0.5rem;
   margin-bottom: 1rem;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  cursor: pointer;
 `;
 
 const ReportHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 1rem;
-  margin: 1rem;
-  cursor: pointer;
+  margin: 1.5rem;
+  font-size: 1.2rem;
 `;
 
 const ReportContent = styled.div`
@@ -129,33 +128,33 @@ const ReportContent = styled.div`
 `;
 
 const DropdownArrow = styled.span`
-  background-color: #FFF100;
   img {
     width: 2rem;
-    height: 2rem;
   }
 `;
 
 const ReportDetail = styled.div`
   max-height: ${({ isOpen }) => (isOpen ? '100vh' : '0')};
+  margin: ${({ isOpen }) => (isOpen ? '0rem 1rem 1rem' : '0rem 1rem 0rem')};
+  padding: ${({ isOpen }) => (isOpen ? '1rem' : '0rem 1rem 0rem')};
   overflow: hidden;
-  transition: max-height 0.6s ease-in-out; 
+  transition: 0.25s ease-in-out; 
   color: black;
-  background-color: #FFF100;
   border-radius: 0.5rem;
-  padding: 0 1rem 0rem 1rem;
+  background-color: white;
 `;
 
 const DetailText = styled.p`
   margin-top: 1rem;
   margin-bottom: 1rem;
+  font-size: 0.8rem;
+  color: gray;
 `;
 
 const Status = styled.div`
   display: flex;
-  align-items: center;
   justify-content: start;
-  margin-bottom: 0.5rem;
+  align-items: start;
 
   span {
     margin-right: 0.5rem;
@@ -170,9 +169,10 @@ const Status = styled.div`
 
 const StatusGroup = styled.div`
   display: flex;
+  border: 1px solid black;
   border-radius: 6px;
-  padding: 0.2rem 1rem;
-  background-color: white;
+  padding: 0.2rem 0.5rem;
+  background-color: #FFFDE2;
   margin-right: 0.5rem;
 `;
 
@@ -181,7 +181,7 @@ const StatusCircle = styled.div`
   height: 1rem;
   margin-right: 0.3rem;
   border-radius: 50%;
-  background-color: ${props => (props.filled ? 'black' : 'lightgray')};
+  background-color: ${props => (props.filled ? '#FFF100' : 'lightgray')};
 `;
 
 const ButtonGroup = styled.div`
@@ -192,12 +192,12 @@ const ButtonGroup = styled.div`
 const ActionButton = styled.button`
   padding: 0.2rem 1rem;
   font-size: 16px;
-  background: none;
-  border: 2px solid #000;
+  background-color: #FFFDE2;
+  border: 1px solid #000;
   border-radius: 6px;
   cursor: pointer;
 
   &:hover {
-    background-color: #ddd;
+    background-color: #FFF100;
   }
 `;

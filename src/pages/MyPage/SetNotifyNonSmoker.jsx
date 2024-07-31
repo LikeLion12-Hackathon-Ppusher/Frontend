@@ -26,10 +26,10 @@ const SetNotifyNonSmoker = () => {
     <SelectContainer>
       <SetNotifyHeader></SetNotifyHeader>
       <Box>
-        <h2>간접흡연 위험구역 알림 설정</h2>
+        <h3>간접흡연 위험구역 알림 설정</h3>
         <div>
-          흡연구역에서 <strong>얼마나 떨어진 거리</strong>부터
-          <br /> 알림을 받으시겠습니까?
+          간접흡연 위험 지역에서
+          <br /> 알림을 받을 수 있습니다.
         </div>
         <BtnBox>
           <Btn
@@ -75,35 +75,35 @@ const SelectContainer = styled.div`
 const Box = styled.div`
   background-color: #FFF100;
   width: 90%;
-  height: 18rem;
+  height: 15rem;
   border-radius: 0.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin: 6% 0;
+  margin: 5% 0 15% 0;
 
   h3 {
-    margin-top: 1rem;
+    font-size: 1.2rem;
   }
 `;
 
 const BtnBox = styled.div`
-  margin-top: 1rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
   display: flex;
   justify-content: space-evenly;
   width: 90%;
 `;
 
 const Btn = styled.div`
-  padding: 1rem 1.5rem;
-  color: white;
+  padding: 0.8rem 1.2rem;
   background-color: black;
-  border: 2px solid transparent;
-  border-radius: 0.8rem;
-  font-size: 1.5rem;
+  border-radius: 0.4rem;
   cursor: pointer;
+  color: white;
+  border: 2px solid transparent;
   &:hover,
   &:focus {
     background-color: #f7f152;
@@ -122,19 +122,11 @@ const Btn = styled.div`
 
 const SelectBtn = styled.div`
   width: 90%;
-  height: 2rem;
   color: white;
   background-color: black;
-  margin-top: 4rem;
-  padding: 1.8rem 0rem 1.8rem 0rem;
-  border-radius: 0.5rem;
+  padding: 1rem 0;
+  border-radius: 0.3rem;
   text-align: center;
   cursor: pointer;
-  font-size: 1.6rem;
-  &:hover,
-  &:focus {
-    color: black;
-    background-color: #FFF100;
-    outline: none;
-  }
+  font-weight: bold;
 `;
