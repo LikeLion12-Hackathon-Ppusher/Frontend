@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 import styled from "styled-components";
 import backgroundImage from '../../assets/mypage_background.png';
+import { logOut } from "../../apis/api";
 
 const Mypage = () => {
   const navigate = useNavigate();
+  const [data, setData] = useState(null);
+  const [err, setErr] = useState(null);
 
   const handleAccount = () => {
     navigate("/home/account")
@@ -22,9 +25,21 @@ const Mypage = () => {
     navigate("/home/report");
   };
 
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate("/login");
+  const handleLogout = async () => {
+    try {
+      const kakaoAccessToken = localStorage.getItem('kakaoAccessToken');
+      const response = await logOut(kakaoAccessToken);
+      console.log(response);
+      alert('로그아웃 성공:', response);
+      navigate("/login");
+    } catch (err) {
+      console.log('로그아웃 에러:', err);
+      alert('로그아웃 실패', err);
+    } finally {
+      localStorage.clear();
+      alert('서버가 닫혀있습니다, 로컬에서 로그아웃됩니다.');
+      navigate("/login");
+    }
   };
 
   return (
