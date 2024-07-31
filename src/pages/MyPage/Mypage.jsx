@@ -29,15 +29,13 @@ const Mypage = () => {
     try {
       const kakaoAccessToken = localStorage.getItem('kakaoAccessToken');
       const response = await logOut(kakaoAccessToken);
-      console.log(response);
       alert('로그아웃 성공:', response);
+      console.log(response);
       navigate("/login");
     } catch (err) {
-      console.log('로그아웃 에러:', err);
-      alert('로그아웃 실패', err);
-    } finally {
-      localStorage.clear();
       alert('서버가 닫혀있습니다, 로컬에서 로그아웃됩니다.');
+      console.log('로그아웃 에러:', err);
+      localStorage.clear();
       navigate("/login");
     }
   };
