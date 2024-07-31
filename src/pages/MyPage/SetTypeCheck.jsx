@@ -76,7 +76,8 @@ const ButtonContainer = styled.div`
 const Button = styled.button`
   width: 45%;
   height: 2rem;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
+  border: 1px solid black;
   border-radius: 0.4rem;
   color: #FFFFFF;
   background-color: #000000;
