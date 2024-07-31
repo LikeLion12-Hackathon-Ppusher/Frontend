@@ -31,15 +31,15 @@ const SetAccount = () => {
         {reports.map(report => (
           <ReportItem key={report.id}>
             <ReportHeader onClick={() => handleToggle(report.id)}>
-              <span>제보하기</span>
+              <span>{report.address}</span>
               <DropdownArrow>
                 <img src={openReportId === report.id ? upButtonImg : bottomButtonImg} alt="토글" />
               </DropdownArrow>
             </ReportHeader>
-            <ReportContent>
-              {report.address}
-            </ReportContent>
             <ReportDetail isOpen={openReportId === report.id}>
+              <ReportContent>
+                제보하기
+              </ReportContent>
               <DetailText>{report.detail}</DetailText>
               <Status>
                 <StatusGroup>
@@ -84,9 +84,9 @@ const ReportContainer = styled.div`
   width: 100%;
   height: calc(100vh - 15rem); 
   overflow-y: auto;
-  margin-top: 15rem;
-  margin-bottom: 5rem;
-  padding: 0 1rem;
+  margin-top: 24%;
+  margin-bottom: 6rem;
+  padding: 0 0.5rem;
   box-sizing: border-box;
 
   &::-webkit-scrollbar {
@@ -105,30 +105,31 @@ const ReportContainer = styled.div`
 
 const ReportItem = styled.div`
   width: 100%;
-  background-color: #dedddd;
+  color: white;
+  background-color: black;
   border-radius: 0.5rem;
   margin-bottom: 1rem;
-  padding: 1rem;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  justify-content: center;
 `;
 
 const ReportHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 21px;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  margin: 1rem;
   cursor: pointer;
 `;
 
 const ReportContent = styled.div`
-  font-size: 24px;
+  font-size: 1rem;
 `;
 
 const DropdownArrow = styled.span`
+  background-color: #FFF100;
   img {
     width: 2rem;
     height: 2rem;
@@ -136,11 +137,11 @@ const DropdownArrow = styled.span`
 `;
 
 const ReportDetail = styled.div`
-  margin-top: 0.5rem;
-  max-height: ${({ isOpen }) => (isOpen ? '300px' : '0')};
+  max-height: ${({ isOpen }) => (isOpen ? '100vh' : '0')};
   overflow: hidden;
-  transition: max-height 0.35s ease-in-out; 
-  background-color: #f1f1f1;
+  transition: max-height 0.6s ease-in-out; 
+  color: black;
+  background-color: #FFF100;
   border-radius: 0.5rem;
   padding: 0 1rem 0rem 1rem;
 `;

@@ -46,32 +46,34 @@ const Box = styled.div`
   background-color: #FFF100;
   border: 1px solid #dee2e6;
   border-radius: 6px;
-  padding: 5rem 0rem 2.5rem 0rem;
+  padding: 4rem 0rem 2rem 0rem;
   margin-bottom: 6rem;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 90%;
 
   p {
-    font-size: 1.8rem;
+    font-size: 1.2rem;
   }
 `;
 
 const ButtonContainer = styled.div`
-  margin-top: 3rem;
+  margin-top: 0.5rem;
   display: flex;
-  justify-content: space-evenly;
-  margin-left: 6rem;
-  margin-right: 6rem;
+  justify-content: space-around;
+  width: 60%;
 `;
 
 const Button = styled.button`
-  width: 150px;
-  height: 36px;
+  width: 8rem;
+  height: 2rem;
   margin-top: 0.5rem;
   border-radius: 0.4rem;
   color: #FFFFFF;
   background-color: #000000;
-  font-size: 18px;
+  font-size: 1rem;
   cursor: pointer;
   text-align: center;
 

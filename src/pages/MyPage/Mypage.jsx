@@ -63,9 +63,9 @@ const MyPageHeader = styled.div`
   align-self: flex-start; 
   text-align: left;
   background: linear-gradient(to top, #FFF100 40%, transparent 40%);
-  font-size: 2.4rem;
+  font-size: 1.6rem;
   font-weight: bold;
-  margin-left: 2rem;
+  margin-left: 5%;
 `;
 
 const MyPageBtnContainer = styled.div`
@@ -76,12 +76,12 @@ const MyPageBtnContainer = styled.div`
 `;
 
 const Btn = styled.button`
-  padding: 1.8rem 0rem 1.8rem 0rem;
+  padding: 1.2rem 0rem;
   margin-top: 2rem;
   width: 100%;
   border-radius: 6px;
   background-color: #000000;
-  font-size: 1.6rem;
+  font-size: 1.2rem;
   color: #FFF100;
   transition: background-color 0.3s ease, transform 0.3s ease;
   cursor: pointer;
