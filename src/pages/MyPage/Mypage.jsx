@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 import styled from "styled-components";
 import backgroundImage from '../../assets/mypage_background.png';
-import axios from "axios";
+
 const Mypage = () => {
   const navigate = useNavigate();
 
@@ -22,27 +22,9 @@ const Mypage = () => {
     navigate("/home/report");
   };
 
-  const handleLogout = async () => {
-    try {
-      const accessToken = localStorage.getItem('kakaoAccessToken'); // 로컬 스토리지에서 access_token 가져오기
-      console.log(accessToken);
-      if (!accessToken) {
-        alert("로그인이 필요합니다.");
-        return;
-      }
-
-      // 로그아웃 요청 보내기
-      const res = await axios.post('http://bbuhackathon.p-e.kr:8000/oauth/logout', { access_token: accessToken });
-      console.log(res);
-      // // 로컬 스토리지 비우기
-      // localStorage.clear();
-
-      // 로그인 페이지로 리디렉션
-      navigate("/login");
-    } catch (error) {
-      console.error("로그아웃 중 오류 발생:", error);
-      // 오류 처리 로직 추가 가능
-    }
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/login");
   };
 
   return (
@@ -81,9 +63,9 @@ const MyPageHeader = styled.div`
   align-self: flex-start; 
   text-align: left;
   background: linear-gradient(to top, #FFF100 40%, transparent 40%);
-  font-size: 2.4rem;
+  font-size: 1.6rem;
   font-weight: bold;
-  margin-left: 2rem;
+  margin-left: 5%;
 `;
 
 const MyPageBtnContainer = styled.div`
@@ -94,12 +76,12 @@ const MyPageBtnContainer = styled.div`
 `;
 
 const Btn = styled.button`
-  padding: 1.8rem 0rem 1.8rem 0rem;
+  padding: 1.2rem 0rem;
   margin-top: 2rem;
   width: 100%;
   border-radius: 6px;
   background-color: #000000;
-  font-size: 1.6rem;
+  font-size: 1.2rem;
   color: #FFF100;
   transition: background-color 0.3s ease, transform 0.3s ease;
   cursor: pointer;
