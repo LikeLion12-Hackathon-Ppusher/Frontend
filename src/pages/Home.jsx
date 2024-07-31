@@ -18,8 +18,6 @@ const Home = () => {
   const [mode, setMode] = useState(context.smokeTheme);
 
   console.log(mode);
-  console.log(mode);
-  console.log(mode);
 
   useEffect(() => {
     setShowNav(true);

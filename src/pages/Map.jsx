@@ -12,7 +12,7 @@ import { faThumbsUp } from "@fortawesome/free-regular-svg-icons";
 const { kakao } = window;
 
 const Map = () => {
-  const mapRef = useRef(null);
+  const mapRef = useRef(null); // 지도 DOM 요소를 참조하는 ref
   const markerRef = useRef(null);
   const reportingMarkerRef = useRef(null);
 
@@ -66,9 +66,16 @@ const Map = () => {
       setIsReporting(false);
     }
 
-    // 현위치 누르면 밑에 함수 실행 그리고 새로고침 ㅠ
+    // 현위치 누르면 밑에 함수 실행 그리고 새로고침 을 없애고 그냥 좌표를 측정해서 다시 좌표를 찍음
     if (queryParams.get("currentLocation") === "true") {
       moveToCurrentLocation();
+      // ture확인하면 그 queryParams을 delete로 삭제해서 다시 url이 home/map이 되게 함
+      console.log(queryParams.get("currentLocation"));
+      console.log("Moving to current location");
+      queryParams.delete("currentLocation");
+      navigate({
+        search: queryParams.toString(),
+      });
     }
 
     console.log(userType);
@@ -82,22 +89,31 @@ const Map = () => {
   }, [isReporting, mapInstance]);
 
   function initializeMap() {
+    // useRef훅을 사용하여 mapRef를 생성함(참조 객체) => 지도를 가르키게 될 예정
+    // mapRef.current은 실제 DOM 요소를 가르키게 됨 => 카카오 지도 API는 이 DOM 요소를 사용하여 지도를 렌더링합니다.
     const container = mapRef.current;
     const options = {
       center: new kakao.maps.LatLng(33.4507, 126.570667),
       level: 3,
     };
 
+    // 지도를 생성하는 카카오 맵 api 함수
     const map = new kakao.maps.Map(container, options);
+
+    // useRef훅의 set을 통해 mapInstance에 생성된 카카오 map을 넣는다
     setMapInstance(map);
 
+    // 현재 위치 가져오기 position에 경도 위도 있음
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
         const userLatLng = new kakao.maps.LatLng(latitude, longitude);
 
+        // 지도이 중심좌표 설정(처음에 보이는 지도의 중심이 이게 되겠지) 그래서 위의 처음 맵 생성을 할 때 옵션에 제주도 좌표가 있으니
+        // 제주도 좌표를 보였다가 이동할듯?
         map.setCenter(userLatLng);
 
+        // 유저의 현 위치를 표현할 이미지
         const imageSrc = UserImg;
         const imageSize = new kakao.maps.Size(24, 30);
         const imageOption = { offset: new kakao.maps.Point(12, 15) };
@@ -108,17 +124,22 @@ const Map = () => {
           imageOption
         );
 
+        // markerRef.current는 현재 가르키는 markerRef가 가르키는 DOM요소(div같은거) 통해 새 마커를 생성
+        // markerRef.current는 카카오 지도 API의 Marker 객체를 참조 (markerRef.current === 생성된 마커)
+        // 이 객체는 지도 위에 표시될 마커를 나타냄
         markerRef.current = new kakao.maps.Marker({
           position: userLatLng,
           image: markerImage,
           map,
         });
 
+        // 실시간 추적 이동이 감지되면 그 이동된 좌표로 markerRef를 움직인다
         navigator.geolocation.watchPosition(
           (position) => {
             const { latitude, longitude } = position.coords;
             const newLatLng = new kakao.maps.LatLng(latitude, longitude);
 
+            // 만약 이미 마커가 존재할 경우 마커의 위치를 옮긴다
             if (markerRef.current) {
               markerRef.current.setPosition(newLatLng);
             }
@@ -168,22 +189,10 @@ const Map = () => {
   }
 
   const moveToCurrentLocation = () => {
-    window.location.reload();
-    // navigator.geolocation.getCurrentPosition(
-    //   (position) => {
-    //     const { latitude, longitude } = position.coords;
-    //     const userLatLng = new kakao.maps.LatLng(latitude, longitude);
-    //     mapInstance.setCenter(userLatLng);
-    //   },
-    //   (error) => {
-    //     console.error("현재 위치를 가져오는 데 실패했습니다.", error);
-    //   },
-    //   {
-    //     enableHighAccuracy: true,
-    //     maximumAge: 0,
-    //     timeout: 10000,
-    //   }
-    // );
+    if (!mapInstance || !markerRef.current) return;
+
+    const userLatLng = markerRef.current.getPosition();
+    mapInstance.setCenter(userLatLng);
   };
 
   const startReporting = () => {
