@@ -12,7 +12,7 @@ const instance = axios.create({
 // 로그아웃 API 호출
 export const logOut = async (token) => {
   try {
-    const response = await instance.post('/oauth/logout', {token});
+    const response = await instance.post('/oauth/logout/', {token});
     return response.data;
   } catch (error) {
     console.error('Login error:', error);

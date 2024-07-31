@@ -29,11 +29,11 @@ const Mypage = () => {
     try {
       const kakaoAccessToken = localStorage.getItem('kakaoAccessToken');
       const response = await logOut(kakaoAccessToken);
-      alert('로그아웃 성공:', response);
-      console.log(response);
+      alert('로그아웃 성공:', response.message);
+      console.log(response.message);
       navigate("/login");
     } catch (err) {
-      alert('서버가 닫혀있습니다, 로컬에서 로그아웃됩니다.');
+      alert('API 호출 실패. 로컬에서 로그아웃됩니다.');
       console.log('로그아웃 에러:', err);
       localStorage.clear();
       navigate("/home/mypage");
