@@ -16,6 +16,8 @@ import SetTypeConfirm from "./pages/MyPage/SetTypeConfirm";
 import SetNotify from "./pages/MyPage/SetNotify";
 import SetNotifyNonSmoker from "./pages/MyPage/SetNotifyNonSmoker";
 import SetReport from "./pages/MyPage/SetReport";
+import { useContext, useState } from "react";
+import { ThemeColorContext } from "./Context/context";
 
 function App() {
   return (

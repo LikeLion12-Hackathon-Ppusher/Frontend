@@ -17,6 +17,9 @@ const Home = () => {
   const context = useContext(ThemeColorContext);
   const [mode, setMode] = useState(context.smokeTheme);
 
+  // 버튼 눌렀을때 active여부 상태 저장
+  const [activeButton, setActiveButton] = useState("");
+
   console.log(mode);
 
   useEffect(() => {
@@ -25,16 +28,20 @@ const Home = () => {
   }, []);
 
   const handleCurrentLocation = () => {
+    setActiveButton("");
     setShowNav(true);
+    navigate("/home/map");
     navigate("/home/map?currentLocation=true");
   };
 
   const handleReport = () => {
+    setActiveButton("report");
     setShowNav(true);
     navigate("/home/map?report=true");
   };
 
   const handleMypage = () => {
+    setActiveButton("mypage");
     setShowNav(false);
     navigate("/home/mypage");
   };
@@ -49,7 +56,11 @@ const Home = () => {
             btncolor={mode.background}
             fontcolor={mode.font}
             bordercolor={mode.borderColor}
+            btnactiveback={mode.btnActiveback}
+            btnactivefont={mode.btnactivefont}
+            btnactiveborder={mode.btnActiveborder}
             onClick={handleCurrentLocation}
+            isActive={activeButton === "currentLocation"}
           >
             현위치&nbsp;
             <FontAwesomeIcon icon={faRotateRight} size="lg" />
@@ -58,7 +69,11 @@ const Home = () => {
             btncolor={mode.background}
             fontcolor={mode.font}
             bordercolor={mode.borderColor}
+            btnactiveback={mode.btnActiveback}
+            btnactivefont={mode.btnactivefont}
+            btnactiveborder={mode.btnActiveborder}
             onClick={handleReport}
+            isActive={activeButton === "report"}
           >
             제보&nbsp;
             <FontAwesomeIcon icon={faFileExport} size="lg" />
@@ -67,7 +82,11 @@ const Home = () => {
             btncolor={mode.background}
             fontcolor={mode.font}
             bordercolor={mode.borderColor}
+            btnactiveback={mode.btnActiveback}
+            btnactivefont={mode.btnactivefont}
+            btnactiveborder={mode.btnActiveborder}
             onClick={handleMypage}
+            isActive={activeButton === "mypage"}
           >
             마이&nbsp;
             <FontAwesomeIcon icon={faUser} size="lg" />
@@ -106,11 +125,17 @@ const Btn = styled.div`
   padding: 1rem 1rem;
   margin-top: 0.5rem;
   border-radius: 0.5rem;
-  background-color: ${(props) => props.btncolor};
-  color: ${(props) => props.fontcolor};
+  background-color: ${(props) =>
+    props.isActive ? props.btnactiveback : props.btncolor};
+  color: ${(props) => (props.isActive ? props.btnactivefont : props.fontcolor)};
   cursor: pointer;
   text-align: center;
   font-weight: bold;
   border: 2px solid;
   border-color: ${(props) => props.bordercolor};
+  &:hover {
+    color: ${(props) => props.btnactivefont};
+    background-color: ${(props) => props.btnactiveback};
+    border-color: ${(props) => props.bordercolor};
+  }
 `;

@@ -8,11 +8,17 @@ const smokeTheme = {
   imgColor: "#B1AD3A",
   borderColor: "#F7F152",
   NavborderColor: "#F7F152",
+  // 제보하기
   reportBackground: "#252424",
   reportTextBox: "#626262",
   placeholder: "#F5F5F5",
+  // 인포 패널 화면
   infoBoxColor: "#242424",
   infoFontBorderColor: "#F7F152",
+  infoCleanback: "#F7F152",
+  btnActiveback: "#F7F152",
+  btnActivefont: "black",
+  btnActiveborder: "#F7F152",
 };
 
 const nonSmokeTheme = {
@@ -28,6 +34,10 @@ const nonSmokeTheme = {
   placeholder: "#8f8f8f",
   infoBoxColor: "#ECE85B",
   infoFontBorderColor: "black",
+  infoCleanback: "white",
+  btnActiveback: "F7F152",
+  btnActivefont: "black",
+  btnActiveborder: "#F7F152",
 };
 
 export const theme = {

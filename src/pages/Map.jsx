@@ -4,10 +4,14 @@ import styled, { css, keyframes } from "styled-components";
 import UserImg from "../assets/UserIcon.png";
 import smokeImg from "../assets/제보흡연구역.png";
 import smokeImg2 from "../assets/상습흡연구역.png";
-import reportImg from "../assets/logo.png";
+import reportImg from "../assets/reportIcon.png";
 import { ThemeColorContext } from "../Context/context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp } from "@fortawesome/free-regular-svg-icons";
+import selectClean from "../assets/selectImg.png";
+import nonSelectClean from "../assets/nonSelect.png";
+import smokerReportImg from "../assets/smokerReportImg.png";
+import nonSmokerReportImg from "../assets/nonSmokerReportImg.png";
 
 const { kakao } = window;
 
@@ -21,6 +25,7 @@ const Map = () => {
   // mapInstance가 그냥 카카오 맵임
   const [mapInstance, setMapInstance] = useState(null);
   const [markers, setMarkers] = useState([]);
+  // selectedMarkerInfo 가 존재해야 InfoPanel이 보인다
   const [selectedMarkerInfo, setSelectedMarkerInfo] = useState(null);
   // 모달창 true면 보이게
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -31,6 +36,12 @@ const Map = () => {
   const [isReporting, setIsReporting] = useState(false);
 
   const [showThankYouModal, setShowThankYouModal] = useState(false); // 감사 모달 상태 추가
+
+  const [cleanlinessRating, setCleanlinessRating] = useState(0); // 청결도
+
+  const handleRatingChange = (rating) => {
+    setCleanlinessRating(rating);
+  };
 
   const location = useLocation();
 
@@ -99,6 +110,11 @@ const Map = () => {
 
     // 지도를 생성하는 카카오 맵 api 함수
     const map = new kakao.maps.Map(container, options);
+    // 지도 클릭 이벤트 리스너 추가
+    kakao.maps.event.addListener(map, "click", () => {
+      setSelectedMarkerInfo(null);
+      handleCloseModal();
+    });
 
     // useRef훅의 set을 통해 mapInstance에 생성된 카카오 map을 넣는다
     setMapInstance(map);
@@ -172,8 +188,10 @@ const Map = () => {
             markerData.img,
             markerData.address,
             markerData.userType,
+            markerData.cleanlinessRating,
             markerData.hasAshtray,
-            markerData.indoorOutdoor
+            markerData.indoorOutdoor,
+            markerData.reportType
           );
         });
       },
@@ -197,7 +215,7 @@ const Map = () => {
 
   const startReporting = () => {
     const map = mapInstance;
-    const smokeImageSrc = userType === "smoker" ? smokeImg : smokeImg2;
+    // const smokeImageSrc = userType === "smoker" ? smokeImg : smokeImg2;
     const smokeImageSize = new kakao.maps.Size(24, 30);
     const smokeImageOption = { offset: new kakao.maps.Point(12, 15) };
 
@@ -251,14 +269,18 @@ const Map = () => {
     img,
     address,
     userType,
+    cleanlinessRating = 0,
     hasAshtray = false, // 전달된 인수가 없을 떄 기본값
-    indoorOutdoor = "" // 전달된 인수가 없을 떄 기본값
+    indoorOutdoor = "", // 전달된 인수가 없을 떄 기본값
+    reportType = "smokerReport" // Default to smokerReport
   ) {
     const smokeImageSize = new kakao.maps.Size(16, 16);
     const smokeImageOption = { offset: new kakao.maps.Point(8, 8) };
 
+    const smokeImageSrc = userType === "smoker" ? smokeImg : smokeImg2;
+
     const smokeMarkerImage = new kakao.maps.MarkerImage(
-      img,
+      smokeImageSrc,
       smokeImageSize,
       smokeImageOption
     );
@@ -275,8 +297,10 @@ const Map = () => {
         img,
         address,
         userType,
+        cleanlinessRating,
         hasAshtray,
         indoorOutdoor,
+        reportType,
       });
     });
 
@@ -292,10 +316,12 @@ const Map = () => {
           La: newMarker.getLng(),
         },
         title,
-        img: userType === "smoker" ? smokeImg : smokeImg2, // 마커의 이미지 설정 (기본값은 smokeImg)
+        img: userType === "smoker" ? smokerReportImg : nonSmokerReportImg, // 마커의 이미지 설정 (기본값은 smokeImg)
         address,
         userType,
+        reportType: userType === "smoker" ? "smokerReport" : "nonSmokerReport",
         ...(userType === "smoker" && {
+          cleanlinessRating, // 청결도 평가 추가
           hasAshtray,
           indoorOutdoor,
         }),
@@ -311,11 +337,13 @@ const Map = () => {
         mapInstance,
         new kakao.maps.LatLng(newMarker.getLat(), newMarker.getLng()),
         title,
-        userType === "smoker" ? smokeImg : smokeImg2,
+        userType === "smoker" ? smokerReportImg : nonSmokerReportImg,
         address,
         userType,
+        cleanlinessRating,
         hasAshtray,
-        indoorOutdoor
+        indoorOutdoor,
+        newMarkerData.reportType
       );
 
       handleCloseModal();
@@ -336,7 +364,7 @@ const Map = () => {
     setAddress("");
     setIsReporting(false);
     setHasAshtray(false);
-
+    setCleanlinessRating(0);
     if (reportingMarkerRef.current) {
       reportingMarkerRef.current.setMap(null); // 마커를 지도에서 제거
       reportingMarkerRef.current = null; // 레퍼런스를 초기화
@@ -344,6 +372,7 @@ const Map = () => {
     navigate("/home/map");
   };
 
+  // selectedMarkerInfo 이게 null이 아닐때 이 InfoPanel이 보이는 것임
   return (
     <Container>
       <MapDiv ref={mapRef}></MapDiv>
@@ -352,39 +381,81 @@ const Map = () => {
           infoboxcolor={mode.infoBoxColor}
           infofontbordercolor={mode.infoFontBorderColor}
         >
-          <CloseButtonBox>
-            <CloseButton
-              infofontbordercolor={mode.infoFontBorderColor}
-              onClick={() => setSelectedMarkerInfo(null)}
-            >
-              닫기
-            </CloseButton>
-          </CloseButtonBox>
+          <h4>
+            {selectedMarkerInfo.reportType === "smokerReport"
+              ? "지정 흡연 제보구역"
+              : "상습 흡연 제보구역"}
+          </h4>
+
           <InfoBox>
             <Box>
-              <h5>제보 흡연 구역</h5>
-              <h3>주소</h3>
-              <h5>{selectedMarkerInfo.address}</h5>
-              <h4>{selectedMarkerInfo.title}</h4>
-              {selectedMarkerInfo.userType === "smoker" && (
-                <PlusInfo>
-                  <InfosmokerBox infofontbordercolor={mode.infoFontBorderColor}>
-                    재떨이
-                    {selectedMarkerInfo.hasAshtray}
-                  </InfosmokerBox>
-                  <InfosmokerBox infofontbordercolor={mode.infoFontBorderColor}>
-                    {selectedMarkerInfo.indoorOutdoor}
-                  </InfosmokerBox>
-                </PlusInfo>
+              {selectedMarkerInfo.reportType === "smokerReport" ? (
+                <SmokerReportBox>
+                  <SmokerReportBoxDiv>
+                    <h3>주소</h3>
+                    <h5>{selectedMarkerInfo.address}</h5>
+                    <h4>{selectedMarkerInfo.title}</h4>
+                    {selectedMarkerInfo.userType === "smoker" && (
+                      <>
+                        <CleanBox
+                          infocleanback={mode.infoCleanback}
+                          fontcolor={mode.infoCleanback}
+                        >
+                          <h5>청결도&nbsp;&nbsp;</h5>
+                          <StarContainer>
+                            {[...Array(5)].map((_, index) => (
+                              <Star
+                                key={index}
+                                src={
+                                  index < selectedMarkerInfo.cleanlinessRating
+                                    ? selectClean
+                                    : nonSelectClean
+                                }
+                                alt={`Cleanliness star ${index + 1}`}
+                              />
+                            ))}
+                          </StarContainer>
+                        </CleanBox>
+                        <PlusInfo>
+                          <InfosmokerBox
+                            infofontbordercolor={mode.infoFontBorderColor}
+                          >
+                            재떨이{" "}
+                            {selectedMarkerInfo.hasAshtray ? "있음" : "없음"}
+                          </InfosmokerBox>
+                          <InfosmokerBox
+                            infofontbordercolor={mode.infoFontBorderColor}
+                          >
+                            {selectedMarkerInfo.indoorOutdoor}
+                          </InfosmokerBox>
+                        </PlusInfo>
+                      </>
+                    )}
+                  </SmokerReportBoxDiv>
+                  <ImgBox>
+                    {selectedMarkerInfo.img && (
+                      <img
+                        src={selectedMarkerInfo.img}
+                        alt="Uploaded content"
+                      />
+                    )}
+                  </ImgBox>
+                </SmokerReportBox>
+              ) : (
+                <NonSmokerReportContainer>
+                  <NonSmokerReportBox>
+                    <h3>
+                      현재 위치는 상습 흡연으로<br></br> 제보된 구역입니다.
+                    </h3>
+                    <div>근처 흡연구역을 이용해주세요</div>
+                    <LikeButton onClick={() => alert("좋아요 클릭!")}>
+                      좋아요
+                    </LikeButton>
+                  </NonSmokerReportBox>
+                </NonSmokerReportContainer>
               )}
             </Box>
-            <ImgBox>
-              {selectedMarkerInfo.img && (
-                <img src={selectedMarkerInfo.img} alt="Uploaded" />
-              )}
-            </ImgBox>
           </InfoBox>
-          <LikeButton onClick={() => alert("좋아요 클릭!")}>좋아요</LikeButton>
         </InfoPanel>
       )}
       {isModalOpen && (
@@ -408,38 +479,57 @@ const Map = () => {
               </Label>
               {img && <ImagePreview src={img} alt="Preview" />} */}
               {userType === "smoker" && (
-                <ModalBtnBox>
+                <>
                   <Label>
-                    *재떨이
-                    <Button
-                      active={hasAshtray === "O"}
-                      onClick={() => setHasAshtray("O")}
-                    >
-                      유
-                    </Button>
-                    <Button
-                      active={hasAshtray === "X"}
-                      onClick={() => setHasAshtray("X")}
-                    >
-                      무
-                    </Button>
+                    <RatingContainer>
+                      <StarBox>
+                        {" "}
+                        *청결도&nbsp;
+                        {[1, 2, 3, 4, 5].map((rating) => (
+                          <RatingStar
+                            key={rating}
+                            onClick={() => handleRatingChange(rating)}
+                            isActive={cleanlinessRating >= rating}
+                          >
+                            ●
+                          </RatingStar>
+                        ))}
+                      </StarBox>
+                    </RatingContainer>
                   </Label>
-                  <Label>
-                    *실내외
-                    <Button
-                      active={indoorOutdoor === "실내"}
-                      onClick={() => setIndoorOutdoor("실내")}
-                    >
-                      실내
-                    </Button>
-                    <Button
-                      active={indoorOutdoor === "실외"}
-                      onClick={() => setIndoorOutdoor("실외")}
-                    >
-                      실외
-                    </Button>
-                  </Label>
-                </ModalBtnBox>
+                  <ModalBtnBox>
+                    <Label>
+                      *재떨이
+                      <Button
+                        active={hasAshtray === "O"}
+                        onClick={() => setHasAshtray("O")}
+                      >
+                        유
+                      </Button>
+                      <Button
+                        active={hasAshtray === "X"}
+                        onClick={() => setHasAshtray("X")}
+                      >
+                        무
+                      </Button>
+                    </Label>
+                    <Label>
+                      *실내외
+                      <Button
+                        active={indoorOutdoor === "실내"}
+                        onClick={() => setIndoorOutdoor("실내")}
+                      >
+                        실내
+                      </Button>
+                      <Button
+                        active={indoorOutdoor === "실외"}
+                        onClick={() => setIndoorOutdoor("실외")}
+                      >
+                        실외
+                      </Button>
+                    </Label>
+                  </ModalBtnBox>
+                </>
               )}
 
               <TextConatiner>
@@ -514,15 +604,13 @@ const InfoPanel = styled.div`
   background-color: ${(props) => props.infoboxcolor};
   color: ${(props) => props.infofontbordercolor};
   border-top: 1px solid #ccc;
-  border-radius: 1rem;
-  text-align: center;
+  border-radius: 0.6rem;
+  text-align: start;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
   padding: 1rem 5%;
 
-  img {
-    object-fit: contain;
-    width: 200px;
-    height: 150px;
+  h4 {
+    margin-top: 0;
   }
 `;
 
@@ -546,15 +634,49 @@ const InfosmokerBox = styled.div`
   font-weight: bold;
 `;
 
+const SmokerReportBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const SmokerReportBoxDiv = styled.div`
+  width: 60%;
+`;
+
+const NonSmokerReportContainer = styled.div`
+  color: black;
+  text-align: center;
+`;
+
+const NonSmokerReportBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  div {
+    color: gray;
+    margin-top: 1rem;
+  }
+`;
+
 const CloseButtonBox = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
+  color: black;
+  margin-bottom: 0.8rem;
+
+  h4 {
+    margin: 0;
+  }
 `;
 
 const CloseButton = styled.button`
   background: none;
   border: none;
-  color: ${(props) => props.infofontbordercolor};
+  // color: ${(props) => props.infofontbordercolor};
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
@@ -572,9 +694,9 @@ const Box = styled.div`
 `;
 
 const ImgBox = styled.div`
-  flex: 1;
+  width: 40%;
   img {
-    width: 50%;
+    width: 60%;
     height: auto;
   }
 `;
@@ -668,9 +790,11 @@ const ThankYouModal = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: white;
+  // 투명으로 전환 박스쉐도우 일단 주석처리
+  background: transparent;
   padding: 2rem;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+
+  // box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   z-index: 100;
   border-radius: 0.5rem;
   text-align: center;
@@ -708,5 +832,53 @@ const Button = styled.button`
 
   &:hover {
     background-color: ${(props) => (props.active ? "#c3bf4e" : "#626262")};
+  }
+`;
+
+// 청결도 관련
+const RatingContainer = styled.div`
+  display: flex;
+  gap: 0.5rem;
+`;
+
+const RatingStar = styled.div`
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: ${({ isActive }) => (isActive ? "black" : "gray")};
+`;
+
+const StarContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const StarBox = styled.div`
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 0.3rem;
+  padding: 0 0.5rem;
+  color: black;
+`;
+
+const Star = styled.img`
+  width: 0.9rem; // 아이콘 크기 조정
+  height: 0.9rem;
+  margin-right: 0.2rem;
+`;
+
+const CleanBox = styled.div`
+  display: flex;
+  width: 50%;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.3rem;
+  background-color: white;
+  border-radius: 0.3rem;
+  margin: 0.3rem 0;
+  background-color: ${(props) => props.infocleanback};
+  color: black;
+  @media (max-width: 600px) {
+    width: 70%;
   }
 `;
