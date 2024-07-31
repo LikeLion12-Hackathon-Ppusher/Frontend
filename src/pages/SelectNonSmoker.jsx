@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import nonSmokerImg from "../assets/nonSmoker.png";
+import NonSmokerBack from '../assets/nonsmokerback.png';
 
 const SelectNonSmoker = () => {
   const [activeBox, setActiveBox] = useState(null);
@@ -72,8 +73,11 @@ const SelectContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-image: url(${NonSmokerBack}); 
   background-color: white;
-
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   img {
     width: 10%;
   }
