@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import smokeImg from "../../assets/free-icon-smoking-813800.png";
 import SetHeader from "./SetHeader";
-import detailBackgroundImage from '../../assets/mypage_detail_background.png';
 
 const SetType = () => {
   const [activeBox, setActiveBox] = useState(null);
@@ -33,7 +32,7 @@ const SetType = () => {
     <SelectContainer>
       <SetHeader headerText="사용자 유형 변경"></SetHeader>
       <SmokeSelect>
-        <Box
+        <SmokerBox
           isActive={activeBox === "smoker"}
           onClick={() => handleBoxClick("smoker")}
         >
@@ -43,8 +42,8 @@ const SetType = () => {
             흡연구역 위치 제공
             <br /> 흡연구역 제보
           </div>
-        </Box>
-        <Box
+        </SmokerBox>
+        <NonSmokerBox
           isActive={activeBox === "nonSmoker"}
           onClick={() => handleBoxClick("nonSmoker")}
         >
@@ -54,7 +53,7 @@ const SetType = () => {
             상습 흡연구역 제보
             <br /> 간접흡연 위험구역 알림
           </div>
-        </Box>
+        </NonSmokerBox>
       </SmokeSelect>
       <SelectBtn onClick={handleConfirmClick}>유형 변경하기</SelectBtn>
     </SelectContainer>
@@ -70,11 +69,11 @@ const SelectContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-image: url(${detailBackgroundImage}); 
   background-color: white;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+
+  h2 {
+    background: linear-gradient(to top, #fff100 40%, transparent 40%);
+  }
 `;
 
 const SmokeSelect = styled.div`
@@ -85,23 +84,73 @@ const SmokeSelect = styled.div`
   margin: 10% 0;
 `;
 
-const Box = styled.div`
-  background-color: ${(props) => (props.isActive ? "#FFF100" : "#dedddd")};
+const SmokerBox = styled.div`
+  background-color: #212121;
   width: 48%;
-  height: 18rem;
+  height: 16rem;
+  border: 2px solid #f7f152;
   border-radius: 0.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  transition: transform 0.3s ease, background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease;
   cursor: pointer;
 
   &:hover,
   &:focus {
+    // background-color: #c0c0c0;
     transform: scale(1.05);
-    outline: none;
+    outline: none; /* 포커스 시에 기본 아웃라인을 없애기 위해 */
+  }
+
+  &.active {
+    // background-color: gray;
+    transform: scale(1.05);
+  }
+
+  img {
+    width: 30%;
+  }
+
+  h3 {
+    margin-top: 1rem;
+    color: #f7f152;
+  }
+
+  div {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.2rem;
+    color: #bbbbbb;
+  }
+`;
+
+const NonSmokerBox = styled.div`
+  background-color: #f7f152;
+  width: 48%;
+  height: 16rem;
+  border: 2px solid black;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    // background-color: #c0c0c0;
+    transform: scale(1.05);
+    outline: none; /* 포커스 시에 기본 아웃라인을 없애기 위해 */
+  }
+
+  &.active {
+    // background-color: gray;
+    transform: scale(1.05);
   }
 
   img {
@@ -121,11 +170,11 @@ const Box = styled.div`
 
 const SelectBtn = styled.div`
   width: 90%;
-  background-color: gray;
-  padding: 1.5rem 0;
-  border-radius: 0.4rem;
+  background-color: white;
+  padding: 1rem 0;
+  border: 2px solid black;
+  border-radius: 0.3rem;
   text-align: center;
   cursor: pointer;
-  font-size: 24px;
-  margin-top: 2rem;
+  font-weight: bold;
 `;

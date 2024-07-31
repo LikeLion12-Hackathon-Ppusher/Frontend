@@ -31,18 +31,18 @@ const BackButton = styled.button`
   border: none;
   cursor: pointer;
   position: absolute;
-  top: 6rem;
-  left: 1rem;
+  top: 4%;
+  left: 3%;
   img {
-    width: 2rem;
-    height: 2rem;
+    width: 1.5rem;
+    height: 1.5rem;
   }
 `;
 
 const TypeHeader = styled.h1`
-  font-size: 2.4rem;
+  font-size: 1.5rem;
   position: absolute;
-  top: 8rem;
-  left: 1.8rem;
+  top: 8%;
+  left: 5%;
   background: linear-gradient(to top, #FFF100 40%, transparent 40%);
 `;
