@@ -6,6 +6,7 @@ import smokeImg from "../assets/제보흡연구역.png";
 import smokeImg2 from "../assets/상습흡연구역.png";
 import reportIcon from "../assets/reportIcon.png";
 import reportImg from "../assets/reportImg.png";
+import clustererMarkerImg from "../assets/logo.png";
 import { ThemeColorContext } from "../Context/context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp } from "@fortawesome/free-regular-svg-icons";
@@ -13,6 +14,7 @@ import selectClean from "../assets/selectImg.png";
 import nonSelectClean from "../assets/nonSelect.png";
 import smokerReportImg from "../assets/smokerReportImg.png";
 import nonSmokerReportImg from "../assets/nonSmokerReportImg.png";
+import axios from "axios";
 
 const { kakao } = window;
 
@@ -103,7 +105,7 @@ const Map = () => {
     }
   }, [isReporting, mapInstance]);
 
-  function initializeMap() {
+  const initializeMap = async () => {
     // useRef훅을 사용하여 mapRef를 생성함(참조 객체) => 지도를 가르키게 될 예정
     // mapRef.current은 실제 DOM 요소를 가르키게 됨 => 카카오 지도 API는 이 DOM 요소를 사용하여 지도를 렌더링합니다.
     const container = mapRef.current;
@@ -122,6 +124,80 @@ const Map = () => {
 
     // useRef훅의 set을 통해 mapInstance에 생성된 카카오 map을 넣는다
     setMapInstance(map);
+
+    //여기서 나라 지정 흡연장소 가져오기
+    const res2 = await axios.get("https://bbuhackathon.p-e.kr/place/nosmoking");
+
+    console.log(res2);
+
+    // 원을 저장할 배열
+    const circles = [];
+
+    // 금연 구역 위치 일단 제보된 흡연장소로 시험 테스트
+    res2.data.forEach((markerData) => {
+      var circle = new kakao.maps.Circle({
+        center: new kakao.maps.LatLng(
+          markerData.latitude,
+          markerData.longitude
+        ), // 원의 중심좌표 입니다
+        radius: 50, // 미터 단위의 원의 반지름입니다
+        strokeWeight: 2, // 선의 두께입니다
+        strokeColor: "red", // 선의 색깔입니다
+        strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+        strokeStyle: "", // 선의 스타일 입니다
+        fillColor: "red", // 채우기 색깔입니다
+        fillOpacity: 0.5, // 채우기 불투명도 입니다
+      });
+
+      // 지도에 원을 표시합니다
+      circle.setMap(map);
+
+      // 배열에 원을 추가합니다
+      circles.push(circle);
+    });
+
+    // 지도 레벨 변경 이벤트를 감지합니다
+    kakao.maps.event.addListener(map, "zoom_changed", () => {
+      const level = map.getLevel();
+
+      // 특정 레벨 이하에서는 원을 숨기고, 그 이상에서는 원을 표시합니다
+      circles.forEach((circle) => {
+        if (level > 4) {
+          // 레벨 4 이상일 때 숨기기
+          circle.setMap(null);
+        } else {
+          circle.setMap(map);
+        }
+      });
+    });
+
+    const clusterer = new kakao.maps.MarkerClusterer({
+      map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
+      averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+      minLevel: 5, // 클러스터 할 최소 지도 레벨
+    });
+
+    const nonSmokeZoneimageSrc = clustererMarkerImg;
+    const nonSmokeZoneimageSize = new kakao.maps.Size(24, 30);
+    const nonSmokeZoneimageOption = { offset: new kakao.maps.Point(12, 15) };
+
+    const nonSmokeZoneMarkerImage = new kakao.maps.MarkerImage(
+      nonSmokeZoneimageSrc,
+      nonSmokeZoneimageSize,
+      nonSmokeZoneimageOption
+    );
+
+    const newMarkers = res2.data.map((markerData) => {
+      return new kakao.maps.Marker({
+        position: new kakao.maps.LatLng(
+          markerData.latitude,
+          markerData.longitude
+        ),
+        image: nonSmokeZoneMarkerImage,
+      });
+    });
+
+    clusterer.addMarkers(newMarkers);
 
     // 현재 위치 가져오기 position에 경도 위도 있음
     navigator.geolocation.getCurrentPosition(
@@ -208,7 +284,7 @@ const Map = () => {
         timeout: 10000,
       }
     );
-  }
+  };
 
   const moveToCurrentLocation = () => {
     if (!mapInstance || !markerRef.current) return;
@@ -439,13 +515,15 @@ const Map = () => {
                 </SmokerReportBox>
               ) : (
                 <NonSmokerReportContainer>
+                  <h4>상습 흡연 제보구역</h4>
                   <NonSmokerReportBox>
                     <h3>
                       현재 위치는 상습 흡연으로<br></br> 제보된 구역입니다.
                     </h3>
                     <div>근처 흡연구역을 이용해주세요</div>
                     <LikeButton onClick={() => alert("좋아요 클릭!")}>
-                      좋아요
+                      <FontAwesomeIcon icon={faThumbsUp} size="2x" />
+                      &nbsp; 공감
                     </LikeButton>
                   </NonSmokerReportBox>
                 </NonSmokerReportContainer>
@@ -621,9 +699,21 @@ const InfoPanel = styled.div`
 
 const InfoBox = styled.div`
   display: flex;
-  width: 60%;
+  width: 100%;
   justify-content: space-between;
   align-items: center;
+`;
+
+const Box = styled.div`
+  text-align: start;
+  flex: 1;
+
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+  }
 `;
 
 const PlusInfo = styled.div`
@@ -644,6 +734,11 @@ const SmokerReportBox = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  h4 {
+    text-align: start;
+    margin-bottom: 1rem;
+  }
 `;
 
 const SmokerReportBoxDiv = styled.div`
@@ -653,6 +748,11 @@ const SmokerReportBoxDiv = styled.div`
 const NonSmokerReportContainer = styled.div`
   color: black;
   text-align: center;
+
+  h4 {
+    text-align: start;
+    margin-bottom: 1rem;
+  }
 `;
 
 const NonSmokerReportBox = styled.div`
@@ -688,17 +788,6 @@ const CloseButton = styled.button`
   cursor: pointer;
 `;
 
-const Box = styled.div`
-  text-align: start;
-  flex: 1;
-  h3,
-  h4,
-  h5,
-  h6 {
-    margin: 0;
-  }
-`;
-
 const ImgBox = styled.div`
   width: 40%;
   img {
@@ -716,6 +805,13 @@ const LikeButton = styled.button`
   border-radius: 0.5rem;
   cursor: pointer;
   margin-top: 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const ModalOverlay = styled.div`
