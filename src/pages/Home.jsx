@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import HomeNav from "./HomeNav";
 import { ThemeColorContext } from "../Context/context";
@@ -7,7 +7,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
 import { faFileExport } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import reportSvg from "../assets/제보.svg";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -15,26 +14,34 @@ const Home = () => {
 
   // Home에서 테마를 받아서 저장해야됨
   const context = useContext(ThemeColorContext);
-  const [mode, setMode] = useState(context.smokeTheme);
+  const [mode, setMode] = useState(context.nonSmokeTheme);
 
   // 버튼 눌렀을때 active여부 상태 저장
   const [activeButton, setActiveButton] = useState("");
 
+  const location = useLocation();
+
   console.log(mode);
 
   useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    if (queryParams.get("report") === "true") {
+      setActiveButton("report");
+    } else {
+      setActiveButton("");
+    }
     setShowNav(true);
-    navigate("/home/map");
-  }, []);
+  }, [location.search]);
 
   const handleCurrentLocation = () => {
     setActiveButton("");
     setShowNav(true);
-    navigate("/home/map");
+    // navigate("/home/map");
     navigate("/home/map?currentLocation=true");
   };
 
   const handleReport = () => {
+    setShowNav(true); // 기본적으로 네비게이션을 표시
     setActiveButton("report");
     setShowNav(true);
     navigate("/home/map?report=true");

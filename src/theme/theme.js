@@ -1,6 +1,7 @@
 // src/theme/theme.js
 
 const smokeTheme = {
+  // Home.jsx의 버튼
   color: "black",
   main: "#000000",
   background: "#000000",
@@ -9,19 +10,23 @@ const smokeTheme = {
   borderColor: "#F7F152",
   NavborderColor: "#F7F152",
   // 제보하기
-  reportBackground: "#252424",
-  reportTextBox: "#626262",
+  reportBackground: "#FFFEEE",
+  reportTextBox: "#FEFBB1",
+  reportTextBoxPlaceholder: "#000000",
   placeholder: "#F5F5F5",
+  reportfont: "black",
   // 인포 패널 화면
-  infoBoxColor: "#242424",
-  infoFontBorderColor: "#F7F152",
+  infoBoxColor: "#FFFEEE",
+  infoFontBorderColor: "#000000",
   infoCleanback: "#F7F152",
+  // 버튼 활성화
   btnActiveback: "#F7F152",
   btnActivefont: "black",
   btnActiveborder: "#F7F152",
 };
 
 const nonSmokeTheme = {
+  // Home.jsx의 버튼
   color: "yellow",
   main: "#F7F152",
   background: "#fffeef",
@@ -29,13 +34,18 @@ const nonSmokeTheme = {
   imgColor: "#4c490e",
   borderColor: "#F7F152",
   NavborderColor: "#F7F152",
-  reportBackground: "#F7F152",
-  reportTextBox: "#fffeef",
+  // 제보하기
+  reportBackground: "#FEFBB1",
+  reportTextBox: "#FFFEEE",
+  reportTextBoxPlaceholder: "8F8F8F",
   placeholder: "#8f8f8f",
-  infoBoxColor: "#ECE85B",
-  infoFontBorderColor: "black",
+  reportfont: "black",
+  // 인포 패널 화면
+  infoBoxColor: "#FFFEEE",
+  infoFontBorderColor: "#000000",
   infoCleanback: "white",
-  btnActiveback: "F7F152",
+  // 버튼 활성화
+  btnActiveback: "#F7F152",
   btnActivefont: "black",
   btnActiveborder: "#F7F152",
 };
