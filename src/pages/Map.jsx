@@ -4,7 +4,8 @@ import styled, { css, keyframes } from "styled-components";
 import UserImg from "../assets/UserIcon.png";
 import smokeImg from "../assets/제보흡연구역.png";
 import smokeImg2 from "../assets/상습흡연구역.png";
-import reportImg from "../assets/reportIcon.png";
+import reportIcon from "../assets/reportIcon.png";
+import reportImg from "../assets/reportImg.png";
 import { ThemeColorContext } from "../Context/context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp } from "@fortawesome/free-regular-svg-icons";
@@ -67,7 +68,6 @@ const Map = () => {
     console.log(userType);
   }, []);
 
-  //  location.search가 변경될 때마다 실행, location.search는 URL의 쿼리 문자열 부분(?report=ture) 부분
   useEffect(() => {
     console.log(location);
     const queryParams = new URLSearchParams(location.search);
@@ -79,7 +79,11 @@ const Map = () => {
 
     // 현위치 누르면 밑에 함수 실행 그리고 새로고침 을 없애고 그냥 좌표를 측정해서 다시 좌표를 찍음
     if (queryParams.get("currentLocation") === "true") {
+      handleCloseModal();
+
+      // 제보 모달창이 열린 상태로 현위치를 누르면 모달창이 사라지게 함
       moveToCurrentLocation();
+
       // ture확인하면 그 queryParams을 delete로 삭제해서 다시 url이 home/map이 되게 함
       console.log(queryParams.get("currentLocation"));
       console.log("Moving to current location");
@@ -220,7 +224,7 @@ const Map = () => {
     const smokeImageOption = { offset: new kakao.maps.Point(12, 15) };
 
     const smokeMarkerImage = new kakao.maps.MarkerImage(
-      reportImg,
+      reportIcon,
       smokeImageSize,
       smokeImageOption
     );
@@ -316,7 +320,7 @@ const Map = () => {
           La: newMarker.getLng(),
         },
         title,
-        img: userType === "smoker" ? smokerReportImg : nonSmokerReportImg, // 마커의 이미지 설정 (기본값은 smokeImg)
+        img: reportImg,
         address,
         userType,
         reportType: userType === "smoker" ? "smokerReport" : "nonSmokerReport",
@@ -381,17 +385,17 @@ const Map = () => {
           infoboxcolor={mode.infoBoxColor}
           infofontbordercolor={mode.infoFontBorderColor}
         >
-          <h4>
-            {selectedMarkerInfo.reportType === "smokerReport"
-              ? "지정 흡연 제보구역"
-              : "상습 흡연 제보구역"}
-          </h4>
-
           <InfoBox>
             <Box>
               {selectedMarkerInfo.reportType === "smokerReport" ? (
                 <SmokerReportBox>
                   <SmokerReportBoxDiv>
+                    {" "}
+                    <h4>
+                      {selectedMarkerInfo.reportType === "smokerReport"
+                        ? "지정 흡연 제보구역"
+                        : "상습 흡연 제보구역"}
+                    </h4>
                     <h3>주소</h3>
                     <h5>{selectedMarkerInfo.address}</h5>
                     <h4>{selectedMarkerInfo.title}</h4>
@@ -432,14 +436,6 @@ const Map = () => {
                       </>
                     )}
                   </SmokerReportBoxDiv>
-                  <ImgBox>
-                    {selectedMarkerInfo.img && (
-                      <img
-                        src={selectedMarkerInfo.img}
-                        alt="Uploaded content"
-                      />
-                    )}
-                  </ImgBox>
                 </SmokerReportBox>
               ) : (
                 <NonSmokerReportContainer>
@@ -455,20 +451,23 @@ const Map = () => {
                 </NonSmokerReportContainer>
               )}
             </Box>
-          </InfoBox>
+          </InfoBox>{" "}
+          {selectedMarkerInfo.reportType === "smokerReport" && (
+            <ImgBox>
+              {<img src={selectedMarkerInfo.img} alt="Uploaded content" />}
+            </ImgBox>
+          )}
         </InfoPanel>
       )}
       {isModalOpen && (
         <ModalOverlay>
           <ModalContent
             modalboxcolor={mode.reportBackground}
-            fontcolor={mode.font}
+            fontcolor={mode.reportfont}
           >
             <h4>제보하기</h4>
             <Form>
-              <h3>주소</h3>
-              <h5>{address}</h5>
-
+              <h4>{address}</h4>
               {/* <Label>
                 이미지 업로드:
                 <Input
@@ -539,13 +538,15 @@ const Map = () => {
                   placeholder="상세 위치(최대 20자)"
                   placeholdercolor={mode.placeholder}
                   textboxcolor={mode.reportTextBox}
+                  textboxplaceholder={mode.reportTextBoxPlaceholder}
                   onChange={(e) => setTitle(e.target.value)}
                   maxLength={20}
+                  row={4}
                 />
               </TextConatiner>
               <ButtonBox>
-                <Button onClick={handleSubmit}>제출</Button>
-                <Button onClick={handleCloseModal}>취소</Button>
+                <Button2 onClick={handleSubmit}>제출</Button2>
+                <Button2 onClick={handleCloseModal}>취소</Button2>
               </ButtonBox>
             </Form>
           </ModalContent>
@@ -609,6 +610,10 @@ const InfoPanel = styled.div`
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
   padding: 1rem 5%;
 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   h4 {
     margin-top: 0;
   }
@@ -616,6 +621,7 @@ const InfoPanel = styled.div`
 
 const InfoBox = styled.div`
   display: flex;
+  width: 60%;
   justify-content: space-between;
   align-items: center;
 `;
@@ -641,7 +647,7 @@ const SmokerReportBox = styled.div`
 `;
 
 const SmokerReportBoxDiv = styled.div`
-  width: 60%;
+  width: 100%;
 `;
 
 const NonSmokerReportContainer = styled.div`
@@ -696,7 +702,7 @@ const Box = styled.div`
 const ImgBox = styled.div`
   width: 40%;
   img {
-    width: 60%;
+    width: 90%;
     height: auto;
   }
 `;
@@ -774,7 +780,7 @@ const Input = styled.input`
     outline: none;
   }
   &::placeholder {
-    color: ${(props) => props.placeholdercolor};
+    color: ${(props) => props.textboxplaceholder};
   }
 `;
 
@@ -822,17 +828,23 @@ const ButtonBox = styled.div`
 `;
 
 const Button = styled.button`
-  background-color: ${(props) => (props.active ? "#F7F152" : "#252424")};
-  color: ${(props) => (props.active ? "#000000" : "#F7F152")};
-  border: 2px solid #f7f152;
+  background-color: ${(props) => (props.active ? "black" : "transparent")};
+  color: ${(props) => (props.active ? "white" : "#000000")};
+  border: 2px solid black;
   padding: 0.1rem 0.5em;
   margin: 0rem 0.3rem;
   border-radius: 4px;
   cursor: pointer;
+`;
 
-  &:hover {
-    background-color: ${(props) => (props.active ? "#c3bf4e" : "#626262")};
-  }
+const Button2 = styled.button`
+  background-color: black;
+  color: white;
+  border: 2px solid black;
+  padding: 0.1rem 0.5em;
+  margin: 0rem 0.3rem;
+  border-radius: 4px;
+  cursor: pointer;
 `;
 
 // 청결도 관련
@@ -844,7 +856,7 @@ const RatingContainer = styled.div`
 const RatingStar = styled.div`
   font-size: 1.5rem;
   cursor: pointer;
-  color: ${({ isActive }) => (isActive ? "black" : "gray")};
+  color: ${({ isActive }) => (isActive ? "#fffa85" : "white")};
 `;
 
 const StarContainer = styled.div`
@@ -855,10 +867,10 @@ const StarContainer = styled.div`
 const StarBox = styled.div`
   display: flex;
   align-items: center;
-  background-color: white;
+  background-color: black;
   border-radius: 0.3rem;
   padding: 0 0.5rem;
-  color: black;
+  color: white;
 `;
 
 const Star = styled.img`

@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import smokerReport from "../assets/제보흡연구역.png";
 import nonSmokerReport from "../assets/상습흡연구역.png";
@@ -7,6 +7,22 @@ import { ThemeColorContext } from "../Context/context";
 
 const HomeNav = () => {
   const mode = useContext(ThemeColorContext);
+
+  const [isReportingMode, setIsReportingMode] = useState(false);
+
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+
+  useEffect(() => {
+    console.log(location);
+    if (queryParams.get("report") === "true") {
+      setIsReportingMode(true);
+    } else {
+      setIsReportingMode(false);
+    }
+    console.log(isReportingMode);
+  }, [location.search]);
+
   return (
     <Container>
       <AppBar>
@@ -19,14 +35,20 @@ const HomeNav = () => {
           bordercolor={mode.NavborderColor}
           backgroundcolor={mode.background}
         >
-          <ImgContainer>
-            <img src={smokerReport} alt="" />
-            <div>제보 흡연구역</div>
-          </ImgContainer>{" "}
-          <ImgContainer>
-            <img src={nonSmokerReport} alt="" />
-            <div>상습 흡연 제보구역</div>{" "}
-          </ImgContainer>
+          {isReportingMode ? (
+            <ReportModeBox>지도를 움직여 위치를 지정해주세요.</ReportModeBox>
+          ) : (
+            <>
+              <ImgContainer>
+                <img src={smokerReport} alt="흡연구역" />
+                <div>제보 흡연구역</div>
+              </ImgContainer>
+              <ImgContainer>
+                <img src={nonSmokerReport} alt="상습 흡연 제보구역" />
+                <div>상습 흡연 제보구역</div>
+              </ImgContainer>
+            </>
+          )}
         </LogoContainer>
       </HomeContainer>
     </Container>
@@ -92,3 +114,5 @@ const ImgContainer = styled.div`
     margin-right: 0.5rem;
   }
 `;
+
+const ReportModeBox = styled.div``;
