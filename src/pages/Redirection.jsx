@@ -92,7 +92,7 @@ const Redirection = () => {
   // 쿼리 스트링에서 인가 코드 추출
   const code = new URLSearchParams(window.location.search).get("code");
 
-  const url = "https://bbuhackathon.p-e.kr:8000/oauth/kakao/callback/";
+  const url = `http://bbuhackathon.p-e.kr:8000/oauth/kakao/callback/`;
 
   const fnGetKakaoOauthToken = async () => {
     try {
@@ -103,14 +103,13 @@ const Redirection = () => {
 
       // 인가 코드를 백엔드로 전달
       const res = await axios.post(url, {
-        authorizationCode: code,
+        authorization: code,
       });
 
-      console.log("응답 정보: ", res.data);
-      console.log("쿠키 정보: ", document.cookie);
+      console.log(res.data);
       // 필요시 res.data에서 accessToken을 추출하여 localStorage에 저장
       localStorage.setItem("kakaoAccessToken", res.data.access_token);
-      navigate("/select");
+      navigate("/home");
     } catch (err) {
       console.error(err);
     }
