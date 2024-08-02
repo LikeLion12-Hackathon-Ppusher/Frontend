@@ -18,6 +18,8 @@ import nonSelectClean from "../assets/nonSelect.png";
 import smokerReportImg from "../assets/smokerReportImg.png";
 import nonSmokerReportImg from "../assets/nonSmokerReportImg.png";
 import axios from "axios";
+import NoSmokingZoneChecker from "./NoSmokingZoneChecker";
+import { getDistance } from "../apis/distance";
 
 const { kakao } = window;
 
@@ -65,6 +67,9 @@ const Map = () => {
   // Home이 최상위라 home에서 바꿔야 한다
   // const [mode, setMode] = useState(context.nonSmokeTheme);
   const mode = useContext(ThemeColorContext);
+
+  const [noSmokingZones, setNoSmokingZones] = useState([]); // 금연구역을 저장할 상태입니다.
+  const [showNoSmokingModal, setShowNoSmokingModal] = useState(false); // 금연구역 알림 모달의 표시 여부를 상태로 관리합니다.
 
   useEffect(() => {
     initializeMap();
@@ -128,82 +133,82 @@ const Map = () => {
     // useRef훅의 set을 통해 mapInstance에 생성된 카카오 map을 넣는다
     setMapInstance(map);
 
-    // //여기서 나라 지정 흡연장소 가져오기
-    // const publicSmokingZone = await axios.get(
-    //   "https://bbuhackathon.p-e.kr/place/nosmoking"
-    // );
+    //여기서 나라 지정 흡연장소 가져오기
+    const publicSmokingZone = await axios.get(
+      "https://bbuhackathon.p-e.kr/place/nosmoking/"
+    );
 
-    // console.log(publicSmokingZone);
+    console.log(publicSmokingZone);
 
-    // // 원을 저장할 배열
-    // const circles = [];
+    // 원을 저장할 배열
+    const circles = [];
 
-    // // 금연 구역 위치 일단 제보된 흡연장소로 시험 테스트
-    // publicSmokingZone.data.forEach((markerData) => {
-    //   var circle = new kakao.maps.Circle({
-    //     center: new kakao.maps.LatLng(
-    //       markerData.latitude,
-    //       markerData.longitude
-    //     ), // 원의 중심좌표 입니다
-    //     radius: 50, // 미터 단위의 원의 반지름입니다
-    //     strokeWeight: 1.5, // 선의 두께입니다
-    //     strokeColor: "red", // 선의 색깔입니다
-    //     strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-    //     strokeStyle: "", // 선의 스타일 입니다
-    //     fillColor: "red", // 채우기 색깔입니다
-    //     fillOpacity: 0.3, // 채우기 불투명도 입니다
-    //   });
+    // 금연 구역 위치 일단 제보된 흡연장소로 시험 테스트
+    publicSmokingZone.data.forEach((markerData) => {
+      var circle = new kakao.maps.Circle({
+        center: new kakao.maps.LatLng(
+          markerData.latitude,
+          markerData.longitude
+        ), // 원의 중심좌표 입니다
+        radius: 50, // 미터 단위의 원의 반지름입니다
+        strokeWeight: 1.5, // 선의 두께니다
+        strokeColor: "red", // 선의 색깔입니다
+        strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+        strokeStyle: "", // 선의 스타일 입니다
+        fillColor: "red", // 채우기 색깔입니다
+        fillOpacity: 0.3, // 채우기 불투명도 입니다
+      });
 
-    //   // 지도에 원을 표시합니다
-    //   circle.setMap(map);
+      // 지도에 원을 표시합니다
+      circle.setMap(map);
 
-    //   // 배열에 원을 추가합니다
-    //   circles.push(circle);
-    // });
+      // 배열에 원을 추가합니다
+      circles.push(circle);
+    });
 
-    // // 지도 레벨 변경 이벤트를 감지합니다
-    // kakao.maps.event.addListener(map, "zoom_changed", () => {
-    //   const level = map.getLevel();
+    // 지도 레벨 변경 이벤트를 감지합니다
+    kakao.maps.event.addListener(map, "zoom_changed", () => {
+      const level = map.getLevel();
 
-    //   // 특정 레벨 이하에서는 원을 숨기고, 그 이상에서는 원을 표시합니다
-    //   circles.forEach((circle) => {
-    //     if (level > 4) {
-    //       // 레벨 4 이상일 때 숨기기
-    //       circle.setMap(null);
-    //     } else {
-    //       circle.setMap(map);
-    //     }
-    //   });
-    // });
+      // 특정 레벨 이하에서는 원을 숨기고, 그 이상에서는 원을 표시합니다
+      circles.forEach((circle) => {
+        if (level > 4) {
+          // 레벨 4 이상일 때 숨기기
+          circle.setMap(null);
+        } else {
+          circle.setMap(map);
+        }
+      });
+    });
 
-    // const clusterer = new kakao.maps.MarkerClusterer({
-    //   map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
-    //   averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
-    //   minLevel: 5, // 클러스터 할 최소 지도 레벨
-    // });
+    const clusterer = new kakao.maps.MarkerClusterer({
+      map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
+      averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+      minLevel: 5, // 클러스터 할 최소 지도 레벨
+    });
 
-    // // 클러스터용 마커 (투명 이미지 + 크기를 0으로 설정)
-    // const nonSmokeZoneimageSrc = clustererMarkerImg;
-    // const nonSmokeZoneimageSize = new kakao.maps.Size(0, 0);
-    // const nonSmokeZoneimageOption = { offset: new kakao.maps.Point(0, 0) };
+    // 클러스터용 마커 (투명 이미지 + 크기를 0으로 설정)
+    const nonSmokeZoneimageSrc = clustererMarkerImg;
+    const nonSmokeZoneimageSize = new kakao.maps.Size(0, 0);
+    const nonSmokeZoneimageOption = { offset: new kakao.maps.Point(0, 0) };
 
-    // const nonSmokeZoneMarkerImage = new kakao.maps.MarkerImage(
-    //   nonSmokeZoneimageSrc,
-    //   nonSmokeZoneimageSize,
-    //   nonSmokeZoneimageOption
-    // );
+    const nonSmokeZoneMarkerImage = new kakao.maps.MarkerImage(
+      nonSmokeZoneimageSrc,
+      nonSmokeZoneimageSize,
+      nonSmokeZoneimageOption
+    );
 
-    // const newMarkers = publicSmokingZone.data.map((markerData) => {
-    //   return new kakao.maps.Marker({
-    //     position: new kakao.maps.LatLng(
-    //       markerData.latitude,
-    //       markerData.longitude
-    //     ),
-    //     image: nonSmokeZoneMarkerImage,
-    //   });
-    // });
+    const newMarkers = publicSmokingZone.data.map((markerData) => {
+      return new kakao.maps.Marker({
+        position: new kakao.maps.LatLng(
+          markerData.latitude,
+          markerData.longitude
+        ),
+        image: nonSmokeZoneMarkerImage,
+      });
+    });
 
-    // clusterer.addMarkers(newMarkers);
+    clusterer.addMarkers(newMarkers);
 
     // 현재 위치 가져오기 position에 경도 위도 있음
     navigator.geolocation.getCurrentPosition(
@@ -247,6 +252,8 @@ const Map = () => {
             }
 
             map.setCenter(newLatLng);
+
+            checkUserInNoSmokingZone(newLatLng);
           },
           (error) => {
             console.error("위치 정보를 가져오는 데 실패했습니다.", error);
@@ -257,6 +264,35 @@ const Map = () => {
             timeout: 10000,
           }
         );
+
+        const checkUserInNoSmokingZone = (userLatLng) => {
+          publicSmokingZone.data.forEach((zone) => {
+            const zoneLatLng = new kakao.maps.LatLng(
+              zone.latitude,
+              zone.longitude
+            );
+            console.log(zoneLatLng);
+            console.log(userLatLng);
+            const distance = getDistance(
+              userLatLng.La,
+              userLatLng.Ma,
+              zoneLatLng.La,
+              zoneLatLng.Ma
+            );
+            if (distance <= 50) {
+              // 30m 내에 있는 경우
+              // 금연구역 좌표 37.51116548   126.9214401
+              console.log("금연구역에 위치함");
+              setShowNoSmokingModal(true);
+            } else {
+              console.log("금연구역에 위치하지 않는다");
+            }
+          });
+        };
+
+        const handleCl = () => {
+          setShowNoSmokingModal(false);
+        };
 
         const savedMarkers = JSON.parse(localStorage.getItem("markers")) || [];
         setMarkers(savedMarkers);
@@ -454,29 +490,6 @@ const Map = () => {
         reportType,
       });
     });
-
-    // kakao.maps.event.addListener(marker, "click", function () {
-    //   setSelectedMarkerInfo({
-    //     title,
-    //     img,
-    //     address,
-    //     userType,
-    //     cleanlinessRating,
-    //     hasAshtray,
-    //     indoorOutdoor,
-    //     reportType,
-    //   });
-
-    //   if (clickedMarker && clickedMarker !== marker) {
-    //     // 이전에 클릭된 마커가 있으면 원래 이미지로 변경
-    //     clickedMarker.setImage(smokeMarkerImage);
-    //   }
-
-    //   // 클릭된 마커를 새로운 이미지로 변경
-    //   // 카카오 기본 이미지 사용할 꺼면 null로 넣으면 된다
-    //   marker.setImage(null);
-    //   clickedMarker = marker; // 현재 클릭된 마커 저장
-    // });
 
     return marker;
   }
@@ -726,7 +739,6 @@ const Map = () => {
           </ModalContent>
         </ModalOverlay>
       )}
-
       <ThankYouModal isvisible={showThankYouModal}>
         <IconBox>
           <FontAwesomeIcon icon={faThumbsUp} size="3x" />
@@ -748,6 +760,14 @@ const Map = () => {
           </>
         )}
       </ThankYouModal>
+      {showNoSmokingModal && (
+        <NonSmokingZoneModal>
+          <div>
+            <h2>금연구역 안내</h2>
+            <p>현재 금연구역에 위치하고 있습니다. 금연구역을 존중해 주세요.</p>
+          </div>
+        </NonSmokingZoneModal>
+      )}
     </Container>
   );
 };
@@ -985,9 +1005,9 @@ const ModalBtnBox = styled.div`
 
 const ThankYouModal = styled.div`
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  // top: 50%;
+  // left: 50%;
+  // transform: translate(-50%, -50%);
   // 투명으로 전환 박스쉐도우 일단 주석처리
   background: transparent;
   padding: 2rem;
@@ -1085,4 +1105,14 @@ const CleanBox = styled.div`
   @media (max-width: 600px) {
     width: 70%;
   }
+`;
+
+const NonSmokingZoneModal = styled.div`
+  position: absolute;
+  width: 50%;
+  z-index: 100;
+  padding: 2rem;
+
+  background-color: white;
+  border-radius: 0.5rem;
 `;

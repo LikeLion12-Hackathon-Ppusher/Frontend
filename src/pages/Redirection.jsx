@@ -109,7 +109,7 @@ const Redirection = () => {
       console.log(res.data);
       // 필요시 res.data에서 accessToken을 추출하여 localStorage에 저장
       localStorage.setItem("kakaoAccessToken", res.data.access_token);
-      navigate("/home");
+      navigate("/select");
     } catch (err) {
       console.error(err);
     }
