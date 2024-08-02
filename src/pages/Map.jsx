@@ -6,7 +6,10 @@ import smokeImg from "../assets/제보흡연구역.png";
 import smokeImg2 from "../assets/상습흡연구역.png";
 import reportIcon from "../assets/reportIcon.png";
 import reportImg from "../assets/reportImg.png";
-import clustererMarkerImg from "../assets/logo.png";
+import selectedMarker from "../assets/logo.png";
+import selectedSmokerMarker from "../assets/selectedSmokerMarker.png";
+import selectedNonSmokerMarker from "../assets/selectedNonSmokerMarker.png";
+import clustererMarkerImg from "../assets/투명.png";
 import { ThemeColorContext } from "../Context/context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp } from "@fortawesome/free-regular-svg-icons";
@@ -116,7 +119,7 @@ const Map = () => {
 
     // 지도를 생성하는 카카오 맵 api 함수
     const map = new kakao.maps.Map(container, options);
-    // 지도 클릭 이벤트 리스너 추가
+    // 지도 클릭 이벤트 리스너 추가 지도를 클릭하면 화면에 보이던 Info, 제보 모달창 사라지게 함
     kakao.maps.event.addListener(map, "click", () => {
       setSelectedMarkerInfo(null);
       handleCloseModal();
@@ -125,79 +128,82 @@ const Map = () => {
     // useRef훅의 set을 통해 mapInstance에 생성된 카카오 map을 넣는다
     setMapInstance(map);
 
-    //여기서 나라 지정 흡연장소 가져오기
-    const res2 = await axios.get("https://bbuhackathon.p-e.kr/place/nosmoking");
+    // //여기서 나라 지정 흡연장소 가져오기
+    // const publicSmokingZone = await axios.get(
+    //   "https://bbuhackathon.p-e.kr/place/nosmoking"
+    // );
 
-    console.log(res2);
+    // console.log(publicSmokingZone);
 
-    // 원을 저장할 배열
-    const circles = [];
+    // // 원을 저장할 배열
+    // const circles = [];
 
-    // 금연 구역 위치 일단 제보된 흡연장소로 시험 테스트
-    res2.data.forEach((markerData) => {
-      var circle = new kakao.maps.Circle({
-        center: new kakao.maps.LatLng(
-          markerData.latitude,
-          markerData.longitude
-        ), // 원의 중심좌표 입니다
-        radius: 50, // 미터 단위의 원의 반지름입니다
-        strokeWeight: 2, // 선의 두께입니다
-        strokeColor: "red", // 선의 색깔입니다
-        strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-        strokeStyle: "", // 선의 스타일 입니다
-        fillColor: "red", // 채우기 색깔입니다
-        fillOpacity: 0.5, // 채우기 불투명도 입니다
-      });
+    // // 금연 구역 위치 일단 제보된 흡연장소로 시험 테스트
+    // publicSmokingZone.data.forEach((markerData) => {
+    //   var circle = new kakao.maps.Circle({
+    //     center: new kakao.maps.LatLng(
+    //       markerData.latitude,
+    //       markerData.longitude
+    //     ), // 원의 중심좌표 입니다
+    //     radius: 50, // 미터 단위의 원의 반지름입니다
+    //     strokeWeight: 1.5, // 선의 두께입니다
+    //     strokeColor: "red", // 선의 색깔입니다
+    //     strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+    //     strokeStyle: "", // 선의 스타일 입니다
+    //     fillColor: "red", // 채우기 색깔입니다
+    //     fillOpacity: 0.3, // 채우기 불투명도 입니다
+    //   });
 
-      // 지도에 원을 표시합니다
-      circle.setMap(map);
+    //   // 지도에 원을 표시합니다
+    //   circle.setMap(map);
 
-      // 배열에 원을 추가합니다
-      circles.push(circle);
-    });
+    //   // 배열에 원을 추가합니다
+    //   circles.push(circle);
+    // });
 
-    // 지도 레벨 변경 이벤트를 감지합니다
-    kakao.maps.event.addListener(map, "zoom_changed", () => {
-      const level = map.getLevel();
+    // // 지도 레벨 변경 이벤트를 감지합니다
+    // kakao.maps.event.addListener(map, "zoom_changed", () => {
+    //   const level = map.getLevel();
 
-      // 특정 레벨 이하에서는 원을 숨기고, 그 이상에서는 원을 표시합니다
-      circles.forEach((circle) => {
-        if (level > 4) {
-          // 레벨 4 이상일 때 숨기기
-          circle.setMap(null);
-        } else {
-          circle.setMap(map);
-        }
-      });
-    });
+    //   // 특정 레벨 이하에서는 원을 숨기고, 그 이상에서는 원을 표시합니다
+    //   circles.forEach((circle) => {
+    //     if (level > 4) {
+    //       // 레벨 4 이상일 때 숨기기
+    //       circle.setMap(null);
+    //     } else {
+    //       circle.setMap(map);
+    //     }
+    //   });
+    // });
 
-    const clusterer = new kakao.maps.MarkerClusterer({
-      map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
-      averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
-      minLevel: 5, // 클러스터 할 최소 지도 레벨
-    });
+    // const clusterer = new kakao.maps.MarkerClusterer({
+    //   map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
+    //   averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+    //   minLevel: 5, // 클러스터 할 최소 지도 레벨
+    // });
 
-    const nonSmokeZoneimageSrc = clustererMarkerImg;
-    const nonSmokeZoneimageSize = new kakao.maps.Size(24, 30);
-    const nonSmokeZoneimageOption = { offset: new kakao.maps.Point(12, 15) };
+    // // 클러스터용 마커 (투명 이미지 + 크기를 0으로 설정)
+    // const nonSmokeZoneimageSrc = clustererMarkerImg;
+    // const nonSmokeZoneimageSize = new kakao.maps.Size(0, 0);
+    // const nonSmokeZoneimageOption = { offset: new kakao.maps.Point(0, 0) };
 
-    const nonSmokeZoneMarkerImage = new kakao.maps.MarkerImage(
-      nonSmokeZoneimageSrc,
-      nonSmokeZoneimageSize,
-      nonSmokeZoneimageOption
-    );
+    // const nonSmokeZoneMarkerImage = new kakao.maps.MarkerImage(
+    //   nonSmokeZoneimageSrc,
+    //   nonSmokeZoneimageSize,
+    //   nonSmokeZoneimageOption
+    // );
 
-    const newMarkers = res2.data.map((markerData) => {
-      return new kakao.maps.Marker({
-        position: new kakao.maps.LatLng(
-          markerData.latitude,
-          markerData.longitude
-        ),
-        image: nonSmokeZoneMarkerImage,
-      });
-    });
+    // const newMarkers = publicSmokingZone.data.map((markerData) => {
+    //   return new kakao.maps.Marker({
+    //     position: new kakao.maps.LatLng(
+    //       markerData.latitude,
+    //       markerData.longitude
+    //     ),
+    //     image: nonSmokeZoneMarkerImage,
+    //   });
+    // });
 
-    clusterer.addMarkers(newMarkers);
+    // clusterer.addMarkers(newMarkers);
 
     // 현재 위치 가져오기 position에 경도 위도 있음
     navigator.geolocation.getCurrentPosition(
@@ -342,6 +348,10 @@ const Map = () => {
     );
   };
 
+  let clickedMarker = null; // 클릭된 마커를 저장하는 변수
+  let firstClickedMarkerType = null; // 클릭된 마커를 저장하는 변수
+  let nextClickedMarkerType = null; // 클릭된 마커를 저장하는 변수
+
   function createMarker(
     map,
     position,
@@ -365,13 +375,74 @@ const Map = () => {
       smokeImageOption
     );
 
+    const smokeReportMarkerImage = new kakao.maps.MarkerImage(
+      smokeImg,
+      smokeImageSize,
+      smokeImageOption
+    );
+
+    const nonSmokeReportMarkerImage = new kakao.maps.MarkerImage(
+      smokeImg2,
+      smokeImageSize,
+      smokeImageOption
+    );
+
     const marker = new kakao.maps.Marker({
       position,
       map,
       image: smokeMarkerImage,
     });
 
+    // 클릭된 마커 크기와 이미지 변화시키기
+
+    const selectedsmokeImageSize = new kakao.maps.Size(20, 20);
+    const selectedsmokeImageOption = { offset: new kakao.maps.Point(10, 10) };
+
+    const selectedMarkerImg = new kakao.maps.MarkerImage(
+      selectedMarker,
+      selectedsmokeImageSize,
+      selectedsmokeImageOption
+    );
+
+    // 마커 클릭 이벤트 설정
     kakao.maps.event.addListener(marker, "click", function () {
+      console.log(clickedMarker);
+      console.log(firstClickedMarkerType);
+      console.log(reportType);
+      console.log(typeof reportType);
+      console.log(nextClickedMarkerType);
+      console.log(typeof nextClickedMarkerType);
+
+      // 이전에 클릭된 마커가 있으면 원래 이미지로 변경
+      // 없으면 그냥 이미지는 null로 바꾸고 clicked에 저장
+
+      if (clickedMarker) {
+        if (nextClickedMarkerType === null) {
+          if (firstClickedMarkerType === "smokerReport") {
+            clickedMarker.setImage(smokeReportMarkerImage);
+          } else {
+            clickedMarker.setImage(nonSmokeReportMarkerImage);
+          }
+          marker.setImage(null);
+          nextClickedMarkerType = reportType;
+        } else {
+          if (nextClickedMarkerType === "smokerReport") {
+            clickedMarker.setImage(smokeReportMarkerImage);
+          } else {
+            clickedMarker.setImage(nonSmokeReportMarkerImage);
+          }
+          marker.setImage(null);
+          nextClickedMarkerType = reportType;
+        }
+      } else {
+        firstClickedMarkerType = reportType;
+        marker.setImage(null);
+      }
+
+      // 클릭된 마커를 갱신
+      clickedMarker = marker;
+
+      // 선택된 마커 정보 설정
       setSelectedMarkerInfo({
         title,
         img,
@@ -383,6 +454,29 @@ const Map = () => {
         reportType,
       });
     });
+
+    // kakao.maps.event.addListener(marker, "click", function () {
+    //   setSelectedMarkerInfo({
+    //     title,
+    //     img,
+    //     address,
+    //     userType,
+    //     cleanlinessRating,
+    //     hasAshtray,
+    //     indoorOutdoor,
+    //     reportType,
+    //   });
+
+    //   if (clickedMarker && clickedMarker !== marker) {
+    //     // 이전에 클릭된 마커가 있으면 원래 이미지로 변경
+    //     clickedMarker.setImage(smokeMarkerImage);
+    //   }
+
+    //   // 클릭된 마커를 새로운 이미지로 변경
+    //   // 카카오 기본 이미지 사용할 꺼면 null로 넣으면 된다
+    //   marker.setImage(null);
+    //   clickedMarker = marker; // 현재 클릭된 마커 저장
+    // });
 
     return marker;
   }
@@ -460,6 +554,7 @@ const Map = () => {
         <InfoPanel
           infoboxcolor={mode.infoBoxColor}
           infofontbordercolor={mode.infoFontBorderColor}
+          infobordercolor={mode.infoBorderColor}
         >
           <InfoBox>
             <Box>
@@ -542,6 +637,7 @@ const Map = () => {
           <ModalContent
             modalboxcolor={mode.reportBackground}
             fontcolor={mode.reportfont}
+            bordercolor={mode.reportBorderColor}
           >
             <h4>제보하기</h4>
             <Form>
@@ -682,7 +778,7 @@ const InfoPanel = styled.div`
   opacity: 95%;
   background-color: ${(props) => props.infoboxcolor};
   color: ${(props) => props.infofontbordercolor};
-  border-top: 1px solid #ccc;
+  border: 2px solid ${(props) => props.infobordercolor};
   border-radius: 0.6rem;
   text-align: start;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
@@ -748,7 +844,6 @@ const SmokerReportBoxDiv = styled.div`
 const NonSmokerReportContainer = styled.div`
   color: black;
   text-align: center;
-
   h4 {
     text-align: start;
     margin-bottom: 1rem;
@@ -842,6 +937,7 @@ const ModalContent = styled.div`
   max-width: 500px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   background-color: ${(props) => props.modalboxcolor};
+  border: 3px solid ${(props) => props.bordercolor};
   color: ${(props) => props.fontcolor};
 
   @media (max-width: 600px) {
