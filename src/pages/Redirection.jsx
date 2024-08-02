@@ -113,11 +113,12 @@ const Redirection = () => {
         authorizationCode: code,
       });
       const status = res.status;
-      console.log('응답 상태:', status);
+      console.log("응답 상태:", status);
       console.log(res.data);
       // 필요한 정보를 localStorage에 저장
       localStorage.setItem("access_token", res.data.access_token);
-      localStorage.setItem('userType', res.data.user.userType);
+      localStorage.setItem("userType", res.data.user.userType);
+      localStorage.setItem("userId", res.data.user.userId);
       handleRoute(status);
     } catch (err) {
       console.error(err);
@@ -125,12 +126,14 @@ const Redirection = () => {
   };
 
   const handleRoute = (status) => {
-    if (status === 200) { // 기존 회원 
+    if (status === 200) {
+      // 기존 회원
       navigate("/home/map");
-    } else if (status === 201) { // 회원 가입
+    } else if (status === 201) {
+      // 회원 가입
       navigate("/home/select");
     } else {
-      alert('응답이 이상해요 힝구');
+      alert("응답이 이상해요 힝구");
     }
   };
 

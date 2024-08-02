@@ -25,13 +25,14 @@ const Home = () => {
   // console.log(mode);
 
   useEffect(() => {
-    if (state) {
-      if (state.userType === "SY") {
-        setMode(context.smokeTheme); // 흡연자 테마로 설정
-      } else {
-        setMode(context.nonSmokeTheme); // 비흡연자 테마로 설정
-      }
+    const userType = localStorage.getItem("userType");
+
+    if (userType === "SY") {
+      setMode(context.smokeTheme); // 흡연자 테마로 설정
+    } else {
+      setMode(context.nonSmokeTheme); // 비흡연자 테마로 설정
     }
+
     // navigate("/home/map");
   }, [state, context]);
 
