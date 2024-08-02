@@ -52,6 +52,9 @@ const Map = () => {
   const [title, setTitle] = useState("");
   // 지도 클릭한 위치 주소 변환 상태 변수
   const [address, setAddress] = useState("");
+
+  // 백엔드에서 get한 report정보에서의 어드레스 저장 상태변수
+  const [reportAddress, setreportAddress] = useState("");
   const [isReporting, setIsReporting] = useState(false);
 
   const [showThankYouModal, setShowThankYouModal] = useState(false); // 감사 모달 상태 추가
@@ -72,7 +75,7 @@ const Map = () => {
   // 로그인 할때 받은 res 데이터 정보에 담겨있는 option에서의 값을 여기다가 갔다놓자 (로그인 했을 때 받은 데이터 객체를 어디다가 저장해야 됨)
 
   const [hasAshtray, setHasAshtray] = useState(true);
-  const [indoorOutdoor, setIndoorOutdoor] = useState(""); // 실내외 구분 상태 추가
+  const [indoorOutdoor, setIndoorOutdoor] = useState(false); // 실내외 구분 상태 추가
 
   // Home이 최상위라 home에서 바꿔야 한다
   // const [mode, setMode] = useState(context.nonSmokeTheme);
@@ -95,7 +98,7 @@ const Map = () => {
 
   useEffect(() => {
     // 여거는 로케이션 변경 있을때 => URL에 reprot가 있을떄 없을때 실행되는 useEffect
-    console.log(location);
+    // console.log(location);
     const queryParams = new URLSearchParams(location.search);
     if (queryParams.get("report") === "true") {
       setIsReporting(true);
@@ -111,8 +114,8 @@ const Map = () => {
       moveToCurrentLocation();
 
       // ture확인하면 그 queryParams을 delete로 삭제해서 다시 url이 home/map이 되게 함
-      console.log(queryParams.get("currentLocation"));
-      console.log("Moving to current location");
+      // console.log(queryParams.get("currentLocation"));
+      // console.log("Moving to current location");
       queryParams.delete("currentLocation");
       navigate({
         search: queryParams.toString(),
@@ -149,6 +152,31 @@ const Map = () => {
 
     // useRef훅의 set을 통해 mapInstance에 생성된 카카오 map을 넣는다
     setMapInstance(map);
+
+    // 제보된 흡연 장소 가져오기
+    const reportSmokingZone = await axios.get(
+      "https://bbuhackathon.p-e.kr/place/reportsmoking/"
+    );
+
+    console.log(reportSmokingZone);
+
+    reportSmokingZone.data.forEach((reportData) => {
+      // console.log(reportData);
+      // console.log(reportData.isIndoor);
+
+      createMarker(
+        map,
+        new kakao.maps.LatLng(reportData.latitude, reportData.longitude),
+        reportData.name,
+        reportImg,
+        reportData.address,
+        "SY",
+        reportData.rate,
+        reportData.ashtray,
+        reportData.isIndoor,
+        "smokerReport"
+      );
+    });
 
     // 나라 지정 흡연 장소 가져오기
     const publicSmokingZone = await axios.get(
@@ -350,28 +378,28 @@ const Map = () => {
           setShowNoSmokingModal(false);
         };
 
-        const savedMarkers = JSON.parse(localStorage.getItem("markers")) || [];
-        setMarkers(savedMarkers);
-        console.log(savedMarkers);
-        savedMarkers.forEach((markerData) => {
-          // const markerImageSrc =
-          //   markerData.userType === "smoker" ? smokeImg : smokeImg2;
-          createMarker(
-            map,
-            new kakao.maps.LatLng(
-              markerData.position.Ma,
-              markerData.position.La
-            ),
-            markerData.title,
-            markerData.img,
-            markerData.address,
-            markerData.userType,
-            markerData.cleanlinessRating,
-            markerData.hasAshtray,
-            markerData.indoorOutdoor,
-            markerData.reportType
-          );
-        });
+        // const savedMarkers = JSON.parse(localStorage.getItem("markers")) || [];
+        // setMarkers(savedMarkers);
+        // console.log(savedMarkers);
+        // savedMarkers.forEach((markerData) => {
+        //   // const markerImageSrc =
+        //   //   markerData.userType === "smoker" ? smokeImg : smokeImg2;
+        //   createMarker(
+        //     map,
+        //     new kakao.maps.LatLng(
+        //       markerData.position.Ma,
+        //       markerData.position.La
+        //     ),
+        //     markerData.title,
+        //     markerData.img,
+        //     markerData.address,
+        //     markerData.userType,
+        //     markerData.cleanlinessRating,
+        //     markerData.hasAshtray,
+        //     markerData.indoorOutdoor,
+        //     markerData.reportType
+        //   );
+        // });
       },
       (error) => {
         console.error("현재 위치를 가져오는 데 실패했습니다.", error);
@@ -415,6 +443,7 @@ const Map = () => {
 
     kakao.maps.event.addListener(map, "dragend", function () {
       const latlng = map.getCenter();
+      console.log(latlng);
       reportingMarker.setPosition(latlng);
       getAddressFromCoords(latlng);
       setNewMarker(latlng);
@@ -423,6 +452,7 @@ const Map = () => {
     setIsModalOpen(true);
   };
 
+  // 좌표를 주소로 변환
   const getAddressFromCoords = (latlng) => {
     const geocoder = new kakao.maps.services.Geocoder();
 
@@ -453,8 +483,8 @@ const Map = () => {
     userType,
     cleanlinessRating = 0,
     hasAshtray = false, // 전달된 인수가 없을 떄 기본값
-    indoorOutdoor = "", // 전달된 인수가 없을 떄 기본값
-    reportType = "public" // Default to smokerReport
+    isindoor = true, // 전달된 인수가 없을 떄 기본값
+    reportType = "smokerReport" // Default to smokerReport
   ) {
     const smokeImageSize = new kakao.maps.Size(16, 16);
     const smokeImageOption = { offset: new kakao.maps.Point(8, 8) };
@@ -557,7 +587,7 @@ const Map = () => {
         userType,
         cleanlinessRating,
         hasAshtray,
-        indoorOutdoor,
+        isindoor,
         reportType,
       });
     });
@@ -576,7 +606,7 @@ const Map = () => {
     userType, // 필요없음
     cleanlinessRating = 0,
     hasAshtray = false, // 전달된 인수가 없을 떄 기본값
-    indoorOutdoor = "", // 전달된 인수가 없을 떄 기본값
+    isindoor = false, // 전달된 인수가 없을 떄 기본값
     reportType = "public" // Default to smokerReport
   ) {
     const publicSmokingZoneMarkerImageSize = new kakao.maps.Size(16, 24);
@@ -626,7 +656,7 @@ const Map = () => {
         userType,
         cleanlinessRating,
         hasAshtray,
-        indoorOutdoor,
+        isindoor,
         reportType,
       });
     });
@@ -817,7 +847,7 @@ const Map = () => {
                           <InfosmokerBox
                             infofontbordercolor={mode.infoFontBorderColor}
                           >
-                            {selectedMarkerInfo.indoorOutdoor}
+                            {selectedMarkerInfo.isindoor ? "실내" : "실외"}
                           </InfosmokerBox>
                         </PlusInfo>
                       </>
@@ -905,14 +935,14 @@ const Map = () => {
                     <Label>
                       *실내외
                       <Button
-                        active={indoorOutdoor === "실내"}
-                        onClick={() => setIndoorOutdoor("실내")}
+                        active={indoorOutdoor === true}
+                        onClick={() => setIndoorOutdoor(true)}
                       >
                         실내
                       </Button>
                       <Button
-                        active={indoorOutdoor === "실외"}
-                        onClick={() => setIndoorOutdoor("실외")}
+                        active={indoorOutdoor === false}
+                        onClick={() => setIndoorOutdoor(false)}
                       >
                         실외
                       </Button>

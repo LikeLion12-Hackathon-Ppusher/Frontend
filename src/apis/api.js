@@ -120,17 +120,18 @@ export const smokerReportAPI = async (
     console.log(Lng);
     console.log(address);
     console.log(title);
+    console.log(indoorOutdoor);
     const response = await axios.post(
       `${baseURL}/report/`,
       {
         reportType: reportUserType,
         userId: userId,
-        smokingPlace: {
+        reportSmokingPlace: {
           latitude: Lat,
           longitude: Lng,
-          name: address,
+          name: title,
           address: address,
-          type: indoorOutdoor,
+          isIndoor: indoorOutdoor,
           ashtray: hasAshtray,
           rate: cleanlinessRating,
         },
@@ -142,6 +143,7 @@ export const smokerReportAPI = async (
         },
       }
     );
+    console.log(response);
     return response.data;
   } catch (error) {
     console.error("흡연자 제보 에러", error);
@@ -174,7 +176,7 @@ export const nonSmokerReportAPI = async (
         secondhandSmokingPlace: {
           latitude: Lat,
           longitude: Lng,
-          name: address,
+          name: title,
           address: address,
         },
         description: title,
