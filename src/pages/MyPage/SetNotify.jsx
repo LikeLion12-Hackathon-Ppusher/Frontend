@@ -18,8 +18,8 @@ const SetNotify = () => {
   return (
     <AccountContainer>
       <SetHeader headerText="알림 설정"></SetHeader>
-      {userType === 'smoker' && <SetNotifySmoker />}
-      {userType === 'nonSmoker' && <SetNotifyNonSmoker />}
+      {userType === 'SY' && <SetNotifySmoker />}
+      {userType === 'SN' && <SetNotifyNonSmoker />}
     </AccountContainer>
   );
 };

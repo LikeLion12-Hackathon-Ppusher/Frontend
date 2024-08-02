@@ -7,6 +7,8 @@ const instance = axios.create({
   baseURL: 'https://bbuhackathon.p-e.kr',
 });
 
+const baseURL = 'https://bbuhackathon.p-e.kr';
+
 // 로그아웃 API 호출
 export const logOut = async (token) => {
   try {
@@ -23,8 +25,6 @@ export const logOut = async (token) => {
     throw error;
   }
 };
-
-const baseURL = 'https://bbuhackathon.p-e.kr';
 
 // GET 사용자 정보
 export const getMyPageAPI = async (token) => {
@@ -58,7 +58,26 @@ export const putUserTypeAPI = async (token, type) => {
   }
 };
 
+// PUT 알림설정
+export const putAlarmOptionAPI = async (token, opt) => {
+  try {
+    const response = await axios.put(`${baseURL}/oauth/user/mypage/alarm/`, {
+      option: opt
+    }, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    console.log(response.data);
+    return response.data;  
+  } catch (error) {
+    console.error('PUT 에러(alarm)', error);
+    throw error;  
+  }
+};
+
 export default instance;
+
 
 
 
