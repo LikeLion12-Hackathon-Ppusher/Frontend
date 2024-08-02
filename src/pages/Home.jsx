@@ -20,8 +20,20 @@ const Home = () => {
   const [activeButton, setActiveButton] = useState("");
 
   const location = useLocation();
+  const { state } = location;
 
   // console.log(mode);
+
+  useEffect(() => {
+    if (state) {
+      if (state.userType === "SY") {
+        setMode(context.smokeTheme); // 흡연자 테마로 설정
+      } else {
+        setMode(context.nonSmokeTheme); // 비흡연자 테마로 설정
+      }
+    }
+    navigate("/home/map");
+  }, [state, context]);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);

@@ -106,10 +106,19 @@ const Redirection = () => {
         authorizationCode: code,
       });
 
+      console.log(res);
       console.log(res.data);
+
+      if (res.status === 200) {
+        navigate("/home/map");
+      } else if (res.status === 201) {
+        navigate("/select");
+      } else {
+        navigate("/login");
+      }
+
       // 필요시 res.data에서 accessToken을 추출하여 localStorage에 저장
       localStorage.setItem("kakaoAccessToken", res.data.access_token);
-      navigate("/select");
     } catch (err) {
       console.error(err);
     }

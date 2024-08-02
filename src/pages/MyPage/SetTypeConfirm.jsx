@@ -1,9 +1,9 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import backButtonImg from "../../assets/arrow-back.png";
-import detailBackgroundImage from '../../assets/mypage_detail_background.png';
-import SetHeader from './SetHeader';
+import detailBackgroundImage from "../../assets/mypage_detail_background.png";
+import SetHeader from "./SetHeader";
 
 const SetTypeConfirm = () => {
   const navigate = useNavigate();
@@ -16,7 +16,9 @@ const SetTypeConfirm = () => {
     <Container>
       <SetHeader headerText="사용자 유형 변경"></SetHeader>
       <Box>
-        <p>변경이 <strong>완료</strong>되었습니다.</p>
+        <p>
+          변경이 <strong>완료</strong>되었습니다.
+        </p>
         <ButtonContainer>
           <Button onClick={handleConfirm}>확인</Button>
         </ButtonContainer>
@@ -35,7 +37,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-image: url(${detailBackgroundImage}); 
+  background-image: url(${detailBackgroundImage});
   background-color: white;
   background-size: cover;
   background-position: center;
@@ -43,7 +45,7 @@ const Container = styled.div`
 `;
 
 const Box = styled.div`
-  background-color: #FFF100;
+  background-color: #fff100;
   border-radius: 6px;
   padding: 4rem 0rem 2rem 0rem;
   margin-bottom: 6rem;
@@ -71,7 +73,7 @@ const Button = styled.button`
   margin-top: 1rem;
   border: 1px solid black;
   border-radius: 0.4rem;
-  color: #FFFFFF;
+  color: #ffffff;
   background-color: #000000;
   font-size: 1rem;
   cursor: pointer;
