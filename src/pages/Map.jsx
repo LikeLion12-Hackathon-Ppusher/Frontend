@@ -6,9 +6,11 @@ import smokeImg from "../assets/제보흡연구역.png";
 import smokeImg2 from "../assets/상습흡연구역.png";
 import reportIcon from "../assets/reportIcon.png";
 import reportImg from "../assets/reportImg.png";
-import selectedMarker from "../assets/logo.png";
 import clustererMarkerImg from "../assets/투명.png";
 import noSmokingZone from "../assets/noSmokingZone.png";
+import publicSmokingZone from "../assets/publicSmokingZone.png";
+import selectedPublicSmokingZone from "../assets/selectedpublicSmokingZone.png";
+import publicSmokingZoneImg from "../assets/publicSmokingZoneImg.png";
 import { ThemeColorContext } from "../Context/context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp } from "@fortawesome/free-regular-svg-icons";
@@ -19,10 +21,15 @@ import nonSmokerReportImg from "../assets/nonSmokerReportImg.png";
 import axios from "axios";
 import NoSmokingZoneChecker from "./NoSmokingZoneChecker";
 import { getDistance } from "../apis/distance";
+import { smokerReportAPI } from "../apis/api";
+import { nonSmokerReportAPI } from "../apis/api";
 
 const { kakao } = window;
 
 const Map = () => {
+  const BaseUrl = "https://bbuhackathon.p-e.kr";
+  const access_Token = localStorage.getItem("access_token");
+
   const mapRef = useRef(null); // 지도 DOM 요소를 참조하는 ref
   const markerRef = useRef(null);
   const reportingMarkerRef = useRef(null);
@@ -34,6 +41,11 @@ const Map = () => {
   const [markers, setMarkers] = useState([]);
   // selectedMarkerInfo 가 존재해야 InfoPanel이 보인다
   const [selectedMarkerInfo, setSelectedMarkerInfo] = useState(null);
+
+  // public 마커 전용 INFOPANEL만들자..
+  const [selectedPublicMarkerInfo, setSelectedPublicMarkerInfo] =
+    useState(null);
+
   // 모달창 true면 보이게
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newMarker, setNewMarker] = useState(null);
@@ -50,17 +62,16 @@ const Map = () => {
     setCleanlinessRating(rating);
   };
 
-  const location = useLocation();
-
   const navigate = useNavigate();
+  const location = useLocation();
+  const { state } = location;
 
-  const [userType, setUserType] = useState(
-    location.state?.userType || "smoker"
-  ); // 상태로 관리
+  const [userType, setUserType] = useState("");
+  // 상태로 관리
   // 이후 로그인 api와 정보를 저장할 수 있는 경우에는 다르게 useEffect에다가 axios.get으로 가져오거나 애초에
   // 로그인 할때 받은 res 데이터 정보에 담겨있는 option에서의 값을 여기다가 갔다놓자 (로그인 했을 때 받은 데이터 객체를 어디다가 저장해야 됨)
 
-  const [hasAshtray, setHasAshtray] = useState("");
+  const [hasAshtray, setHasAshtray] = useState(true);
   const [indoorOutdoor, setIndoorOutdoor] = useState(""); // 실내외 구분 상태 추가
 
   // Home이 최상위라 home에서 바꿔야 한다
@@ -73,11 +84,17 @@ const Map = () => {
   useEffect(() => {
     initializeMap();
 
-    console.log(mode);
+    setUserType(localStorage.getItem("userType"));
+    // setUserType(state.userType);
+    // console.log(mode);
+    // setUserType(state.userType);
+
+    // 여기 그냥 home/map 컴포넌트가 호출될때 단 1회 실행 의존 배열이 없으므로 근데 일단 로컬스토리지에 있는 유저타입 내용 가져옴
     console.log(userType);
   }, []);
 
   useEffect(() => {
+    // 여거는 로케이션 변경 있을때 => URL에 reprot가 있을떄 없을때 실행되는 useEffect
     console.log(location);
     const queryParams = new URLSearchParams(location.search);
     if (queryParams.get("report") === "true") {
@@ -126,24 +143,49 @@ const Map = () => {
     // 지도 클릭 이벤트 리스너 추가 지도를 클릭하면 화면에 보이던 Info, 제보 모달창 사라지게 함
     kakao.maps.event.addListener(map, "click", () => {
       setSelectedMarkerInfo(null);
+      setSelectedPublicMarkerInfo(null);
       handleCloseModal();
     });
 
     // useRef훅의 set을 통해 mapInstance에 생성된 카카오 map을 넣는다
     setMapInstance(map);
 
-    //여기서 나라 지정 흡연장소 가져오기
+    // 나라 지정 흡연 장소 가져오기
     const publicSmokingZone = await axios.get(
-      "https://bbuhackathon.p-e.kr/place/nosmoking/"
+      "https://bbuhackathon.p-e.kr/place/smoking/"
     );
 
     console.log(publicSmokingZone);
+
+    publicSmokingZone.data.forEach((markerData) => {
+      // const markerImageSrc =
+      //   markerData.userType === "smoker" ? smokeImg : smokeImg2;
+      createPublickSmokingZoneMarker(
+        map,
+        new kakao.maps.LatLng(markerData.latitude, markerData.longitude),
+        markerData.name,
+        publicSmokingZoneImg,
+        markerData.name,
+        markerData.userType,
+        markerData.cleanlinessRating,
+        markerData.hasAshtray,
+        markerData.type,
+        markerData.reportType
+      );
+    });
+
+    //나라 지정 금연장소 가져오기
+    const publicNoSmokingZone = await axios.get(
+      "https://bbuhackathon.p-e.kr/place/nosmoking/"
+    );
+
+    console.log(publicNoSmokingZone);
 
     // 원을 저장할 배열
     const circles = [];
 
     // 금연 구역 위치 일단 제보된 흡연장소로 시험 테스트
-    publicSmokingZone.data.forEach((markerData) => {
+    publicNoSmokingZone.data.forEach((markerData) => {
       var circle = new kakao.maps.Circle({
         center: new kakao.maps.LatLng(
           markerData.latitude,
@@ -197,7 +239,7 @@ const Map = () => {
       nonSmokeZoneimageOption
     );
 
-    const newMarkers = publicSmokingZone.data.map((markerData) => {
+    const newMarkers = publicNoSmokingZone.data.map((markerData) => {
       return new kakao.maps.Marker({
         position: new kakao.maps.LatLng(
           markerData.latitude,
@@ -282,7 +324,7 @@ const Map = () => {
               zoneLatLng.Ma
             );
 
-            if (distance <= 1000) {
+            if (distance <= 50) {
               // 금연구역 지정 거리 안에 있을때
 
               if (!isModalVisible) {
@@ -352,8 +394,8 @@ const Map = () => {
   const startReporting = () => {
     const map = mapInstance;
     // const smokeImageSrc = userType === "smoker" ? smokeImg : smokeImg2;
-    const smokeImageSize = new kakao.maps.Size(24, 30);
-    const smokeImageOption = { offset: new kakao.maps.Point(12, 15) };
+    const smokeImageSize = new kakao.maps.Size(24, 36);
+    const smokeImageOption = { offset: new kakao.maps.Point(12, 18) };
 
     const smokeMarkerImage = new kakao.maps.MarkerImage(
       reportIcon,
@@ -412,12 +454,12 @@ const Map = () => {
     cleanlinessRating = 0,
     hasAshtray = false, // 전달된 인수가 없을 떄 기본값
     indoorOutdoor = "", // 전달된 인수가 없을 떄 기본값
-    reportType = "smokerReport" // Default to smokerReport
+    reportType = "public" // Default to smokerReport
   ) {
     const smokeImageSize = new kakao.maps.Size(16, 16);
     const smokeImageOption = { offset: new kakao.maps.Point(8, 8) };
 
-    const smokeImageSrc = userType === "smoker" ? smokeImg : smokeImg2;
+    const smokeImageSrc = userType === "SY" ? smokeImg : smokeImg2;
 
     const smokeMarkerImage = new kakao.maps.MarkerImage(
       smokeImageSrc,
@@ -437,23 +479,33 @@ const Map = () => {
       smokeImageOption
     );
 
-    const marker = new kakao.maps.Marker({
-      position,
-      map,
-      image: smokeMarkerImage,
-    });
+    const publicSmokingZoneMarkerImageSize = new kakao.maps.Size(16, 24);
+    const publicSmokingZoneMarkerImageOption = {
+      offset: new kakao.maps.Point(8, 12),
+    };
 
-    // 클릭된 마커 크기와 이미지 변화시키기
-
-    const selectedsmokeImageSize = new kakao.maps.Size(20, 20);
-    const selectedsmokeImageOption = { offset: new kakao.maps.Point(10, 10) };
-
-    const selectedMarkerImg = new kakao.maps.MarkerImage(
-      selectedMarker,
-      selectedsmokeImageSize,
-      selectedsmokeImageOption
+    const publicSmokingZoneMarkerImage = new kakao.maps.MarkerImage(
+      publicSmokingZone,
+      publicSmokingZoneMarkerImageSize,
+      publicSmokingZoneMarkerImageOption
     );
 
+    let marker;
+    if (reportType === "public") {
+      marker = new kakao.maps.Marker({
+        position,
+        map,
+        image: publicSmokingZoneMarkerImage,
+      });
+    } else {
+      marker = new kakao.maps.Marker({
+        position,
+        map,
+        image: smokeMarkerImage,
+      });
+    }
+
+    // 이 자체는 마커를 만들 때 적용시키므로
     // 마커 클릭 이벤트 설정
     kakao.maps.event.addListener(marker, "click", function () {
       console.log(clickedMarker);
@@ -470,16 +522,20 @@ const Map = () => {
         if (nextClickedMarkerType === null) {
           if (firstClickedMarkerType === "smokerReport") {
             clickedMarker.setImage(smokeReportMarkerImage);
-          } else {
+          } else if (firstClickedMarkerType === "nonSmokerReport") {
             clickedMarker.setImage(nonSmokeReportMarkerImage);
+          } else {
+            clickedMarker.setImage(publicSmokingZoneMarkerImage);
           }
           marker.setImage(null);
           nextClickedMarkerType = reportType;
         } else {
           if (nextClickedMarkerType === "smokerReport") {
             clickedMarker.setImage(smokeReportMarkerImage);
-          } else {
+          } else if (firstClickedMarkerType === "nonSmokerReport") {
             clickedMarker.setImage(nonSmokeReportMarkerImage);
+          } else {
+            clickedMarker.setImage(publicSmokingZoneMarkerImage);
           }
           marker.setImage(null);
           nextClickedMarkerType = reportType;
@@ -492,6 +548,7 @@ const Map = () => {
       // 클릭된 마커를 갱신
       clickedMarker = marker;
 
+      setSelectedPublicMarkerInfo(null);
       // 선택된 마커 정보 설정
       setSelectedMarkerInfo({
         title,
@@ -508,8 +565,77 @@ const Map = () => {
     return marker;
   }
 
+  let clickedPublicMarker = null; // 클릭된 마커를 저장하는 변수
+
+  function createPublickSmokingZoneMarker(
+    map, // 존재
+    position, // 존재근데 위도,경도 합쳐서 보냄
+    title, // 존재 (name)
+    img, // 존재 ?
+    address, // 존재 (address)
+    userType, // 필요없음
+    cleanlinessRating = 0,
+    hasAshtray = false, // 전달된 인수가 없을 떄 기본값
+    indoorOutdoor = "", // 전달된 인수가 없을 떄 기본값
+    reportType = "public" // Default to smokerReport
+  ) {
+    const publicSmokingZoneMarkerImageSize = new kakao.maps.Size(16, 24);
+    const publicSmokingZoneMarkerImageOption = {
+      offset: new kakao.maps.Point(8, 12),
+    };
+
+    const publicSmokingZoneMarkerImage = new kakao.maps.MarkerImage(
+      publicSmokingZone,
+      publicSmokingZoneMarkerImageSize,
+      publicSmokingZoneMarkerImageOption
+    );
+
+    const selectedPublicSmokingZoneMarkerImage = new kakao.maps.MarkerImage(
+      selectedPublicSmokingZone,
+      publicSmokingZoneMarkerImageSize,
+      publicSmokingZoneMarkerImageOption
+    );
+
+    const marker = new kakao.maps.Marker({
+      position,
+      map,
+      image: publicSmokingZoneMarkerImage,
+    });
+
+    // 이 자체는 마커를 만들 때 적용시키므로
+    // 마커 클릭 이벤트 설정
+    kakao.maps.event.addListener(marker, "click", function () {
+      console.log(clickedPublicMarker);
+      if (clickedPublicMarker) {
+        marker.setImage(selectedPublicSmokingZoneMarkerImage);
+        clickedPublicMarker.setImage(publicSmokingZoneMarkerImage);
+      } else {
+        marker.setImage(selectedPublicSmokingZoneMarkerImage);
+      }
+
+      // marker.setImage(selectedPublicSmokingZoneMarkerImage);
+
+      // 클릭된 마커를 갱신
+      clickedPublicMarker = marker;
+
+      setSelectedMarkerInfo(null);
+      setSelectedPublicMarkerInfo({
+        title,
+        img,
+        address,
+        userType,
+        cleanlinessRating,
+        hasAshtray,
+        indoorOutdoor,
+        reportType,
+      });
+    });
+
+    return marker;
+  }
+
   // 제보 제출
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (newMarker && title && address) {
       const newMarkerData = {
         position: {
@@ -520,13 +646,46 @@ const Map = () => {
         img: reportImg,
         address,
         userType,
-        reportType: userType === "smoker" ? "smokerReport" : "nonSmokerReport",
-        ...(userType === "smoker" && {
+        reportType: userType === "SY" ? "smokerReport" : "nonSmokerReport",
+        ...(userType === "SY" && {
           cleanlinessRating, // 청결도 평가 추가
           hasAshtray,
           indoorOutdoor,
         }),
       };
+
+      const reportUserType = userType === "SY" ? "SM" : "SH";
+      const userId = localStorage.getItem("userId");
+
+      // UserType마다 post로 보낼 데이터 Body가 다름
+      if (reportUserType === "SM") {
+        console.log(reportUserType);
+        const responseSM = smokerReportAPI(
+          access_Token,
+          reportUserType,
+          userId,
+          newMarker.getLat(),
+          newMarker.getLng(),
+          address,
+          indoorOutdoor,
+          hasAshtray,
+          cleanlinessRating,
+          title
+        );
+        console.log(responseSM);
+      } else {
+        console.log(reportUserType);
+        const responseSH = nonSmokerReportAPI(
+          access_Token,
+          reportUserType,
+          userId,
+          newMarker.getLat(),
+          newMarker.getLng(),
+          address,
+          title
+        );
+        console.log(responseSH);
+      }
 
       setMarkers((prev) => {
         const updatedMarkers = [...prev, newMarkerData];
@@ -538,7 +697,7 @@ const Map = () => {
         mapInstance,
         new kakao.maps.LatLng(newMarker.getLat(), newMarker.getLng()),
         title,
-        userType === "smoker" ? smokerReportImg : nonSmokerReportImg,
+        userType === "SY" ? smokerReportImg : nonSmokerReportImg,
         address,
         userType,
         cleanlinessRating,
@@ -577,6 +736,36 @@ const Map = () => {
   return (
     <Container>
       <MapDiv ref={mapRef}></MapDiv>
+      {selectedPublicMarkerInfo && (
+        <InfoPanel
+          infoboxcolor={mode.infoBoxColor}
+          infofontbordercolor={mode.infoFontBorderColor}
+          infobordercolor={mode.infoBorderColor}
+        >
+          <InfoBox>
+            <Box>
+              <SmokerPublicReportBox>
+                <SmokerPublicReportBoxDiv>
+                  <h4>지정 흡연 제보구역</h4>
+                  <h3>주소</h3>
+                  <h5>{selectedPublicMarkerInfo.address}</h5>
+                  <PlusInfo>
+                    <InfosmokerBox
+                      infofontbordercolor={mode.infoFontBorderColor}
+                    >
+                      {selectedPublicMarkerInfo.indoorOutdoor}
+                    </InfosmokerBox>
+                  </PlusInfo>
+                </SmokerPublicReportBoxDiv>
+              </SmokerPublicReportBox>
+            </Box>
+          </InfoBox>
+
+          <ImgBox>
+            {<img src={selectedPublicMarkerInfo.img} alt="Uploaded content" />}
+          </ImgBox>
+        </InfoPanel>
+      )}
       {selectedMarkerInfo && (
         <InfoPanel
           infoboxcolor={mode.infoBoxColor}
@@ -591,13 +780,13 @@ const Map = () => {
                     {" "}
                     <h4>
                       {selectedMarkerInfo.reportType === "smokerReport"
-                        ? "지정 흡연 제보구역"
+                        ? "제보 흡연 제보구역"
                         : "상습 흡연 제보구역"}
                     </h4>
                     <h3>주소</h3>
                     <h5>{selectedMarkerInfo.address}</h5>
                     <h4>{selectedMarkerInfo.title}</h4>
-                    {selectedMarkerInfo.userType === "smoker" && (
+                    {selectedMarkerInfo.userType === "SY" && (
                       <>
                         <CleanBox
                           infocleanback={mode.infoCleanback}
@@ -678,7 +867,7 @@ const Map = () => {
                 />
               </Label>
               {img && <ImagePreview src={img} alt="Preview" />} */}
-              {userType === "smoker" && (
+              {userType === "SY" && (
                 <>
                   <Label>
                     <RatingContainer>
@@ -701,14 +890,14 @@ const Map = () => {
                     <Label>
                       *재떨이
                       <Button
-                        active={hasAshtray === "O"}
-                        onClick={() => setHasAshtray("O")}
+                        active={hasAshtray === true}
+                        onClick={() => setHasAshtray(true)}
                       >
                         유
                       </Button>
                       <Button
-                        active={hasAshtray === "X"}
-                        onClick={() => setHasAshtray("X")}
+                        active={hasAshtray === false}
+                        onClick={() => setHasAshtray(false)}
                       >
                         무
                       </Button>
@@ -757,7 +946,7 @@ const Map = () => {
         <IconBox>
           <FontAwesomeIcon icon={faThumbsUp} size="3x" />
         </IconBox>
-        {userType === "smoker" && (
+        {userType === "SY" && (
           <>
             <h3>흡연구역 제보 완료</h3>
             <div>
@@ -767,7 +956,7 @@ const Map = () => {
             </div>
           </>
         )}
-        {userType === "nonSmoker" && (
+        {userType === "SN" && (
           <>
             <h3>상습 흡연구역 제보 완료</h3>
             <div>간접흡연 방지를 위해 힘써주셔서 감사합니다!</div>
@@ -869,6 +1058,24 @@ const InfosmokerBox = styled.div`
   padding: 0.2rem 0.3rem;
   margin-right: 0.5rem;
   font-weight: bold;
+`;
+
+const SmokerPublicReportBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h4 {
+    text-align: start;
+    margin-bottom: 1rem;
+  }
+  h5 {
+    margin-bottom: 1rem;
+  }
+`;
+
+const SmokerPublicReportBoxDiv = styled.div`
+  width: 100%;
 `;
 
 const SmokerReportBox = styled.div`

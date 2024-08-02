@@ -16,7 +16,7 @@ const SetTypeCheck = () => {
 
   const handleConfirm = () => {
     const token = localStorage.getItem("access_token");
-    if (selectedType === "smoker" || selectedType === "nonSmoker") {
+    if (selectedType === "smoker") {
       selectedType = "SY";
     } else if (selectedType === "nonSmoker") {
       selectedType = "SN";

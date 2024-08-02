@@ -28,6 +28,7 @@ const Select = () => {
         }
       );
       console.log(res1);
+      localStorage.setItem("userType", "SY");
       navigate("/home/map", { state: { userType: "SY", data: res1.data } });
     } else if (activeBox === "nonSmoker") {
       const res2 = await axios.put(
@@ -40,6 +41,7 @@ const Select = () => {
         }
       );
       console.log(res2);
+      localStorage.setItem("userType", "SN");
       navigate("/home/map", { state: { userType: "SN", data: res2.data } });
     } else {
       alert("유형을 선택해 주세요.");
