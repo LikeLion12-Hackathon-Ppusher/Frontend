@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import bottomButtonImg from "../../assets/down.png";
 import upButtonImg from "../../assets/up.png";
@@ -31,20 +31,28 @@ import { getMyPageReportAPI, getReportDetailAPI } from '../../apis/api';
 //   console.log(`아이디: ${item.reportId}`);
 //   // console.log(`주소: ${item.reportSmokingPlace.address}`);
 // });
-const rports = await getMyPageReportAPI();
-const reports = rports.map(item => ({
-  id: item.reportId,
-  address: item.reportType === "SM" ? item.reportSmokingPlace.address : item.secondhandSmokingPlace.address,
-  description: item.description,
-  rate: item.reportType === "SM" ? item.reportSmokingPlace.rate : null,
-  isIndoor: item.reportType === "SM" ? item.reportSmokingPlace.isIndoor : null,
-  ashtray: item.reportType === "SM" ? item.reportSmokingPlace.ashtray : null,
-}));
-console.log('아 제발:', reports);
 
 const SetAccount = () => {
   const [openReportId, setOpenReportId] = useState(null);
+  const [rports, setRports] = useState([]);
 
+  useEffect(() => {
+    getMyPageReportAPI()
+      .then(res => {
+        setRports(res);
+      })
+      .catch(err => console.error('Error fetching reports:', err));
+  }, []);
+
+  const reports = rports.map(item => ({
+    id: item.reportId,
+    address: item.reportType === "SM" ? item.reportSmokingPlace.address : item.secondhandSmokingPlace.address,
+    description: item.description,
+    rate: item.reportType === "SM" ? item.reportSmokingPlace.rate : null,
+    isIndoor: item.reportType === "SM" ? item.reportSmokingPlace.isIndoor : null,
+    ashtray: item.reportType === "SM" ? item.reportSmokingPlace.ashtray : null,
+  }));
+  console.log('아 제발:', reports);
   const handleToggle = (id) => {
     getReportDetailAPI(id);
     setOpenReportId(openReportId === id ? null : id);
