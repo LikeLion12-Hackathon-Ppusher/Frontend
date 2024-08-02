@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import smokeImg from "../../assets/free-icon-smoking-813800.png";
+import smokerImg from "../../assets/smoker.png";
+import nonSmokerImg from "../../assets/nonSmoker.png";
 import SetHeader from "./SetHeader";
+import dotsBox from '../../assets/background_dots.png';
 import detailBackgroundImage from '../../assets/mypage_detail_background.png';
 
 const SetType = () => {
@@ -34,10 +36,10 @@ const SetType = () => {
       <SetHeader headerText="사용자 유형 변경"></SetHeader>
       <SmokeSelect>
         <SmokerBox
-          isActive={activeBox === "smoker"}
+          className={activeBox === "smoker" ? "active" : ""}
           onClick={() => handleBoxClick("smoker")}
         >
-          <img src={smokeImg} alt="흡연자 이미지" />
+          <img src={smokerImg} alt="흡연자 이미지" />
           <h3>흡연자</h3>
           <div>
             흡연구역 위치 제공
@@ -45,10 +47,10 @@ const SetType = () => {
           </div>
         </SmokerBox>
         <NonSmokerBox
-          isActive={activeBox === "nonSmoker"}
+          className={activeBox === "nonSmoker" ? "active" : ""}
           onClick={() => handleBoxClick("nonSmoker")}
         >
-          <img src={smokeImg} alt="비흡연자 이미지" />
+          <img src={nonSmokerImg} alt="비흡연자 이미지" />
           <h3>비흡연자</h3>
           <div>
             상습 흡연구역 제보
@@ -75,6 +77,7 @@ const SelectContainer = styled.div`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+
   h2 {
     background: linear-gradient(to top, #fff100 40%, transparent 40%);
   }
