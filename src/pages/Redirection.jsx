@@ -104,7 +104,7 @@ const Redirection = () => {
       // 인가 코드를 백엔드로 전달
       const res = await axios.post(url, {
         authorizationCode: code,
-      }, { withCredentials: true });
+      });
 
       console.log(res.data);
       // 필요시 res.data에서 accessToken을 추출하여 localStorage에 저장
