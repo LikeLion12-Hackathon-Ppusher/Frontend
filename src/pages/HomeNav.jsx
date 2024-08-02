@@ -14,13 +14,13 @@ const HomeNav = () => {
   const queryParams = new URLSearchParams(location.search);
 
   useEffect(() => {
-    console.log(location);
+    // console.log(location);
     if (queryParams.get("report") === "true") {
       setIsReportingMode(true);
     } else {
       setIsReportingMode(false);
     }
-    console.log(isReportingMode);
+    // console.log(isReportingMode);
   }, [location.search]);
 
   return (
