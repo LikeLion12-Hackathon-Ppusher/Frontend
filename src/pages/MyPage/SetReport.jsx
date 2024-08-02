@@ -3,25 +3,67 @@ import styled from 'styled-components';
 import bottomButtonImg from "../../assets/down.png";
 import upButtonImg from "../../assets/up.png";
 import SetHeader from './SetHeader';
+import { getMyPageReportAPI, getReportDetailAPI } from '../../apis/api';
 
-const reports = [
-  { id: 1, address: '주소 어쩌구1', detail: '상세 위치 설명 썰라썰라' },
-  { id: 2, address: '주소 어쩌구2', detail: '상세 위치 설명 썰라썰라' },
-  { id: 3, address: '주소 어쩌구3', detail: '상세 위치 설명 썰라썰라' },
-  { id: 4, address: '주소 어쩌구4', detail: '상세 위치 설명 썰라썰라' },
-  { id: 5, address: '주소 어쩌구5', detail: '상세 위치 설명 썰라썰라' },
-  { id: 6, address: '주소 어쩌구6', detail: '상세 위치 설명 썰라썰라' },
-  { id: 7, address: '주소 어쩌구7', detail: '상세 위치 설명 썰라썰라' },
-  { id: 8, address: '주소 어쩌구8', detail: '상세 위치 설명 썰라썰라' },
-  { id: 9, address: '주소 어쩌구9', detail: '상세 위치 설명 썰라썰라' },
-  { id: 10, address: '주소 어쩌구10', detail: '상세 위치 설명 썰라썰라' }
-];
+// const reports = [
+//   { id: 1, address: '주소 어쩌구1', detail: '상세 위치 설명 썰라썰라' },
+//   { id: 2, address: '주소 어쩌구2', detail: '상세 위치 설명 썰라썰라' },
+//   { id: 3, address: '주소 어쩌구3', detail: '상세 위치 설명 썰라썰라' },
+//   { id: 4, address: '주소 어쩌구4', detail: '상세 위치 설명 썰라썰라' },
+//   { id: 5, address: '주소 어쩌구5', detail: '상세 위치 설명 썰라썰라' },
+//   { id: 6, address: '주소 어쩌구6', detail: '상세 위치 설명 썰라썰라' },
+//   { id: 7, address: '주소 어쩌구7', detail: '상세 위치 설명 썰라썰라' },
+//   { id: 8, address: '주소 어쩌구8', detail: '상세 위치 설명 썰라썰라' },
+//   { id: 9, address: '주소 어쩌구9', detail: '상세 위치 설명 썰라썰라' },
+//   { id: 10, address: '주소 어쩌구10', detail: '상세 위치 설명 썰라썰라' }
+// ];
+// const ports = await getMyPageReportAPI();
+// console.log('나의 제보 내역:', ports);
+// const transformData = async () => {
+//   const ports = await getMyPageReportAPI();
+//   console.log('나의 제보 내역:', ports);
+
+//   const report = ports.
+// };
+
+// console.log('나의 제보 내역:', rports);
+// rports.forEach(item => {
+//   console.log(`아이디: ${item.reportId}`);
+//   // console.log(`주소: ${item.reportSmokingPlace.address}`);
+// });
+const rports = await getMyPageReportAPI();
+const reports = rports.map(item => ({
+  id: item.reportId,
+  address: item.reportType === "SM" ? item.reportSmokingPlace.address : item.secondhandSmokingPlace.address,
+  description: item.description,
+  rate: item.reportType === "SM" ? item.reportSmokingPlace.rate : null,
+  isIndoor: item.reportType === "SM" ? item.reportSmokingPlace.isIndoor : null,
+  ashtray: item.reportType === "SM" ? item.reportSmokingPlace.ashtray : null,
+}));
+console.log('아 제발:', reports);
 
 const SetAccount = () => {
   const [openReportId, setOpenReportId] = useState(null);
 
   const handleToggle = (id) => {
+    getReportDetailAPI(id);
     setOpenReportId(openReportId === id ? null : id);
+  };
+
+  const StatusGroupComponent = ({ rate }) => {
+    const totalCircles = 5;
+    const filledCircles = parseInt(rate, 10); // rate를 숫자로 변환
+
+    return (
+      <StatusGroup>
+        <span>청결도 </span>
+        <div>
+          {Array.from({ length: totalCircles }, (_, index) => (
+            <StatusCircle key={index} filled={index < filledCircles} />
+          ))}
+        </div>
+      </StatusGroup>
+    );
   };
 
   return (
@@ -30,7 +72,7 @@ const SetAccount = () => {
       <ReportContainer>
         {reports.map(report => (
           <ReportItem key={report.id} isOpen={openReportId === report.id}>
-            <ReportHeader onClick={() => handleToggle(report.id)} isOpen={openReportId === report.id}>
+            <ReportHeader onClick={() => handleToggle(report.id)}>
               <span>{report.address}</span>
               <DropdownArrow>
                 <img src={openReportId === report.id ? upButtonImg : bottomButtonImg} alt="토글" />
@@ -40,21 +82,12 @@ const SetAccount = () => {
               <ReportContent>
                 {report.detail}
               </ReportContent>
-              <DetailText>내가 기록해놓은 정보 샘플</DetailText>
+              <DetailText>{report.description}</DetailText>
               <Status>
-                <StatusGroup>
-                  <span>청결도</span>
-                  <div>
-                    <StatusCircle filled />
-                    <StatusCircle filled />
-                    <StatusCircle filled />
-                    <StatusCircle />
-                    <StatusCircle />
-                  </div>
-                </StatusGroup>
+                {report.rate && <StatusGroupComponent rate={report.rate} />}
                 <ButtonGroup>
-                  <ActionButton>실내</ActionButton>
-                  <ActionButton>재떨이</ActionButton>
+                  {report.isIndoor && <ActionButton>실내</ActionButton>}
+                  {report.ashtray && <ActionButton>재떨이</ActionButton>}
                 </ButtonGroup>
               </Status>
             </ReportDetail>

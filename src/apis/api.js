@@ -1,14 +1,10 @@
 // src/services/api.js
-
 import axios from "axios";
-
 // 기본 설정
 const instance = axios.create({
   baseURL: "https://bbuhackathon.p-e.kr",
 });
-
 const baseURL = "https://bbuhackathon.p-e.kr";
-
 // POST 로그아웃
 export const logOut = async (token) => {
   try {
@@ -27,7 +23,6 @@ export const logOut = async (token) => {
     throw error;
   }
 };
-
 // GET 흡연 구역 안내
 export const getPlaceSmokingAPI = async (token) => {
   try {
@@ -37,17 +32,14 @@ export const getPlaceSmokingAPI = async (token) => {
       },
     });
     console.log("흡연 구역 안내:", response.data);
-
     const placeId = response.data.placeId;
     console.log("placeId:", placeId);
-
     return response.data;
   } catch (error) {
     console.error("GET 에러(place/smoking):", error);
     throw error;
   }
 };
-
 // GET 상세 흡연 구역 안내
 export const getPlaceSmokingIDAPI = async (token, id) => {
   try {
@@ -63,7 +55,6 @@ export const getPlaceSmokingIDAPI = async (token, id) => {
     throw error;
   }
 };
-
 // GET 사용자 정보
 export const getMyPageAPI = async (token) => {
   try {
@@ -78,7 +69,6 @@ export const getMyPageAPI = async (token) => {
     throw error;
   }
 };
-
 // PUT 사용자 유형
 export const putUserTypeAPI = async (token, type) => {
   try {
@@ -99,7 +89,6 @@ export const putUserTypeAPI = async (token, type) => {
     throw error;
   }
 };
-
 // 흡연자의 흡연구역 제보
 export const smokerReportAPI = async (
   access_Token,
@@ -150,7 +139,6 @@ export const smokerReportAPI = async (
     throw error;
   }
 };
-
 // 비흡연자의 흡연구역 제보
 export const nonSmokerReportAPI = async (
   access_Token,
@@ -193,7 +181,6 @@ export const nonSmokerReportAPI = async (
     throw error;
   }
 };
-
 // PUT 알림설정
 export const putAlarmOptionAPI = async (token, opt) => {
   try {
@@ -213,6 +200,40 @@ export const putAlarmOptionAPI = async (token, opt) => {
   } catch (error) {
     console.error("PUT 에러(alarm)", error);
     throw error;
+  }
+};
+
+// GET 나의 제보 내역
+export const getMyPageReportAPI = async () => {
+  try {
+    const token = localStorage.getItem('access_token');
+    const response = await axios.get(`${baseURL}/oauth/user/mypage/report/`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    console.log('나의 제보 내역:', response.data);
+    return response.data;  
+  } catch (error) {
+    console.error('GET 에러(mypage/report):', error);
+    throw error;  
+  }
+};
+
+// GET 나의 제보 상세 내역
+export const getReportDetailAPI = async (reportId) => {
+  try {
+    const token = localStorage.getItem('access_token');
+    const response = await axios.get(`${baseURL}/oauth/user/mypage/report/${reportId}/`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    console.log('나의 제보 상세 내역:', response.data);
+    return response.data;  
+  } catch (error) {
+    console.error('GET 에러(mypage):', error);
+    throw error;  
   }
 };
 
