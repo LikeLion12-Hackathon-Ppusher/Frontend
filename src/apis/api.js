@@ -28,7 +28,41 @@ export const logOut = async (token) => {
   }
 };
 
-const baseURL = "https://bbuhackathon.p-e.kr";
+// GET 흡연 구역 안내
+export const getPlaceSmokingAPI = async (token) => {
+  try {
+    const response = await axios.get(`${baseURL}/place/smoking/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log("흡연 구역 안내:", response.data);
+
+    const placeId = response.data.placeId;
+    console.log("placeId:", placeId);
+
+    return response.data;
+  } catch (error) {
+    console.error("GET 에러(place/smoking):", error);
+    throw error;
+  }
+};
+
+// GET 상세 흡연 구역 안내
+export const getPlaceSmokingIDAPI = async (token, id) => {
+  try {
+    const response = await axios.get(`${baseURL}/place/smoking/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log("상세 흡연 구역 안내:", response.data);
+    // return response.data;
+  } catch (error) {
+    console.error("GET 에러(place/smoking/{id}):", error);
+    throw error;
+  }
+};
 
 // GET 사용자 정보
 export const getMyPageAPI = async (token) => {
