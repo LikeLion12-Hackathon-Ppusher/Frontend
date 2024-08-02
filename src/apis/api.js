@@ -7,7 +7,9 @@ const instance = axios.create({
   baseURL: "https://bbuhackathon.p-e.kr",
 });
 
-// 로그아웃 API 호출
+const baseURL = "https://bbuhackathon.p-e.kr";
+
+// POST 로그아웃
 export const logOut = async (token) => {
   try {
     const response = await instance.post(
@@ -26,7 +28,41 @@ export const logOut = async (token) => {
   }
 };
 
-const baseURL = "https://bbuhackathon.p-e.kr";
+// GET 흡연 구역 안내
+export const getPlaceSmokingAPI = async (token) => {
+  try {
+    const response = await axios.get(`${baseURL}/place/smoking/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log("흡연 구역 안내:", response.data);
+
+    const placeId = response.data.placeId;
+    console.log("placeId:", placeId);
+
+    return response.data;
+  } catch (error) {
+    console.error("GET 에러(place/smoking):", error);
+    throw error;
+  }
+};
+
+// GET 상세 흡연 구역 안내
+export const getPlaceSmokingIDAPI = async (token, id) => {
+  try {
+    const response = await axios.get(`${baseURL}/place/smoking/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log("상세 흡연 구역 안내:", response.data);
+    // return response.data;
+  } catch (error) {
+    console.error("GET 에러(place/smoking/{id}):", error);
+    throw error;
+  }
+};
 
 // GET 사용자 정보
 export const getMyPageAPI = async (token) => {
@@ -64,94 +100,24 @@ export const putUserTypeAPI = async (token, type) => {
   }
 };
 
-// 흡연자의 흡연구역 제보
-export const smokerReportAPI = async (
-  access_Token,
-  reportUserType,
-  userId,
-  Lat,
-  Lng,
-  address,
-  indoorOutdoor,
-  hasAshtray,
-  cleanlinessRating,
-  title
-) => {
+// PUT 알림설정
+export const putAlarmOptionAPI = async (token, opt) => {
   try {
-    console.log(reportUserType);
-    console.log(userId);
-    console.log(Lat);
-    console.log(Lng);
-    console.log(address);
-    console.log(title);
-    const response = await axios.post(
-      `${baseURL}/report/`,
+    const response = await axios.put(
+      `${baseURL}/oauth/user/mypage/alarm/`,
       {
-        reportType: reportUserType,
-        userId: userId,
-        smokingPlace: {
-          latitude: Lat,
-          longitude: Lng,
-          name: address,
-          address: address,
-          type: indoorOutdoor,
-          ashtray: hasAshtray,
-          rate: cleanlinessRating,
-        },
-        description: title,
+        option: opt,
       },
       {
         headers: {
-          Authorization: `Bearer ${access_Token}`,
+          Authorization: `Bearer ${token}`,
         },
       }
     );
+    console.log(response.data);
     return response.data;
   } catch (error) {
-    console.error("흡연자 제보 에러", error);
-    throw error;
-  }
-};
-
-// 비흡연자의 흡연구역 제보
-export const nonSmokerReportAPI = async (
-  access_Token,
-  reportUserType,
-  userId,
-  Lat,
-  Lng,
-  address,
-  title
-) => {
-  try {
-    console.log(reportUserType);
-    console.log(userId);
-    console.log(Lat);
-    console.log(Lng);
-    console.log(address);
-    console.log(title);
-    const response = await axios.post(
-      `${baseURL}/report/`,
-      {
-        reportType: reportUserType,
-        userId: userId,
-        secondhandSmokingPlace: {
-          latitude: Lat,
-          longitude: Lng,
-          name: address,
-          address: address,
-        },
-        description: title,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${access_Token}`,
-        },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error("비흡연자 제보 에러", error);
+    console.error("PUT 에러(alarm)", error);
     throw error;
   }
 };
