@@ -1,9 +1,9 @@
-import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import styled from 'styled-components';
-import SetHeader from './SetHeader';
-import detailBackgroundImage from '../../assets/mypage_detail_background.png';
-import { putUserTypeAPI } from '../../apis/api';
+import React from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import styled from "styled-components";
+import SetHeader from "./SetHeader";
+import detailBackgroundImage from "../../assets/mypage_detail_background.png";
+import { putUserTypeAPI } from "../../apis/api";
 
 const SetTypeCheck = () => {
   const navigate = useNavigate();
@@ -15,24 +15,29 @@ const SetTypeCheck = () => {
   };
 
   const handleConfirm = () => {
-    const token = localStorage.getItem('access_token');
-    if (selectedType === 'smoker') {
+    const token = localStorage.getItem("access_token");
+    if (selectedType === "smoker" || selectedType === "nonSmoker") {
       selectedType = "SY";
-    } else {
+    } else if (selectedType === "nonSmoker") {
       selectedType = "SN";
+    } else {
+      alert("asdf");
     }
-    alert(`타입 상태: ${selectedType}`);
+
     const status = putUserTypeAPI(token, selectedType);
-    console.log('PUT 응답 상태:', status);
-    localStorage.setItem('userType', selectedType);
-    navigate("/home/set-type-confirm");
+    console.log("PUT 응답 상태:", status);
+    localStorage.setItem("userType", selectedType);
+
+    navigate("/home/set-type-confirm", { state: { userType: selectedType } });
   };
 
   return (
     <Container>
       <SetHeader headerText={"사용자 유형 변경"}></SetHeader>
       <Box>
-        <p>정말 <strong>변경</strong>하시겠습니까?</p>
+        <p>
+          정말 <strong>변경</strong>하시겠습니까?
+        </p>
         <ButtonContainer>
           <Button onClick={handleCancel}>취소</Button>
           <Button onClick={handleConfirm}>확인</Button>
@@ -51,7 +56,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-image: url(${detailBackgroundImage}); 
+  background-image: url(${detailBackgroundImage});
   background-color: white;
   background-size: cover;
   background-position: center;
@@ -59,7 +64,7 @@ const Container = styled.div`
 `;
 
 const Box = styled.div`
-  background-color: #FFF100;
+  background-color: #fff100;
   border-radius: 6px;
   padding: 4rem 0rem 2rem 0rem;
   margin-bottom: 6rem;
@@ -87,7 +92,7 @@ const Button = styled.button`
   margin-top: 1rem;
   border: 1px solid black;
   border-radius: 0.4rem;
-  color: #FFFFFF;
+  color: #ffffff;
   background-color: #000000;
   font-size: 1rem;
   cursor: pointer;
