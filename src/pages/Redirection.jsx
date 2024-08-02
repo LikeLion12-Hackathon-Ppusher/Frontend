@@ -115,8 +115,9 @@ const Redirection = () => {
       const status = res.status;
       console.log('응답 상태:', status);
       console.log(res.data);
-      // accessToken을 추출하여 localStorage에 저장
+      // 필요한 정보를 localStorage에 저장
       localStorage.setItem("access_token", res.data.access_token);
+      localStorage.setItem('userType', res.data.user.userType);
       handleRoute(status);
     } catch (err) {
       console.error(err);

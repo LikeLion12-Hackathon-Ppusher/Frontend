@@ -1,20 +1,29 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import backButtonImg from "../../assets/arrow-back.png";
 import SetHeader from './SetHeader';
 import detailBackgroundImage from '../../assets/mypage_detail_background.png';
+import { putUserTypeAPI } from '../../apis/api';
 
 const SetTypeCheck = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { selectedType } = location.state || {};
+  let { selectedType } = location.state || {};
 
   const handleCancel = () => {
     navigate(-1);
   };
 
   const handleConfirm = () => {
+    const token = localStorage.getItem('access_token');
+    if (selectedType === 'smoker') {
+      selectedType = "SY";
+    } else {
+      selectedType = "SN";
+    }
+    alert(`타입 상태: ${selectedType}`);
+    const status = putUserTypeAPI(token, selectedType);
+    console.log('PUT 응답 상태:', status);
     localStorage.setItem('userType', selectedType);
     navigate("/home/set-type-confirm");
   };

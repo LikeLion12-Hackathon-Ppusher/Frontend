@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import SetHeader from './SetHeader';
 import detailBackgroundImage from '../../assets/mypage_detail_background.png';
-import { callMyPageAPI } from '../../apis/api';
+import { getMyPageAPI } from '../../apis/api';
 
 const SetAccount = () => {
   // 프론트 단독 사용자 정보 호출 코드
@@ -26,7 +26,7 @@ const SetAccount = () => {
   const getAccountInfo = async () => {
     try {
       const token = localStorage.getItem('access_token');
-      const userData = await callMyPageAPI(token);
+      const userData = await getMyPageAPI(token);
       setUserInfo(userData);
     } catch (error) {
       alert('마이페이지 정보 가져오기 실패: ' + error);
