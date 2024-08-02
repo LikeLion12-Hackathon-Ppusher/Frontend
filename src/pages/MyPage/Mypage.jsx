@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 import styled from "styled-components";
 import backgroundImage from '../../assets/mypage_background.png';
+import axios from "axios";
 import { logOut } from "../../apis/api";
 
 const Mypage = () => {
@@ -27,21 +28,25 @@ const Mypage = () => {
 
   const handleLogout = async () => {
     try {
-      const kakaoAccessToken = localStorage.getItem('kakaoAccessToken');
-      const res = await logOut(kakaoAccessToken);
-      if (res) {
-        const msg = res.data.message;
+      const accessToken = localStorage.getItem('access_token');
+      const response = await logOut(accessToken);
+      // const response = await axios.post('https://bbuhackathon.p-e.kr/oauth/logout/',
+      //   {},
+      //   {
+      //     headers: {
+      //       'Authorization': `Bearer ${accessToken}`
+      //     }
+      //   });
+      if (response) {
+        const msg = response.data.message;
         alert('로그아웃 성공:', msg);
-        console.log(msg);
-        localStorage.setItem("response", msg);
-        // navigate("/login");
+        localStorage.clear();
+        navigate("/login");
       } else {
         throw new Error('응답 메세지가 업습니다.');
       }
     } catch (err) {
       alert('API 호출 실패. 로컬에서 로그아웃됩니다.');
-      console.log('로그아웃 에러:', err);
-      localStorage.clear();
       navigate("/home/mypage");
     }
   };
