@@ -1,15 +1,14 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import styled, { css, keyframes } from "styled-components";
+import styled from "styled-components";
 import UserImg from "../assets/UserIcon.png";
 import smokeImg from "../assets/제보흡연구역.png";
 import smokeImg2 from "../assets/상습흡연구역.png";
 import reportIcon from "../assets/reportIcon.png";
 import reportImg from "../assets/reportImg.png";
 import selectedMarker from "../assets/logo.png";
-import selectedSmokerMarker from "../assets/selectedSmokerMarker.png";
-import selectedNonSmokerMarker from "../assets/selectedNonSmokerMarker.png";
 import clustererMarkerImg from "../assets/투명.png";
+import noSmokingZone from "../assets/noSmokingZone.png";
 import { ThemeColorContext } from "../Context/context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp } from "@fortawesome/free-regular-svg-icons";
@@ -265,32 +264,47 @@ const Map = () => {
           }
         );
 
+        let isModalVisible = false; // 모달 창이 보이는지 여부를 추적하는 플래그 변수
+        let hasShownModal = false; // 금연 구역을 벗어나기 전까지 모달을 다시 보여주지 않도록 하는 플래그 변수
+
         const checkUserInNoSmokingZone = (userLatLng) => {
           publicSmokingZone.data.forEach((zone) => {
             const zoneLatLng = new kakao.maps.LatLng(
               zone.latitude,
               zone.longitude
             );
-            console.log(zoneLatLng);
-            console.log(userLatLng);
+            // console.log(zoneLatLng);
+            // console.log(userLatLng);
             const distance = getDistance(
               userLatLng.La,
               userLatLng.Ma,
               zoneLatLng.La,
               zoneLatLng.Ma
             );
-            if (distance <= 50) {
-              // 30m 내에 있는 경우
-              // 금연구역 좌표 37.51116548   126.9214401
-              console.log("금연구역에 위치함");
-              setShowNoSmokingModal(true);
+
+            if (distance <= 1000) {
+              // 금연구역 지정 거리 안에 있을때
+
+              if (!isModalVisible) {
+                // 모달이 보이지 않는 경우에만 모달을 띄움
+                setShowNoSmokingModal(true);
+                isModalVisible = true;
+
+                // 2초 뒤에 모달 창을 숨기고 플래그를 초기화
+                setTimeout(() => {
+                  setShowNoSmokingModal(false);
+                  isModalVisible = false;
+                }, 5000);
+              }
             } else {
               console.log("금연구역에 위치하지 않는다");
+              // 금연구역을 벗어났을 때 플래그를 초기화
+              isModalVisible = false;
             }
           });
         };
 
-        const handleCl = () => {
+        const handleNoSmokingZone = () => {
           setShowNoSmokingModal(false);
         };
 
@@ -539,8 +553,8 @@ const Map = () => {
       setShowThankYouModal(true); // 감사 모달 상태 변경
 
       setTimeout(() => {
-        setShowThankYouModal(false); // 2초 후 감사 모달 숨기기
-      }, 2000);
+        setShowThankYouModal(false); // 3초 후 감사 모달 숨기기
+      }, 3000);
     }
   };
 
@@ -763,8 +777,19 @@ const Map = () => {
       {showNoSmokingModal && (
         <NonSmokingZoneModal>
           <div>
-            <h2>금연구역 안내</h2>
-            <p>현재 금연구역에 위치하고 있습니다. 금연구역을 존중해 주세요.</p>
+            <NonSmokingZoneImgBox>
+              <img
+                src={noSmokingZone}
+                alt="asdf
+              "
+              ></img>
+              <h2>금연구역</h2>
+            </NonSmokingZoneImgBox>
+            <p>
+              현재 금연구역에 머물고 있습니다. <br></br>
+              <strong>담배생각</strong>이 나신다면 가까운{" "}
+              <strong>흡연구역</strong>을 이용해주세요.
+            </p>
           </div>
         </NonSmokingZoneModal>
       )}
@@ -1109,10 +1134,30 @@ const CleanBox = styled.div`
 
 const NonSmokingZoneModal = styled.div`
   position: absolute;
-  width: 50%;
+  width: 80%;
   z-index: 100;
   padding: 2rem;
 
-  background-color: white;
+  opacity: 80%;
+  text-align: center;
+  background-color: black;
   border-radius: 0.5rem;
+  border: 2px solid yellow;
+  h2 {
+    color: yellow;
+  }
+  p {
+    color: gray;
+  }
+`;
+
+const NonSmokingZoneImgBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: 2.5rem;
+    margin-right: 0.5rem;
+  }
 `;

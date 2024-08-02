@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import smokerImg from "../assets/smoker.png";
 import nonSmokerImg from "../assets/nonSmoker.png";
-import BackgroundImg from '../assets/background.png';
+import BackgroundImg from "../assets/background.png";
+import axios from "axios";
 
 const Select = () => {
   const [activeBox, setActiveBox] = useState(null);
@@ -13,12 +14,33 @@ const Select = () => {
     // 문자열 "smoker" or "nonSmoker" 를 넘겨줘서 상태를 저장한다
     setActiveBox(box);
   };
+  const access = localStorage.getItem("access_token");
 
-  const handleConfirmClick = () => {
+  const handleConfirmClick = async () => {
     if (activeBox === "smoker") {
-      navigate("/select-smoker");
+      const res1 = await axios.put(
+        "https://bbuhackathon.p-e.kr/oauth/user/mypage/type/",
+        { userType: "SY" },
+        {
+          headers: {
+            Authorization: `Bearer ${access}`,
+          },
+        }
+      );
+      console.log(res1);
+      navigate("/home/map", { state: { userType: "SY", data: res1.data } });
     } else if (activeBox === "nonSmoker") {
-      navigate("/select-non-smoker");
+      const res2 = await axios.put(
+        "https://bbuhackathon.p-e.kr/oauth/user/mypage/type/",
+        { userType: "SN" },
+        {
+          headers: {
+            Authorization: `Bearer ${access}`,
+          },
+        }
+      );
+      console.log(res2);
+      navigate("/home/map", { state: { userType: "SN", data: res2.data } });
     } else {
       alert("유형을 선택해 주세요.");
     }
@@ -65,7 +87,7 @@ const SelectContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-image: url(${BackgroundImg}); 
+  background-image: url(${BackgroundImg});
   background-color: white;
   background-size: cover;
   background-position: center;
