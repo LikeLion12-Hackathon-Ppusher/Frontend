@@ -7,7 +7,9 @@ const instance = axios.create({
   baseURL: "https://bbuhackathon.p-e.kr",
 });
 
-// 로그아웃 API 호출
+const baseURL = "https://bbuhackathon.p-e.kr";
+
+// POST 로그아웃
 export const logOut = async (token) => {
   try {
     const response = await instance.post(
@@ -152,6 +154,28 @@ export const nonSmokerReportAPI = async (
     return response.data;
   } catch (error) {
     console.error("비흡연자 제보 에러", error);
+    throw error;
+  }
+};
+
+// PUT 알림설정
+export const putAlarmOptionAPI = async (token, opt) => {
+  try {
+    const response = await axios.put(
+      `${baseURL}/oauth/user/mypage/alarm/`,
+      {
+        option: opt,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error("PUT 에러(alarm)", error);
     throw error;
   }
 };

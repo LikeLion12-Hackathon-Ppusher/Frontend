@@ -3,12 +3,14 @@ import { useNavigate, Outlet } from "react-router-dom";
 import styled from "styled-components";
 import backgroundImage from '../../assets/mypage_background.png';
 import axios from "axios";
-import { logOut } from "../../apis/api";
+import { getPlaceSmokingAPI, logOut } from "../../apis/api";
 
 const Mypage = () => {
   const navigate = useNavigate();
   const [data, setData] = useState(null);
   const [err, setErr] = useState(null);
+
+  const accessToken = localStorage.getItem('access_token');
 
   const handleAccount = () => {
     navigate("/home/account")
@@ -28,7 +30,6 @@ const Mypage = () => {
 
   const handleLogout = async () => {
     try {
-      const accessToken = localStorage.getItem('access_token');
       const response = await logOut(accessToken);
       // const response = await axios.post('https://bbuhackathon.p-e.kr/oauth/logout/',
       //   {},
@@ -51,6 +52,9 @@ const Mypage = () => {
     }
   };
 
+  const handlePlaceSmoking = async () => {
+    const response = await getPlaceSmokingAPI(accessToken);
+  };
   return (
     <MyPageContainer>
       <MyPageHeader>마이페이지</MyPageHeader>
@@ -60,6 +64,7 @@ const Mypage = () => {
         <Outlet />
         <Btn onClick={handleNotify}>알림 설정</Btn>
         <Btn onClick={handleReport}>내 제보 내역</Btn>
+        <button onClick={handlePlaceSmoking}>흡연구역 안내</button>
         <button onClick={handleLogout}>로그아웃</button>
       </MyPageBtnContainer>
     </MyPageContainer>

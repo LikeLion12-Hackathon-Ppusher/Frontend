@@ -1,20 +1,24 @@
 import React, { useState } from 'react';
 import styled from "styled-components";
+import { putAlarmOptionAPI } from '../../apis/api';
 
 const SetNotifyHeader = () => {
   const [isNotificationEnabled, setIsNotificationEnabled] = useState(false);
+  const token = localStorage.getItem('access_token');
 
   const handleNotificationToggle = (isOn) => {
+    // 알림 활성화 요청
     if (isOn) {
-      // 알림 권한 요청
       if (Notification.permission === "granted") {
         setIsNotificationEnabled(true);
         alert("알림이 활성화되었습니다.");
+        putAlarmOptionAPI(token, true);
       } else if (Notification.permission !== "denied") {
         Notification.requestPermission().then((permission) => {
           if (permission === "granted") {
             setIsNotificationEnabled(true);
             alert("알림이 활성화되었습니다.");
+            putAlarmOptionAPI(token, true);
           } else {
             alert("알림 권한이 거부되었습니다.");
           }
@@ -23,6 +27,7 @@ const SetNotifyHeader = () => {
     } else {
       setIsNotificationEnabled(false);
       alert("알림이 비활성화되었습니다.");
+      putAlarmOptionAPI(token, false);
     }
   };
 
