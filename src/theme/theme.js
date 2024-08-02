@@ -13,11 +13,13 @@ const smokeTheme = {
   reportBackground: "#FFFEEE",
   reportTextBox: "#FEFBB1",
   reportTextBoxPlaceholder: "#000000",
+  reportBorderColor: "#FFF100",
   placeholder: "#F5F5F5",
   reportfont: "black",
   // 인포 패널 화면
   infoBoxColor: "#FFFEEE",
   infoFontBorderColor: "#000000",
+  infoBorderColor: "#FFF100",
   infoCleanback: "#F7F152",
   // 버튼 활성화
   btnActiveback: "#F7F152",
@@ -38,11 +40,13 @@ const nonSmokeTheme = {
   reportBackground: "#FEFBB1",
   reportTextBox: "#FFFEEE",
   reportTextBoxPlaceholder: "8F8F8F",
+  reportBorderColor: "#FFF100",
   placeholder: "#8f8f8f",
   reportfont: "black",
   // 인포 패널 화면
   infoBoxColor: "#FFFEEE",
   infoFontBorderColor: "#000000",
+  infoBorderColor: "#FFF100",
   infoCleanback: "white",
   // 버튼 활성화
   btnActiveback: "#F7F152",
