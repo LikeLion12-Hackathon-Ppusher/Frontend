@@ -9,7 +9,7 @@ const instance = axios.create({
 
 const baseURL = 'https://bbuhackathon.p-e.kr';
 
-// 로그아웃 API 호출
+// POST 로그아웃
 export const logOut = async (token) => {
   try {
     const response = await instance.post('/oauth/logout/', {},
@@ -23,6 +23,42 @@ export const logOut = async (token) => {
   } catch (error) {
     console.error('로그아웃 에러:', error);
     throw error;
+  }
+};
+
+// GET 흡연 구역 안내
+export const getPlaceSmokingAPI = async (token) => {
+  try {
+    const response = await axios.get(`${baseURL}/place/smoking/`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    console.log("흡연 구역 안내:", response.data);
+
+    const placeId = response.data.placeId;
+    console.log("placeId:", placeId);
+
+    return response.data;  
+  } catch (error) {
+    console.error('GET 에러(place/smoking):', error);
+    throw error;  
+  }
+};
+
+// GET 상세 흡연 구역 안내
+export const getPlaceSmokingIDAPI = async (token, id) => {
+  try {
+    const response = await axios.get(`${baseURL}/place/smoking/${id}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    console.log("상세 흡연 구역 안내:", response.data);
+    // return response.data;  
+  } catch (error) {
+    console.error('GET 에러(place/smoking/{id}):', error);
+    throw error;  
   }
 };
 
