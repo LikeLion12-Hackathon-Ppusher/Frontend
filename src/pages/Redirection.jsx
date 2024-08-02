@@ -94,7 +94,14 @@ const Redirection = () => {
 
   const url = `https://bbuhackathon.p-e.kr/oauth/kakao/callback/`;
 
-  const fnGetKakaoOauthToken = async () => {
+  useEffect(() => {
+    if (code) {
+      handleAPIResponse();
+    }
+  }, [code]);
+
+  // API 호출하고 자체 access_token 불러오기
+  const handleAPIResponse = async () => {
     try {
       console.log("Redirect URL:", REDIRECT_URI);
       console.log("REST API Key:", REST_API_KEY);
@@ -119,16 +126,30 @@ const Redirection = () => {
 
       // 필요시 res.data에서 accessToken을 추출하여 localStorage에 저장
       localStorage.setItem("kakaoAccessToken", res.data.access_token);
+
+      const status = res.status;
+      console.log("응답 상태:", status);
+      console.log(res.data);
+      // 필요한 정보를 localStorage에 저장
+      localStorage.setItem("access_token", res.data.access_token);
+      localStorage.setItem("userType", res.data.user.userType);
+      handleRoute(status);
     } catch (err) {
       console.error(err);
     }
   };
 
-  useEffect(() => {
-    if (code) {
-      fnGetKakaoOauthToken();
+  const handleRoute = (status) => {
+    if (status === 200) {
+      // 기존 회원
+      navigate("/home/map");
+    } else if (status === 201) {
+      // 회원 가입
+      navigate("/home/select");
+    } else {
+      alert("응답이 이상해요 힝구");
     }
-  }, [code]);
+  };
 
   return <div>로그인 중입니다.</div>;
 };

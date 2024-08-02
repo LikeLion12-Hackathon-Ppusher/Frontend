@@ -1,9 +1,9 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import backButtonImg from "../../assets/arrow-back.png";
 import SetHeader from "./SetHeader";
 import detailBackgroundImage from "../../assets/mypage_detail_background.png";
+import { putUserTypeAPI } from "../../apis/api";
 
 const SetTypeCheck = () => {
   const navigate = useNavigate();

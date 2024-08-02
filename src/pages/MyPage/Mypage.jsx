@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 import styled from "styled-components";
-import backgroundImage from '../../assets/mypage_background.png';
+import backgroundImage from "../../assets/mypage_background.png";
 import { logOut } from "../../apis/api";
 
 const Mypage = () => {
@@ -10,7 +10,7 @@ const Mypage = () => {
   const [err, setErr] = useState(null);
 
   const handleAccount = () => {
-    navigate("/home/account")
+    navigate("/home/account");
   };
 
   const handleUserType = () => {
@@ -27,20 +27,20 @@ const Mypage = () => {
 
   const handleLogout = async () => {
     try {
-      const kakaoAccessToken = localStorage.getItem('kakaoAccessToken');
+      const kakaoAccessToken = localStorage.getItem("kakaoAccessToken");
       const res = await logOut(kakaoAccessToken);
       if (res) {
         const msg = res.data.message;
-        alert('로그아웃 성공:', msg);
+        alert("로그아웃 성공:", msg);
         console.log(msg);
         localStorage.setItem("response", msg);
         // navigate("/login");
       } else {
-        throw new Error('응답 메세지가 업습니다.');
+        throw new Error("응답 메세지가 업습니다.");
       }
     } catch (err) {
-      alert('API 호출 실패. 로컬에서 로그아웃됩니다.');
-      console.log('로그아웃 에러:', err);
+      alert("API 호출 실패. 로컬에서 로그아웃됩니다.");
+      console.log("로그아웃 에러:", err);
       localStorage.clear();
       navigate("/home/mypage");
     }
@@ -70,7 +70,7 @@ const MyPageContainer = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
-  background-image: url(${backgroundImage}); 
+  background-image: url(${backgroundImage});
   background-color: white;
   background-size: cover;
   background-position: center;
@@ -79,9 +79,9 @@ const MyPageContainer = styled.div`
 `;
 
 const MyPageHeader = styled.div`
-  align-self: flex-start; 
+  align-self: flex-start;
   text-align: left;
-  background: linear-gradient(to top, #FFF100 40%, transparent 40%);
+  background: linear-gradient(to top, #fff100 40%, transparent 40%);
   font-size: 1.6rem;
   font-weight: bold;
   margin-left: 5%;
@@ -101,16 +101,16 @@ const Btn = styled.button`
   border-radius: 6px;
   background-color: #000000;
   font-size: 1.2rem;
-  color: #FFF100;
+  color: #fff100;
   transition: background-color 0.3s ease, transform 0.3s ease;
   cursor: pointer;
 
   &:hover,
   &:focus {
     color: #000000;
-    background-color: #FFF100;
+    background-color: #fff100;
     transform: scale(1.01);
-    outline: none; 
+    outline: none;
   }
 
   &.active {

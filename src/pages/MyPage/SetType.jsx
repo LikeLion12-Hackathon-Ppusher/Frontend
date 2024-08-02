@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import smokeImg from "../../assets/free-icon-smoking-813800.png";
 import SetHeader from "./SetHeader";
+import dotsBox from "../../assets/background_dots.png";
 import detailBackgroundImage from "../../assets/mypage_detail_background.png";
 
 const SetType = () => {
