@@ -80,7 +80,7 @@ const SetNotifySmoker = () => {
             <Guide>
               금연구역에서 알림을 통해
               <br />
-              <strong>가까운 흡연정보</strong>를 확인할 수 있습니다.
+              <strong>가까운 흡연구역 정보</strong>를 확인할 수 있습니다.
             </Guide>
           </DotsBox>
         </PlaceholderBox>

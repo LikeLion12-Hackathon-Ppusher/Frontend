@@ -38,11 +38,17 @@ const SetAccount = () => {
   const [openReportId, setOpenReportId] = useState(null);
   const [rports, setRports] = useState([]);
   const token = localStorage.getItem('access_token');
+  const [noReports, setNoReports] = useState();
 
   useEffect(() => {
+    setNoReports(false);
     getMyPageReportAPI()
       .then(res => {
-        setRports(res);
+        if (res.length > 0) {
+          setRports(res);
+        } else {
+          setNoReports(true);
+        }
       })
       .catch(err => console.error('Error fetching reports:', err));
   }, []);
@@ -76,7 +82,11 @@ const SetAccount = () => {
   const fetchReports = () => {
     getMyPageReportAPI()
       .then(res => {
-        setRports(res);
+        if (res.length > 0) {
+          setRports(res);
+        } else {
+          setNoReports(true);
+        }
       })
       .catch(err => console.error('Error fetching reports:', err));
   };
@@ -100,32 +110,35 @@ const SetAccount = () => {
   return (
     <AccountContainer>
       <SetHeader headerText="제보 내역"></SetHeader>
-      <ReportContainer>
-        {reports.map(report => (
-          <ReportItem key={report.id} isOpen={openReportId === report.id}>
-            <ReportHeader isOpen={openReportId === report.id} onClick={() => handleToggle(report.id)}>
-              <span>{report.address}</span>
-              <DropdownArrow>
-                <img src={openReportId === report.id ? upButtonImg : bottomButtonImg} alt="토글" />
-              </DropdownArrow>
-            </ReportHeader>
-            <ReportDetail isOpen={openReportId === report.id}>
-              <ReportContent>
-                {report.detail}
-              </ReportContent>
-              <DetailText>{report.description}</DetailText>
-              <Status>
-                {report.rate && <StatusGroupComponent rate={report.rate} />}
-                <ButtonGroup>
-                  {report.isIndoor && <ActionButton>실내</ActionButton>}
-                  {report.ashtray && <ActionButton>재떨이</ActionButton>}
-                  <ActionButton onClick={() => handleDelete(report.id)}>삭제</ActionButton>
-                </ButtonGroup>
-              </Status>
-            </ReportDetail>
-          </ReportItem>
-        ))}
-      </ReportContainer>
+      {noReports ? (
+        <NoDataMessage>제보 내역이 없습니다.</NoDataMessage>
+      ) : (
+        <ReportContainer>
+          {reports.map(report => (
+            <ReportItem key={report.id} isOpen={openReportId === report.id}>
+              <ReportHeader isOpen={openReportId === report.id} onClick={() => handleToggle(report.id)}>
+                <span>{report.address}</span>
+                <DropdownArrow>
+                  <img src={openReportId === report.id ? upButtonImg : bottomButtonImg} alt="토글" />
+                </DropdownArrow>
+              </ReportHeader>
+              <ReportDetail isOpen={openReportId === report.id}>
+                <ReportContent>
+                  {report.detail}
+                </ReportContent>
+                <DetailText>{report.description}</DetailText>
+                <Status>
+                  {report.rate && <StatusGroupComponent rate={report.rate} />}
+                  <ButtonGroup>
+                    {report.isIndoor && <ActionButton>실내</ActionButton>}
+                    {report.ashtray && <ActionButton>재떨이</ActionButton>}
+                    <ActionButton onClick={() => handleDelete(report.id)}>삭제</ActionButton>
+                  </ButtonGroup>
+                </Status>
+              </ReportDetail>
+            </ReportItem>
+          ))}
+        </ReportContainer>)}
     </AccountContainer>
   );
 };
@@ -146,6 +159,16 @@ const AccountContainer = styled.div`
   background-repeat: no-repeat;
   z-index: 700;
 `;
+
+const NoDataMessage = styled.div`
+  display: flex;
+  margin-top: 45vh;
+  color: #D9D9D9;
+  font-size: 1.2rem; 
+  text-align: center; 
+  font-weight: bold;
+`;
+
 
 const ReportContainer = styled.div`
   display: flex;
