@@ -1,25 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
 import { putAlarmOptionAPI } from '../../apis/api';
 
 const SetNotifyHeader = () => {
-  const [isNotificationEnabled, setIsNotificationEnabled] = useState(false);
+  const [isNotificationEnabled, setIsNotificationEnabled] = useState(localStorage.getItem('option') === 'true');
   const token = localStorage.getItem('access_token');
+
+  // 컴포넌트 마운트 시 알림 권한 확인
+  useEffect(() => {
+    const option = localStorage.getItem('option');
+    if (option === 'true') {
+      setIsNotificationEnabled(true);
+    } else {
+      setIsNotificationEnabled(false);
+    }
+  }, []);
 
   const handleNotificationToggle = (isOn) => {
     // 알림 활성화 요청
     if (isOn) {
       if (Notification.permission === "granted") {
         setIsNotificationEnabled(true);
+        localStorage.setItem('option', true);
         alert("알림이 활성화되었습니다.");
         putAlarmOptionAPI(token, true);
       } else if (Notification.permission !== "denied") {
         Notification.requestPermission().then((permission) => {
           if (permission === "granted") {
             setIsNotificationEnabled(true);
+            localStorage.setItem('option', true);
             alert("알림이 활성화되었습니다.");
             putAlarmOptionAPI(token, true);
           } else {
+            localStorage.setItem('option', true);
             alert("알림 권한이 거부되었습니다.");
           }
         });
@@ -27,6 +40,7 @@ const SetNotifyHeader = () => {
     } else {
       setIsNotificationEnabled(false);
       alert("알림이 비활성화되었습니다.");
+      localStorage.setItem('option', false);
       putAlarmOptionAPI(token, false);
     }
   };
@@ -60,13 +74,17 @@ const TitleContainer = styled.div`
   align-items: center;
   width: 90%;
   height: 3rem;
-  border: 0.08rem solid black;
-  border-radius: 0.4rem;
+  border: 2px solid #272A30;
+  border-radius: 0.3rem;
   font-size: 1.2rem;
+  font-weight: bold;
+  background-color: #FFFEEE;
+  box-shadow: 0.2rem 0.2rem 0.2rem #FEFBBD;
 `;
 
 const Title = styled.div`
   margin-left: 2rem;
+  color: #272A30;
 `;
 
 const TitleBtnContainer = styled.div`
@@ -81,16 +99,17 @@ const TitleBtnContainer = styled.div`
 const TitleButton = styled.button`
   width: 45%;
   height: 80%;
-  color: ${(props) => (props.isActive ? "#FFF100" : "#000000")};
-  background-color: ${(props) => (props.isActive ? "#000000" : "#D9D9D9")};
+  color: ${(props) => (props.isActive ? "#FFF100" : "#272A30")};
+  background-color: ${(props) => (props.isActive ? "#272A30" : "#D9D9D9")};
   font-size: 1rem;
+  font-weight: bold;
   text-align: center;
   border: 0.08rem;
   border-radius: 0.4rem;
   cursor: pointer;
 
   &:hover {
-    color: #000000;
+    color: #272A30;
     background-color: #FFF100;
   }
 `;

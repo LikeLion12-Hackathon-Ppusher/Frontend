@@ -5,6 +5,7 @@ import axios from 'axios';
 import SetHeader from './SetHeader';
 import detailBackgroundImage from '../../assets/mypage_detail_background.png';
 import { getMyPageAPI } from '../../apis/api';
+import dotsImg from '../../assets/background_dots.png';
 
 const SetAccount = () => {
   // 프론트 단독 사용자 정보 호출 코드
@@ -33,6 +34,21 @@ const SetAccount = () => {
     }
   };
 
+  const handleType = (type) => {
+    if (type === 'SY') {
+      return '흡연자';
+    } else {
+      return '비흡연자';
+    }
+  };
+  const handleAlarm = (option) => {
+    if (option) {
+      return '켜짐';
+    } else {
+      return '꺼짐';
+    }
+  };
+
   useEffect(() => {
     getAccountInfo();
   }, []);
@@ -43,14 +59,14 @@ const SetAccount = () => {
       {userInfo && (
         <UserInfo>
           {/* <p>이메일: {userInfo.kakao_account.email}</p> */}
-          <p>아이디: {userInfo.userId}</p>
-          <p>유형: {userInfo.userType}</p>
-          <p>카카오 이메일: {userInfo.kakaoEmail}</p>
-          <p>이름: {userInfo.name}</p>
-          <p>성별: {userInfo.gender}</p>
-          <p>거리: {userInfo.distance}</p>
-          <p>시간: {userInfo.time}</p>
-          <p>알림설정: {userInfo.option}</p>
+          {/* <p>아이디: {userInfo.userId}</p> */}
+          <DotsContainer>
+            <InfoBox><Title>사용자 유형</Title><Content>{handleType(userInfo.userType)}</Content></InfoBox>
+            <InfoBox><Title>카카오 이메일</Title><Content>{userInfo.kakaoEmail}</Content></InfoBox>
+            <InfoBox><Title>이름</Title><Content>{userInfo.name}</Content></InfoBox>
+            <InfoBox><Title>설정거리</Title><Content>{userInfo.distance}M</Content></InfoBox>
+            <InfoBox><Title>알림설정 여부</Title><Content>{handleAlarm(userInfo.option)}</Content></InfoBox>
+          </DotsContainer>
         </UserInfo>
       )}
       {/* <button onClick={handleUserInfo}>사용자 정보 불러오기</button> */}
@@ -68,38 +84,72 @@ const AccountContainer = styled.div`
   width: 100%;
   height: 100%;
   background-image: url(${detailBackgroundImage}); 
-  background-color: white;
+  background-color: #FFFFFF;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  z-index: 700;
 `;
 
 const UserInfo = styled.div`
-  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 6rem;
+  background-color: #FFF100;  
   text-align: center;
-
-  p {
-    margin: 5px 0;
-  }
-
-  img {
-    border-radius: 50%;
-    margin-top: 10px;
-  }
+  width: 90%;
+  height: 45%;
+  border-radius: 1rem;
+  box-shadow: 0.5rem 0.5rem 0.5rem #D9D9D9;
 `;
 
-const ProfileImage = styled.img`
-  border-radius: 50%;
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-  margin-top: 10px;
+const DotsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-image: url(${dotsImg});  
+  background-size: 50%;  
+  background-repeat: no-repeat;  
+  background-position: left top;  
+  text-align: center;
+  width: 95%;
+  height: 95%;
 `;
 
-const ThumbnailImage = styled.img`
-  border-radius: 10%;
-  width: 50px;
-  height: 50px;
-  object-fit: cover;
-  margin-top: 10px;
+const InfoBox = styled.div`
+  display: flex;
+  width: 90%;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+`;
+
+const Title = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 60%;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #272A30;
+  box-shadow: inset 0 -0.6rem 0 #E2D600;
+  line-height: 1rem;
+`;
+
+const Content = styled.div`
+  display: flex;
+  padding: 0.6rem;
+  width: 50%;
+  min-width: relative;
+  font-size: 1rem;
+  color: #272A30;
+  background-color: #FFFFFF;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  font-weight: bold;
 `;

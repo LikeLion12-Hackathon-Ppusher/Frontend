@@ -41,6 +41,7 @@ const BackButton = styled.button`
 
 const TypeHeader = styled.h1`
   font-size: 1.5rem;
+  color: #272A30;
   position: absolute;
   top: 8%;
   left: 5%;

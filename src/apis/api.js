@@ -237,4 +237,46 @@ export const getReportDetailAPI = async (reportId) => {
   }
 };
 
+// PUT 마이페이지 알림거리 설정
+export const putMyPageDistAPI = async (token, dist) => {
+  try {
+    const response = await axios.put(
+      `${baseURL}/oauth/user/mypage/distance/`,
+      {
+        distance: dist,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("PUT 에러(distance)", error);
+    throw error;
+  }
+};
+
+// PUT 마이페이지 시간 설정
+export const putMyPageTimeAPI = async (token, tm) => {
+  try {
+    const response = await axios.put(
+      `${baseURL}/oauth/user/mypage/time/`,
+      {
+        time: tm,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("PUT 에러(time)", error);
+    throw error;
+  }
+};
+
 export default instance;

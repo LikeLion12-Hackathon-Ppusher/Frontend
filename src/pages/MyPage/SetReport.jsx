@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import bottomButtonImg from "../../assets/down.png";
 import upButtonImg from "../../assets/up.png";
 import SetHeader from './SetHeader';
+import reportBckgrnd from '../../assets/report_background.png';
+
 import { getMyPageReportAPI, getReportDetailAPI } from '../../apis/api';
 
 // const reports = [
@@ -80,7 +82,7 @@ const SetAccount = () => {
       <ReportContainer>
         {reports.map(report => (
           <ReportItem key={report.id} isOpen={openReportId === report.id}>
-            <ReportHeader onClick={() => handleToggle(report.id)}>
+            <ReportHeader isOpen={openReportId === report.id} onClick={() => handleToggle(report.id)}>
               <span>{report.address}</span>
               <DropdownArrow>
                 <img src={openReportId === report.id ? upButtonImg : bottomButtonImg} alt="토글" />
@@ -114,9 +116,13 @@ const AccountContainer = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
-  background-color: white;
   padding: 1rem;
   box-sizing: border-box;
+  background-image: url(${reportBckgrnd}); 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 700;
 `;
 
 const ReportContainer = styled.div`
@@ -124,7 +130,7 @@ const ReportContainer = styled.div`
   flex-direction: column;
   width: 100%;
   overflow-y: auto;
-  margin-top: 30%;
+  margin-top: 15vh;
   margin-bottom: 4rem;
   padding: 0 0.5rem;
   box-sizing: border-box;
@@ -145,14 +151,14 @@ const ReportContainer = styled.div`
 
 const ReportItem = styled.div`
   width: 100%;
-  color: ${({ isOpen }) => (isOpen ? 'black' : 'white')};
-  background-color: ${({ isOpen }) => (isOpen ? '#FFF100' : 'black')}; 
+  background-color: ${({ isOpen }) => (isOpen ? '#FEFBBD' : '#272A30')}; 
   border-radius: 0.5rem;
   margin-bottom: 1rem;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  border: 2px solid #272A30;
   cursor: pointer;
 `;
 
@@ -162,6 +168,7 @@ const ReportHeader = styled.div`
   align-items: center;
   margin: 1.5rem;
   font-size: 1.2rem;
+  color: ${({ isOpen }) => (isOpen ? '#272A30' : '#EDEDED')};
 `;
 
 const ReportContent = styled.div`
@@ -180,7 +187,7 @@ const ReportDetail = styled.div`
   padding: ${({ isOpen }) => (isOpen ? '1rem' : '0rem 1rem 0rem')};
   overflow: hidden;
   transition: 0.25s ease-in-out; 
-  color: black;
+  color: #272A30;
   border-radius: 0.5rem;
   background-color: white;
 `;
@@ -189,7 +196,7 @@ const DetailText = styled.p`
   margin-top: 1rem;
   margin-bottom: 1rem;
   font-size: 0.8rem;
-  color: gray;
+  color: #272A30;
 `;
 
 const Status = styled.div`
@@ -210,20 +217,22 @@ const Status = styled.div`
 
 const StatusGroup = styled.div`
   display: flex;
-  border: 1px solid black;
+  border: 1px solid #272A30;
   border-radius: 6px;
   padding: 0.2rem 0.4rem;
-  background-color: #FFFDE2;
+  color: #FFFFFF;
+  background-color: #272A30;
   margin-right: 0.5rem;
   font-size: 0.8rem;
 `;
 
 const StatusCircle = styled.div`
-  width: 0.8rem;
-  height: 0.8rem;
+  width: 0.6rem;
+  height: 0.6rem;
   margin-right: 0.3rem;
   border-radius: 50%;
-  background-color: ${props => (props.filled ? '#FFF100' : 'lightgray')};
+  border: 0.1rem solid #FFFDE2;
+  background-color: ${props => (props.filled ? '#FFFDE2' : '#272A30')};
 `;
 
 const ButtonGroup = styled.div`

@@ -40,7 +40,7 @@ const Mypage = () => {
       //   });
       if (response) {
         const msg = response.data.message;
-        alert('로그아웃 성공:', msg);
+        alert('로그아웃 되었습니다.');
         localStorage.clear();
         navigate("/login");
       } else {
@@ -64,8 +64,8 @@ const Mypage = () => {
         <Outlet />
         <Btn onClick={handleNotify}>알림 설정</Btn>
         <Btn onClick={handleReport}>내 제보 내역</Btn>
-        <button onClick={handlePlaceSmoking}>흡연구역 안내</button>
-        <button onClick={handleLogout}>로그아웃</button>
+        <Btn onClick={handleLogout}>로그아웃</Btn>
+        {/* <button onClick={handlePlaceSmoking}>흡연구역 안내</button> */}
       </MyPageBtnContainer>
     </MyPageContainer>
   );
@@ -81,11 +81,11 @@ const MyPageContainer = styled.div`
   width: 100%;
   height: 100%;
   background-image: url(${backgroundImage}); 
-  background-color: white;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   padding-bottom: 6rem;
+  z-index: 700;
 `;
 
 const MyPageHeader = styled.div`
@@ -109,22 +109,25 @@ const Btn = styled.button`
   margin-top: 2rem;
   width: 100%;
   border-radius: 6px;
-  background-color: #000000;
+  border: none;
+  background-color: #272A30;
   font-size: 1.2rem;
   color: #FFF100;
   transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0.2rem 0.2rem 0.2rem;
+
   cursor: pointer;
 
   &:hover,
   &:focus {
-    color: #000000;
+    color: #272A30;
     background-color: #FFF100;
-    transform: scale(1.01);
+    transform: scale(1.005);
     outline: none; 
   }
 
   &.active {
     background-color: white;
-    transform: scale(1.01);
+    transform: scale(1.005);
   }
 `;

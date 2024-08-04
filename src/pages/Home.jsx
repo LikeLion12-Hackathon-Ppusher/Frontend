@@ -10,7 +10,7 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 const Home = () => {
   const navigate = useNavigate();
-  const [showNav, setShowNav] = useState(true);
+  const [showNav, setShowNav] = useState(false);
 
   // Home에서 테마를 받아서 저장해야됨
   const context = useContext(ThemeColorContext);
@@ -43,7 +43,7 @@ const Home = () => {
     } else {
       setActiveButton("");
     }
-    setShowNav(true);
+    setShowNav(true); // 새로고침해도 HomeNav 안 보임
   }, [location.search]);
 
   const handleCurrentLocation = () => {

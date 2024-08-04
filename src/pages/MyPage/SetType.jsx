@@ -77,6 +77,7 @@ const SelectContainer = styled.div`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  z-index: 700;
 
   h2 {
     background: linear-gradient(to top, #fff100 40%, transparent 40%);
@@ -103,6 +104,7 @@ const SmokerBox = styled.div`
   align-items: center;
   text-align: center;
   transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0.25rem 0.25rem 0.25rem #D9D9D9;
   cursor: pointer;
 
   &:hover,
@@ -138,7 +140,7 @@ const NonSmokerBox = styled.div`
   background-color: #f7f152;
   width: 48%;
   height: 16rem;
-  border: 2px solid black;
+  border: 2px solid #272A30;
   border-radius: 0.5rem;
   display: flex;
   flex-direction: column;
@@ -146,6 +148,7 @@ const NonSmokerBox = styled.div`
   align-items: center;
   text-align: center;
   transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0.25rem 0.25rem 0.25rem #D9D9D9;
   cursor: pointer;
 
   &:hover,
@@ -177,9 +180,9 @@ const NonSmokerBox = styled.div`
 
 const SelectBtn = styled.div`
   width: 90%;
-  background-color: white;
+  background-color: #FFFFFF;
   padding: 1rem 0;
-  border: 2px solid black;
+  border: 2px solid #272A30;
   border-radius: 0.3rem;
   text-align: center;
   cursor: pointer;
