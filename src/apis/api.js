@@ -278,5 +278,19 @@ export const putMyPageTimeAPI = async (token, tm) => {
     throw error;
   }
 };
-
+// DELETE 내 제보내역 삭제
+export const deletePlaceAPI = async (token, reportId) => {
+  try {
+    const response = await axios.delete(`${baseURL}/oauth/user/mypage/report/${reportId}/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log("흡연 구역 삭제:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("DELETE 에러(report):", error);
+    throw error;
+  }
+};
 export default instance;

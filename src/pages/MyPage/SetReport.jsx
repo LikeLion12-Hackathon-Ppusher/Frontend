@@ -5,7 +5,7 @@ import upButtonImg from "../../assets/up.png";
 import SetHeader from './SetHeader';
 import reportBckgrnd from '../../assets/report_background.png';
 
-import { getMyPageReportAPI, getReportDetailAPI } from '../../apis/api';
+import { deletePlaceAPI, getMyPageReportAPI, getReportDetailAPI } from '../../apis/api';
 
 // const reports = [
 //   { id: 1, address: '주소 어쩌구1', detail: '상세 위치 설명 썰라썰라' },
@@ -37,6 +37,7 @@ import { getMyPageReportAPI, getReportDetailAPI } from '../../apis/api';
 const SetAccount = () => {
   const [openReportId, setOpenReportId] = useState(null);
   const [rports, setRports] = useState([]);
+  const token = localStorage.getItem('access_token');
 
   useEffect(() => {
     getMyPageReportAPI()
@@ -54,10 +55,30 @@ const SetAccount = () => {
     isIndoor: item.reportType === "SM" ? item.reportSmokingPlace.isIndoor : null,
     ashtray: item.reportType === "SM" ? item.reportSmokingPlace.ashtray : null,
   }));
-  console.log('아 제발:', reports);
+  console.log('응답:', reports);
   const handleToggle = (id) => {
     getReportDetailAPI(id);
     setOpenReportId(openReportId === id ? null : id);
+  };
+
+  const handleDelete = (reportId) => {
+    deletePlaceAPI(token, reportId)
+      .then(() => {
+        alert('제보가 삭제됩니다.');
+        fetchReports();  // 삭제 후 목록을 다시 불러옴
+      })
+      .catch(err => {
+        console.error('Error deleting report:', err);
+        alert('제보 삭제에 실패했습니다.');
+      });
+  };
+
+  const fetchReports = () => {
+    getMyPageReportAPI()
+      .then(res => {
+        setRports(res);
+      })
+      .catch(err => console.error('Error fetching reports:', err));
   };
 
   const StatusGroupComponent = ({ rate }) => {
@@ -98,6 +119,7 @@ const SetAccount = () => {
                 <ButtonGroup>
                   {report.isIndoor && <ActionButton>실내</ActionButton>}
                   {report.ashtray && <ActionButton>재떨이</ActionButton>}
+                  <ActionButton onClick={() => handleDelete(report.id)}>삭제</ActionButton>
                 </ButtonGroup>
               </Status>
             </ReportDetail>
@@ -227,9 +249,9 @@ const StatusGroup = styled.div`
 `;
 
 const StatusCircle = styled.div`
-  width: 0.6rem;
-  height: 0.6rem;
-  margin-right: 0.3rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-right: 0.2rem;
   border-radius: 50%;
   border: 0.1rem solid #FFFDE2;
   background-color: ${props => (props.filled ? '#FFFDE2' : '#272A30')};
@@ -244,7 +266,7 @@ const ActionButton = styled.button`
   padding: 0.2rem 0.8rem;
   font-size: 0.8rem;
   background-color: #FFFDE2;
-  border: 1px solid #000;
+  border: 1.2px solid #272A30;
   border-radius: 6px;
   cursor: pointer;
 
