@@ -4,7 +4,7 @@ const smokeTheme = {
   // Home.jsx의 버튼
   color: "black",
   main: "#000000",
-  background: "#000000",
+  background: "#272A30",
   font: "#F7F152",
   imgColor: "#B1AD3A",
   borderColor: "#F7F152",
