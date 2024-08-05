@@ -126,8 +126,9 @@ const Redirection = () => {
       localStorage.setItem("userType", res.data.user.userType);
       localStorage.setItem("userId", res.data.user.userId);
       // 초기 setting 정보
-      if (res.data.setting.distance === 2) {
+      if (res.data.setting.distance === '2') {
         setDistance(30);
+        console.log('초기 distance:', distance);
       }
       localStorage.setItem("distance", distance);
       localStorage.setItem("option", res.data.setting.option);
