@@ -69,7 +69,6 @@ export default App;
 
 const AppDom = styled.div`
   width: 600px;
-  max-width: 800px;
   height: 100vh;
   margin: 0 auto;
   display: flex;
@@ -79,15 +78,14 @@ const AppDom = styled.div`
 
   @media (max-width: 600px) {
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
+    @supports (-webkit-appearance:none) and (stroke-color: transparent) {
+      min-height: -webkit-fill-available;
+    }
   }
 `;
 
 // 전체 배경을 밀 색으로 설정 그렇다면 다른 요소들에서 white를 직접 주든가 해야지?
 const Outside = styled.div`
-  min-height: 100vh;
-  @supports (-webkit-appearance:none) and (stroke-color: transparent) {
-    min-height: -webkit-fill-available;
-  }
   background-color: wheat;
 `;
