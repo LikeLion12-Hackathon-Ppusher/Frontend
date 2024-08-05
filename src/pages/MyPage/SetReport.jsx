@@ -126,7 +126,7 @@ const SetAccount = () => {
         <ReportContainer>
           {reports.map(report => (
             <ReportItem key={report.id} isOpen={openReportId === report.id}>
-              <ReportHeader isOpen={openReportId === report.id} onClick={() => { handleToggle(report.id); handleLike(report.placeId); }}>
+              <ReportHeader isOpen={openReportId === report.id} onClick={() => { handleToggle(report.id); report.placeId && handleLike(report.placeId); }}>
                 <span>{report.address}</span>
                 <DropdownArrow>
                   <img src={openReportId === report.id ? upButtonImg : bottomButtonImg} alt="토글" />
@@ -281,6 +281,7 @@ const StatusGroup = styled.div`
   background-color: #272A30;
   margin-right: 0.5rem;
   font-size: 0.8rem;
+  font-weight: bold;
 `;
 
 const StatusCircle = styled.div`
