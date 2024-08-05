@@ -7,7 +7,7 @@ const smokeTheme = {
   background: "#272A30",
   font: "#F7F152",
   imgColor: "#B1AD3A",
-  borderColor: "#F7F152",
+  borderColor: "#000000",
   NavborderColor: "#F7F152",
   // HomeNav.jsx의 버튼
   Navbackground: "#000000",
