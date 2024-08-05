@@ -474,8 +474,7 @@ const Map = () => {
                 zone.latitude,
                 zone.longitude
               );
-              // console.log(zoneLatLng);
-              // console.log(userLatLng);
+
               const distance = getDistance(
                 userLatLng.La,
                 userLatLng.Ma,
@@ -509,8 +508,7 @@ const Map = () => {
                 zone.latitude,
                 zone.longitude
               );
-              // console.log(zoneLatLng);
-              // console.log(userLatLng);
+
               const distance = getDistance(
                 userLatLng.La,
                 userLatLng.Ma,
@@ -682,6 +680,9 @@ const Map = () => {
     // 이 자체는 마커를 만들 때 적용시키므로
     // 마커 클릭 이벤트 설정
     kakao.maps.event.addListener(marker, "click", async function () {
+      // 제보 화면이 있을때 마커를 클릭하면 제보화면 모달창 없애기
+      handleCloseModal();
+
       // 이전에 클릭된 마커가 있으면 원래 이미지로 변경
       // 없으면 그냥 이미지는 null로 바꾸고 clicked에 저장
 

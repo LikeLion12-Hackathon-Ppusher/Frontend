@@ -77,7 +77,7 @@ const Home = () => {
             fontcolor={mode.font}
             bordercolor={mode.borderColor}
             btnactiveback={mode.btnActiveback}
-            btnactivefont={mode.btnactivefont}
+            btnactivefont={mode.btnActivefont}
             btnactiveborder={mode.btnActiveborder}
             onClick={handleCurrentLocation}
             isActive={activeButton === "currentLocation"}
@@ -90,7 +90,7 @@ const Home = () => {
             fontcolor={mode.font}
             bordercolor={mode.borderColor}
             btnactiveback={mode.btnActiveback}
-            btnactivefont={mode.btnactivefont}
+            btnactivefont={mode.btnActivefont}
             btnactiveborder={mode.btnActiveborder}
             onClick={handleReport}
             isActive={activeButton === "report"}
@@ -103,7 +103,7 @@ const Home = () => {
             fontcolor={mode.font}
             bordercolor={mode.borderColor}
             btnactiveback={mode.btnActiveback}
-            btnactivefont={mode.btnactivefont}
+            btnactivefont={mode.btnActivefont}
             btnactiveborder={mode.btnActiveborder}
             onClick={handleMypage}
             isActive={activeButton === "mypage"}
