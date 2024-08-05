@@ -192,7 +192,7 @@ const ReportContainer = styled.div`
   flex-direction: column;
   width: 100%;
   overflow-y: auto;
-  margin-top: 20vh;
+  margin-top: 15vh;
   margin-bottom: 4rem;
   padding: 0 0.5rem;
   box-sizing: border-box;
