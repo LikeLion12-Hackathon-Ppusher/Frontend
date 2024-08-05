@@ -7,7 +7,8 @@ import smokeImg2 from "../assets/상습흡연구역.png";
 import reportIcon from "../assets/reportIcon.png";
 import reportImg from "../assets/reportImg.png";
 import clustererMarkerImg from "../assets/투명.png";
-import noSmokingZone from "../assets/noSmokingZone.png";
+import noSmokingZone from "../assets/금연구역경고아이콘.png";
+import indirectSmokingZone from "../assets/간접흡연경고아이콘.png";
 import publicSmokingZone from "../assets/publicSmokingZone.png";
 import selectedPublicSmokingZone from "../assets/selectedpublicSmokingZone.png";
 import publicSmokingZoneImg from "../assets/publicSmokingZoneImg.png";
@@ -82,7 +83,8 @@ const Map = () => {
   const mode = useContext(ThemeColorContext);
 
   const [noSmokingZones, setNoSmokingZones] = useState([]); // 금연구역을 저장할 상태입니다.
-  const [showNoSmokingModal, setShowNoSmokingModal] = useState(false); // 금연구역 알림 모달의 표시 여부를 상태로 관리합니다.
+  const [showNoSmokingModalSY, setShowNoSmokingModalSY] = useState(false); // 금연구역 알림 모달의 표시 여부를 상태로 관리합니다.
+  const [showNoSmokingModalSN, setShowNoSmokingModalSN] = useState(false); // 간접 흡연구역 알림 모달의 표시 여부를 상태로 관리합니다.
 
   // 좋아요 카운트
   const [likeCount, setLikeCount] = useState(0);
@@ -169,14 +171,16 @@ const Map = () => {
     console.log(reportIndirectSmokingZone);
 
     reportIndirectSmokingZone.data.forEach(async (reportData) => {
-      console.log(reportData);
+      // console.log(reportData);
       const nowUserType = localStorage.getItem("userType");
 
-      const userId = localStorage.getItem("userId");
-      const access_Token = localStorage.getItem("access_token");
+      // const userId = localStorage.getItem("userId");
+      // const access_Token = localStorage.getItem("access_token");
+
       const reportIndirectSmokingZoneData = await axios.get(
         `https://bbuhackathon.p-e.kr/place/shsmoking/${reportData.placeId}/`
       );
+
       // console.log(reportIndirectSmokingZoneData.status);
       console.log(reportIndirectSmokingZoneData.data);
 
@@ -268,6 +272,8 @@ const Map = () => {
         }
       }
     });
+
+    // 제보된 간접흡연 가져오기 => 원 클러스터
 
     // 제보된 흡연 장소 가져오기
     const reportSmokingZone = await axios.get(
@@ -451,44 +457,88 @@ const Map = () => {
           }
         );
 
-        let isModalVisible = false; // 모달 창이 보이는지 여부를 추적하는 플래그 변수
-        let hasShownModal = false; // 금연 구역을 벗어나기 전까지 모달을 다시 보여주지 않도록 하는 플래그 변수
+        let isModalVisibleSY = false; // 모달 창이 보이는지 여부를 추적하는 플래그 변수
+        let hasShownModalSY = false; // 금연 구역을 벗어나기 전까지 모달을 다시 보여주지 않도록 하는 플래그 변수
+
+        let isModalVisibleSN = false; // 모달 창이 보이는지 여부를 추적하는 플래그 변수
+        let hasShownModalSN = false; // 금연 구역을 벗어나기 전까지 모달을 다시 보여주지 않도록 하는 플래그 변수
 
         const checkUserInNoSmokingZone = (userLatLng) => {
-          publicSmokingZone.data.forEach((zone) => {
-            const zoneLatLng = new kakao.maps.LatLng(
-              zone.latitude,
-              zone.longitude
-            );
-            // console.log(zoneLatLng);
-            // console.log(userLatLng);
-            const distance = getDistance(
-              userLatLng.La,
-              userLatLng.Ma,
-              zoneLatLng.La,
-              zoneLatLng.Ma
-            );
+          const userType = localStorage.getItem("userType");
+          // 유저가 선택한 알림 거리
+          const userDistance = localStorage.getItem("distance");
 
-            if (distance <= 50) {
-              // 금연구역 지정 거리 안에 있을때
+          if (userType === "SY") {
+            publicSmokingZone.data.forEach((zone) => {
+              const zoneLatLng = new kakao.maps.LatLng(
+                zone.latitude,
+                zone.longitude
+              );
+              // console.log(zoneLatLng);
+              // console.log(userLatLng);
+              const distance = getDistance(
+                userLatLng.La,
+                userLatLng.Ma,
+                zoneLatLng.La,
+                zoneLatLng.Ma
+              );
 
-              if (!isModalVisible) {
-                // 모달이 보이지 않는 경우에만 모달을 띄움
-                setShowNoSmokingModal(true);
-                isModalVisible = true;
+              if (distance <= 50) {
+                // 금연구역 지정 거리 안에 있을때
 
-                // 2초 뒤에 모달 창을 숨기고 플래그를 초기화
-                setTimeout(() => {
-                  setShowNoSmokingModal(false);
-                  isModalVisible = false;
-                }, 5000);
+                if (!isModalVisibleSY) {
+                  // 모달이 보이지 않는 경우에만 모달을 띄움
+                  setShowNoSmokingModalSY(true);
+                  isModalVisibleSY = true;
+
+                  // 2초 뒤에 모달 창을 숨기고 플래그를 초기화
+                  setTimeout(() => {
+                    setShowNoSmokingModalSY(false);
+                    isModalVisibleSY = false;
+                  }, 5000);
+                }
+              } else {
+                console.log("금연구역에 위치하지 않는다");
+                // 금연구역을 벗어났을 때 플래그를 초기화
+                isModalVisibleSY = false;
               }
-            } else {
-              console.log("금연구역에 위치하지 않는다");
-              // 금연구역을 벗어났을 때 플래그를 초기화
-              isModalVisible = false;
-            }
-          });
+            });
+          } else {
+            reportSmokingZone.data.forEach((zone) => {
+              const zoneLatLng = new kakao.maps.LatLng(
+                zone.latitude,
+                zone.longitude
+              );
+              // console.log(zoneLatLng);
+              // console.log(userLatLng);
+              const distance = getDistance(
+                userLatLng.La,
+                userLatLng.Ma,
+                zoneLatLng.La,
+                zoneLatLng.Ma
+              );
+
+              if (distance <= userDistance) {
+                // 금연구역 지정 거리 안에 있을때
+
+                if (!isModalVisibleSN) {
+                  // 모달이 보이지 않는 경우에만 모달을 띄움
+                  setShowNoSmokingModalSN(true);
+                  isModalVisibleSN = true;
+
+                  // 2초 뒤에 모달 창을 숨기고 플래그를 초기화
+                  setTimeout(() => {
+                    setShowNoSmokingModalSN(false);
+                    isModalVisibleSN = false;
+                  }, 5000);
+                }
+              } else {
+                console.log("간접 흡연구역에 위치하지 않는다");
+                // 금연구역을 벗어났을 때 플래그를 초기화
+                isModalVisibleSN = false;
+              }
+            });
+          }
         };
       },
       (error) => {
@@ -902,20 +952,35 @@ const Map = () => {
       }
     );
 
-    console.log("클릭한 버튼 정보", clickLikeBtn.data);
-    console.log("클릭한 버튼 정보의 likesCount", clickLikeBtn.data.likesCount);
+    const getNewData = await axios.get(
+      `https://bbuhackathon.p-e.kr/place/shsmoking/${selectedMarkerInfo.placeId}/`
+    );
+
+    console.log(getNewData);
+
+    console.log("클릭한 버튼 정보 clickLikeBtn", clickLikeBtn);
+    console.log("클릭한 버튼 정보 clickLikeBtn.data", clickLikeBtn.data);
+    console.log(
+      "클릭한 버튼 정보의 clickLikeBtn.data.likesCount",
+      clickLikeBtn.data.likesCount
+    );
 
     const newLikeCount = clickLikeBtn.data.likesCount;
 
     console.log("newLikeCount", newLikeCount);
 
-    setLikeCount(newLikeCount);
     console.log("반영 전 likeCount", likeCount);
     console.log("반영 전 selectedMarkerInfo", selectedMarkerInfo);
+    console.log(
+      "반영 전 selectedMarkerInfo.likeCount",
+      selectedMarkerInfo.likeCount
+    );
 
+    setLikeCount(newLikeCount);
+    console.log("반영 후 likeCount", likeCount);
     if (clickLikeBtn.status === 201) {
       // useState로 newLikeCount와 IsClicked 업데이트
-      setIsClikced(false);
+      setIsClikced(true);
       setSelectedMarkerInfo({
         title,
         img,
@@ -930,7 +995,7 @@ const Map = () => {
         isClikced,
       });
     } else {
-      setIsClikced(true);
+      setIsClikced(false);
       setSelectedMarkerInfo({
         title,
         img,
@@ -946,9 +1011,12 @@ const Map = () => {
       });
     }
 
-    console.log("반영 후 likeCount", likeCount);
     // selectedMarkerInfo 에 반영 됬는지 확인
     console.log("반영 후 selectedMarkerInfo", selectedMarkerInfo);
+    console.log(
+      "반영 후 selectedMarkerInfo.likeCount",
+      selectedMarkerInfo.likeCount
+    );
 
     // window.location.reload();
   };
@@ -1212,24 +1280,44 @@ const Map = () => {
           </>
         )}
       </ThankYouModal>
-      {showNoSmokingModal && (
-        <NonSmokingZoneModal>
+      {showNoSmokingModalSY && (
+        <NonSmokingZoneModalSY>
           <div>
-            <NonSmokingZoneImgBox>
+            <NonSmokingZoneImgBoxSY>
               <img
                 src={noSmokingZone}
                 alt="asdf
               "
-              ></img>
+              ></img>{" "}
               <h2>금연구역</h2>
-            </NonSmokingZoneImgBox>
+            </NonSmokingZoneImgBoxSY>{" "}
             <p>
               현재 금연구역에 머물고 있습니다. <br></br>
               <strong>담배생각</strong>이 나신다면 가까운{" "}
               <strong>흡연구역</strong>을 이용해주세요.
             </p>
           </div>
-        </NonSmokingZoneModal>
+        </NonSmokingZoneModalSY>
+      )}
+      {showNoSmokingModalSN && (
+        <NonSmokingZoneModalSN>
+          <div>
+            <NonSmokingZoneImgBoxSN>
+              <img
+                src={indirectSmokingZone}
+                alt="asdf
+              "
+              ></img>
+              <h2>간접흡연 위험 지역</h2>
+            </NonSmokingZoneImgBoxSN>
+            <p>
+              현재 <strong>간접흡연 위험 지역</strong>에 들어와 있습니다.{" "}
+              <br></br>
+              간접흡연은 다양한 건강문제를 일으킬 수 있으니<br></br>
+              <strong>주의</strong>해주시기 바랍니다.
+            </p>
+          </div>
+        </NonSmokingZoneModalSN>
       )}
     </Container>
   );
@@ -1414,7 +1502,7 @@ const LikeButtonIsClicked = styled.button`
   width: 100%;
   padding: 1rem;
   background: black;
-  color: white;
+  color: yellow;
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
@@ -1606,7 +1694,7 @@ const CleanBox = styled.div`
   }
 `;
 
-const NonSmokingZoneModal = styled.div`
+const NonSmokingZoneModalSY = styled.div`
   position: absolute;
   width: 80%;
   z-index: 100;
@@ -1616,16 +1704,46 @@ const NonSmokingZoneModal = styled.div`
   text-align: center;
   background-color: black;
   border-radius: 0.5rem;
-  border: 2px solid yellow;
+  border: 2px solid #fff100;
   h2 {
-    color: yellow;
+    color: #fff100;
   }
   p {
     color: gray;
   }
 `;
 
-const NonSmokingZoneImgBox = styled.div`
+const NonSmokingZoneImgBoxSY = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: 2.5rem;
+    margin-right: 0.5rem;
+  }
+`;
+
+const NonSmokingZoneModalSN = styled.div`
+  position: absolute;
+  width: 80%;
+  z-index: 100;
+  padding: 2rem;
+
+  opacity: 80%;
+  text-align: center;
+  background-color: #fff100;
+  border-radius: 0.5rem;
+  border: 2px solid yellow;
+  h2 {
+    color: black;
+  }
+  p {
+    color: black;
+  }
+`;
+
+const NonSmokingZoneImgBoxSN = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
