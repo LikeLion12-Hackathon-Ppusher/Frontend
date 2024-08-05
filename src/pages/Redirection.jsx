@@ -72,7 +72,7 @@
 
 // 백엔드 연동할 때 쓸 코드
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
@@ -81,7 +81,7 @@ import '../App.css';
 import logoImage from '../assets/loading.svg';
 
 const Redirection = () => {
-
+  const [distance, setDistance] = useState();
 
   const navigate = useNavigate();
   const REST_API_KEY = process.env.REACT_APP_REST_API_KEY;
@@ -126,7 +126,10 @@ const Redirection = () => {
       localStorage.setItem("userType", res.data.user.userType);
       localStorage.setItem("userId", res.data.user.userId);
       // 초기 setting 정보
-      localStorage.setItem("distance", res.data.setting.distance);
+      if (res.data.setting.distance == 2) {
+        setDistance(30);
+      }
+      localStorage.setItem("distance", distance);
       localStorage.setItem("option", res.data.setting.option);
       handleRoute(status);
     } catch (err) {
@@ -140,7 +143,7 @@ const Redirection = () => {
       navigate("/home/map");
     } else if (status === 201) {
       // 회원 가입
-      navigate("/home/select");
+      navigate("/select");
     } else {
       alert("응답이 이상해요");
     }
