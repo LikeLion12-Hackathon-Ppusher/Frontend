@@ -75,8 +75,14 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import styled from "styled-components";
+import loadingBack from '../assets/initial_background.png';
+import '../App.css';
+import logoImage from '../assets/loading.svg';
 
 const Redirection = () => {
+
+
   const navigate = useNavigate();
   const REST_API_KEY = process.env.REACT_APP_REST_API_KEY;
   const CLIENT_SECRET = process.env.REACT_APP_CLIENT_SECRET;
@@ -119,6 +125,9 @@ const Redirection = () => {
       localStorage.setItem("access_token", res.data.access_token);
       localStorage.setItem("userType", res.data.user.userType);
       localStorage.setItem("userId", res.data.user.userId);
+      // 초기 setting 정보
+      localStorage.setItem("distance", res.data.setting.distance);
+      localStorage.setItem("option", res.data.setting.option);
       handleRoute(status);
     } catch (err) {
       console.error(err);
@@ -133,11 +142,34 @@ const Redirection = () => {
       // 회원 가입
       navigate("/home/select");
     } else {
-      alert("응답이 이상해요 힝구");
+      alert("응답이 이상해요");
     }
+
+
   };
 
-  return <div>로그인 중입니다.</div>;
+  return (
+    <LoadingContainer>
+      <img src={logoImage} className="spinner" alt="logo" />
+    </LoadingContainer>
+  );
 };
+
+const LoadingContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-image: url(${loadingBack});
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  img {
+    width: 20%;
+  }
+`;
 
 export default Redirection;

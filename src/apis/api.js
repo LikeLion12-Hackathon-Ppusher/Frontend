@@ -237,4 +237,60 @@ export const getReportDetailAPI = async (reportId) => {
   }
 };
 
+// PUT 마이페이지 알림거리 설정
+export const putMyPageDistAPI = async (token, dist) => {
+  try {
+    const response = await axios.put(
+      `${baseURL}/oauth/user/mypage/distance/`,
+      {
+        distance: dist,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("PUT 에러(distance)", error);
+    throw error;
+  }
+};
+
+// PUT 마이페이지 시간 설정
+export const putMyPageTimeAPI = async (token, tm) => {
+  try {
+    const response = await axios.put(
+      `${baseURL}/oauth/user/mypage/time/`,
+      {
+        time: tm,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("PUT 에러(time)", error);
+    throw error;
+  }
+};
+// DELETE 내 제보내역 삭제
+export const deletePlaceAPI = async (token, reportId) => {
+  try {
+    const response = await axios.delete(`${baseURL}/oauth/user/mypage/report/${reportId}/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log("흡연 구역 삭제:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("DELETE 에러(report):", error);
+    throw error;
+  }
+};
 export default instance;

@@ -65,7 +65,7 @@ const Container = styled.div`
   position: absolute;
   width: 100%;
   top: 0;
-  z-index: 1000;
+  z-index: 500;
 `;
 
 const AppBar = styled.div`

@@ -3,7 +3,9 @@ import styled from 'styled-components';
 import bottomButtonImg from "../../assets/down.png";
 import upButtonImg from "../../assets/up.png";
 import SetHeader from './SetHeader';
-import { getMyPageReportAPI, getReportDetailAPI } from '../../apis/api';
+import reportBckgrnd from '../../assets/report_background.png';
+
+import { deletePlaceAPI, getMyPageReportAPI, getReportDetailAPI } from '../../apis/api';
 
 // const reports = [
 //   { id: 1, address: '주소 어쩌구1', detail: '상세 위치 설명 썰라썰라' },
@@ -35,11 +37,18 @@ import { getMyPageReportAPI, getReportDetailAPI } from '../../apis/api';
 const SetAccount = () => {
   const [openReportId, setOpenReportId] = useState(null);
   const [rports, setRports] = useState([]);
+  const token = localStorage.getItem('access_token');
+  const [noReports, setNoReports] = useState();
 
   useEffect(() => {
+    setNoReports(false);
     getMyPageReportAPI()
       .then(res => {
-        setRports(res);
+        if (res.length > 0) {
+          setRports(res);
+        } else {
+          setNoReports(true);
+        }
       })
       .catch(err => console.error('Error fetching reports:', err));
   }, []);
@@ -52,10 +61,34 @@ const SetAccount = () => {
     isIndoor: item.reportType === "SM" ? item.reportSmokingPlace.isIndoor : null,
     ashtray: item.reportType === "SM" ? item.reportSmokingPlace.ashtray : null,
   }));
-  console.log('아 제발:', reports);
+  console.log('응답:', reports);
   const handleToggle = (id) => {
     getReportDetailAPI(id);
     setOpenReportId(openReportId === id ? null : id);
+  };
+
+  const handleDelete = (reportId) => {
+    deletePlaceAPI(token, reportId)
+      .then(() => {
+        alert('제보가 삭제됩니다.');
+        fetchReports();  // 삭제 후 목록을 다시 불러옴
+      })
+      .catch(err => {
+        console.error('Error deleting report:', err);
+        alert('제보 삭제에 실패했습니다.');
+      });
+  };
+
+  const fetchReports = () => {
+    getMyPageReportAPI()
+      .then(res => {
+        if (res.length > 0) {
+          setRports(res);
+        } else {
+          setNoReports(true);
+        }
+      })
+      .catch(err => console.error('Error fetching reports:', err));
   };
 
   const StatusGroupComponent = ({ rate }) => {
@@ -77,31 +110,35 @@ const SetAccount = () => {
   return (
     <AccountContainer>
       <SetHeader headerText="제보 내역"></SetHeader>
-      <ReportContainer>
-        {reports.map(report => (
-          <ReportItem key={report.id} isOpen={openReportId === report.id}>
-            <ReportHeader onClick={() => handleToggle(report.id)}>
-              <span>{report.address}</span>
-              <DropdownArrow>
-                <img src={openReportId === report.id ? upButtonImg : bottomButtonImg} alt="토글" />
-              </DropdownArrow>
-            </ReportHeader>
-            <ReportDetail isOpen={openReportId === report.id}>
-              <ReportContent>
-                {report.detail}
-              </ReportContent>
-              <DetailText>{report.description}</DetailText>
-              <Status>
-                {report.rate && <StatusGroupComponent rate={report.rate} />}
-                <ButtonGroup>
-                  {report.isIndoor && <ActionButton>실내</ActionButton>}
-                  {report.ashtray && <ActionButton>재떨이</ActionButton>}
-                </ButtonGroup>
-              </Status>
-            </ReportDetail>
-          </ReportItem>
-        ))}
-      </ReportContainer>
+      {noReports ? (
+        <NoDataMessage>제보 내역이 없습니다.</NoDataMessage>
+      ) : (
+        <ReportContainer>
+          {reports.map(report => (
+            <ReportItem key={report.id} isOpen={openReportId === report.id}>
+              <ReportHeader isOpen={openReportId === report.id} onClick={() => handleToggle(report.id)}>
+                <span>{report.address}</span>
+                <DropdownArrow>
+                  <img src={openReportId === report.id ? upButtonImg : bottomButtonImg} alt="토글" />
+                </DropdownArrow>
+              </ReportHeader>
+              <ReportDetail isOpen={openReportId === report.id}>
+                <ReportContent>
+                  {report.detail}
+                </ReportContent>
+                <DetailText>{report.description}</DetailText>
+                <Status>
+                  {report.rate && <StatusGroupComponent rate={report.rate} />}
+                  <ButtonGroup>
+                    {report.isIndoor && <ActionButton>실내</ActionButton>}
+                    {report.ashtray && <ActionButton>재떨이</ActionButton>}
+                    <ActionButton onClick={() => handleDelete(report.id)}>삭제</ActionButton>
+                  </ButtonGroup>
+                </Status>
+              </ReportDetail>
+            </ReportItem>
+          ))}
+        </ReportContainer>)}
     </AccountContainer>
   );
 };
@@ -114,17 +151,31 @@ const AccountContainer = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
-  background-color: white;
   padding: 1rem;
   box-sizing: border-box;
+  background-image: url(${reportBckgrnd}); 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 700;
 `;
+
+const NoDataMessage = styled.div`
+  display: flex;
+  margin-top: 45vh;
+  color: #D9D9D9;
+  font-size: 1.2rem; 
+  text-align: center; 
+  font-weight: bold;
+`;
+
 
 const ReportContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
   overflow-y: auto;
-  margin-top: 30%;
+  margin-top: 15vh;
   margin-bottom: 4rem;
   padding: 0 0.5rem;
   box-sizing: border-box;
@@ -145,14 +196,14 @@ const ReportContainer = styled.div`
 
 const ReportItem = styled.div`
   width: 100%;
-  color: ${({ isOpen }) => (isOpen ? 'black' : 'white')};
-  background-color: ${({ isOpen }) => (isOpen ? '#FFF100' : 'black')}; 
+  background-color: ${({ isOpen }) => (isOpen ? '#FEFBBD' : '#272A30')}; 
   border-radius: 0.5rem;
   margin-bottom: 1rem;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  border: 2px solid #272A30;
   cursor: pointer;
 `;
 
@@ -162,6 +213,7 @@ const ReportHeader = styled.div`
   align-items: center;
   margin: 1.5rem;
   font-size: 1.2rem;
+  color: ${({ isOpen }) => (isOpen ? '#272A30' : '#EDEDED')};
 `;
 
 const ReportContent = styled.div`
@@ -180,7 +232,7 @@ const ReportDetail = styled.div`
   padding: ${({ isOpen }) => (isOpen ? '1rem' : '0rem 1rem 0rem')};
   overflow: hidden;
   transition: 0.25s ease-in-out; 
-  color: black;
+  color: #272A30;
   border-radius: 0.5rem;
   background-color: white;
 `;
@@ -189,7 +241,7 @@ const DetailText = styled.p`
   margin-top: 1rem;
   margin-bottom: 1rem;
   font-size: 0.8rem;
-  color: gray;
+  color: #272A30;
 `;
 
 const Status = styled.div`
@@ -210,20 +262,22 @@ const Status = styled.div`
 
 const StatusGroup = styled.div`
   display: flex;
-  border: 1px solid black;
+  border: 1px solid #272A30;
   border-radius: 6px;
   padding: 0.2rem 0.4rem;
-  background-color: #FFFDE2;
+  color: #FFFFFF;
+  background-color: #272A30;
   margin-right: 0.5rem;
   font-size: 0.8rem;
 `;
 
 const StatusCircle = styled.div`
-  width: 0.8rem;
-  height: 0.8rem;
-  margin-right: 0.3rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-right: 0.2rem;
   border-radius: 50%;
-  background-color: ${props => (props.filled ? '#FFF100' : 'lightgray')};
+  border: 0.1rem solid #FFFDE2;
+  background-color: ${props => (props.filled ? '#FFFDE2' : '#272A30')};
 `;
 
 const ButtonGroup = styled.div`
@@ -235,7 +289,7 @@ const ActionButton = styled.button`
   padding: 0.2rem 0.8rem;
   font-size: 0.8rem;
   background-color: #FFFDE2;
-  border: 1px solid #000;
+  border: 1.2px solid #272A30;
   border-radius: 6px;
   cursor: pointer;
 

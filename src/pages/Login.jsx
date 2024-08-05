@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import LoginBtnImg from "../assets/kakao_login_medium_narrow.png";
+import InitialBckgrnd from "../assets/initial_background.png";
+import Logo from "../assets/logo.png";
 
 const Login = () => {
   const REST_API_KEY = process.env.REACT_APP_REST_API_KEY;
@@ -26,7 +28,11 @@ const Login = () => {
 
   return (
     <LoginBox>
-      <LoginBtn src={LoginBtnImg} onClick={loginHandler}></LoginBtn>
+      <Box>
+        <Title><p><span>흡연</span>자와 <span>비흡연</span>자, <strong>서로를 위하는</strong> 담배문화</p></Title>
+        <LogoImg src={Logo}></LogoImg>
+        <LoginBtn src={LoginBtnImg} onClick={loginHandler}></LoginBtn>
+      </Box>
     </LoginBox>
   );
 };
@@ -34,12 +40,47 @@ const Login = () => {
 export default Login;
 
 const LoginBox = styled.div`
-  background-color: gray;
-  width: 100%;
-  height: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  height: 100%;
+  background-image: url(${InitialBckgrnd}); 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 `;
 
-const LoginBtn = styled.img``;
+const Box = styled.div`  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+`;
+
+const Title = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  font-size: 3vw;
+  margin-top: 15%;
+  color: #535353;
+  p span {
+    text-emphasis-style: dot;
+  }
+`;
+
+const LogoImg = styled.img`
+  display: flex;
+  padding-right: 10%;
+  width: 60%;
+
+`;
+
+const LoginBtn = styled.img`
+  margin-top: 30%;
+  width: 50%;
+`;
