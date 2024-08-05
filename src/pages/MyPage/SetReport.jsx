@@ -135,7 +135,7 @@ const SetAccount = () => {
                     <ArrowImg src={openReportId === report.id ? upButtonImg : bottomButtonImg} alt="토글" />
                   </DropdownArrow>
                 </ReportHeader>
-                <DelBox onClick={() => { handleDelete(report.placeId) }}>
+                <DelBox onClick={() => { handleDelete(report.id) }}>
                   <DelImg src={openReportId === report.id ? blackX : coloredX} alt="삭제"></DelImg>
                 </DelBox>
               </NewHeader>
