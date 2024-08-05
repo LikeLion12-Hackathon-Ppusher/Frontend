@@ -64,7 +64,7 @@ const SetAccount = () => {
     ashtray: item.reportType === "SM" ? item.reportSmokingPlace.ashtray : null,
     placeId: item.reportType === "SM" ? null : item.secondhandSmokingPlace.placeId,
   }));
-  console.log('응답:', reports);
+  // console.log('응답:', reports);
   const handleToggle = (id) => {
     getReportDetailAPI(id);
     setOpenReportId(openReportId === id ? null : id);
@@ -85,8 +85,8 @@ const SetAccount = () => {
   const handleLike = async (placeId) => {
     const likes = await getLikesCountAPI(placeId);
     setLikes(likes);
-    console.log("공감 수:", likes);
-    console.log("placeId:", placeId);
+    // console.log("공감 수:", likes);
+    // console.log("placeId:", placeId);
   };
 
   const fetchReports = () => {
