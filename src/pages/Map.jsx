@@ -91,6 +91,9 @@ const Map = () => {
   const [likeCount, setLikeCount] = useState(0);
   const [isClikced, setIsClikced] = useState(false);
 
+  // 제보 누르면 사용자 추적 멈추기 true면 추적
+  const [wathcedMode, setWatchedMode] = useState(true);
+
   useEffect(() => {
     initializeMap();
 
@@ -112,8 +115,10 @@ const Map = () => {
     if (queryParams.get("report") === "true") {
       setSelectedMarkerInfo(null);
       setIsReporting(true);
+      setWatchedMode(false);
     } else {
       setIsReporting(false);
+      setWatchedMode(true);
     }
 
     // 현위치 누르면 밑에 함수 실행 그리고 새로고침 을 없애고 그냥 좌표를 측정해서 다시 좌표를 찍음
@@ -449,8 +454,9 @@ const Map = () => {
               markerRef.current.setPosition(newLatLng);
             }
 
-            map.setCenter(newLatLng);
-
+            if (wathcedMode === true) {
+              map.setCenter(newLatLng);
+            }
             checkUserInNoSmokingZone(newLatLng);
           },
           (error) => {
