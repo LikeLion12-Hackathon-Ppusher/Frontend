@@ -193,13 +193,14 @@ const Btn = styled.div`
 `;
 
 const SelectBtn = styled.div`
-  width: 90%;
   color: white;
   background-color: #272A30;
+  width: 90%;
   padding: 1rem 0;
+  border: 2px solid black;
   border-radius: 0.3rem;
   text-align: center;
   cursor: pointer;
   font-weight: bold;
-  box-shadow: 0.3rem 0.3rem 0.3rem #FEFBBD;
+  box-shadow: 0.2rem 0.2rem 0.2rem #FEFBBD;
 `;
