@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import bottomButtonImg from "../../assets/down.png";
 import upButtonImg from "../../assets/up.png";
+import blackX from "../../assets/trashcan.png";
+import coloredX from "../../assets/colored_trashcan.png";
 import SetHeader from './SetHeader';
 import reportBckgrnd from '../../assets/report_background.png';
-import like from '../../assets/like.png';
-
 import { deletePlaceAPI, getLikesCountAPI, getMyPageReportAPI, getReportDetailAPI } from '../../apis/api';
+import likeImg from '../../assets/like.png';
 
 // const reports = [
 //   { id: 1, address: '주소 어쩌구1', detail: '상세 위치 설명 썰라썰라' },
@@ -62,7 +63,8 @@ const SetAccount = () => {
     rate: item.reportType === "SM" ? item.reportSmokingPlace.rate : null,
     isIndoor: item.reportType === "SM" ? item.reportSmokingPlace.isIndoor : null,
     ashtray: item.reportType === "SM" ? item.reportSmokingPlace.ashtray : null,
-    placeId: item.reportType === "SM" ? null : item.secondhandSmokingPlace.placeId,
+    placeId: item.reportType === "SM" ? item.reportSmokingPlace.placeId : item.secondhandSmokingPlace.placeId,
+    reportType: item.reportType,
   }));
   // console.log('응답:', reports);
   const handleToggle = (id) => {
@@ -83,8 +85,8 @@ const SetAccount = () => {
   };
 
   const handleLike = async (placeId) => {
-    const likes = await getLikesCountAPI(placeId);
-    setLikes(likes);
+    const likeCount = await getLikesCountAPI(placeId);
+    setLikes(likeCount);
     // console.log("공감 수:", likes);
     // console.log("placeId:", placeId);
   };
@@ -126,12 +128,17 @@ const SetAccount = () => {
         <ReportContainer>
           {reports.map(report => (
             <ReportItem key={report.id} isOpen={openReportId === report.id}>
-              <ReportHeader isOpen={openReportId === report.id} onClick={() => { handleToggle(report.id); report.placeId && handleLike(report.placeId); }}>
-                <span>{report.address}</span>
-                <DropdownArrow>
-                  <img src={openReportId === report.id ? upButtonImg : bottomButtonImg} alt="토글" />
-                </DropdownArrow>
-              </ReportHeader>
+              <NewHeader>
+                <ReportHeader isOpen={openReportId === report.id} onClick={() => { handleToggle(report.id); if (report.reportType === "SH") { handleLike(report.placeId); } }}>
+                  <span>{report.address}</span>
+                  <DropdownArrow>
+                    <ArrowImg src={openReportId === report.id ? upButtonImg : bottomButtonImg} alt="토글" />
+                  </DropdownArrow>
+                </ReportHeader>
+                <DelBox onClick={() => { handleDelete(report.placeId) }}>
+                  <DelImg src={openReportId === report.id ? blackX : coloredX} alt="삭제"></DelImg>
+                </DelBox>
+              </NewHeader>
               <ReportDetail isOpen={openReportId === report.id}>
                 <ReportContent>
                   {report.detail}
@@ -140,10 +147,9 @@ const SetAccount = () => {
                 <Status>
                   {report.rate && <StatusGroupComponent rate={report.rate} />}
                   <ButtonGroup>
-                    {report.isIndoor && <ActionButton>실내</ActionButton>}
-                    {report.ashtray && <ActionButton>재떨이</ActionButton>}
-                    {report.placeId && <LikeButton><img src={like} alt="공감버튼"></img>누적 공감 {likes}개</LikeButton>}
-                    <ActionButton onClick={() => handleDelete(report.id)}>삭제</ActionButton>
+                    {(report.reportType === "SM" && (report.isIndoor ? <ActionButton>실내</ActionButton> : <ActionButton>실외</ActionButton>))}
+                    {(report.reportType === "SM" && (report.ashtray ? <ActionButton>재떨이 O</ActionButton> : <ActionButton>재떨이 X</ActionButton>))}
+                    {report.reportType === "SH" && <LikeButton><img src={likeImg} alt="공감버튼"></img>누적 공감 {likes}개</LikeButton>}
                   </ButtonGroup>
                 </Status>
               </ReportDetail>
@@ -218,12 +224,22 @@ const ReportItem = styled.div`
   cursor: pointer;
 `;
 
+const NewHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  color: ${({ isOpen }) => (isOpen ? '#272A30' : '#EDEDED')};
+`;
+
 const ReportHeader = styled.div`
   display: flex;
+  width: 100%;
   justify-content: space-between;
   align-items: center;
   font-weight: bold;
-  margin: 1.5rem;
+  margin: 1.5rem 0rem 1.5rem 1.5rem;
   font-size: 1.2rem;
   color: ${({ isOpen }) => (isOpen ? '#272A30' : '#EDEDED')};
 `;
@@ -233,9 +249,26 @@ const ReportContent = styled.div`
 `;
 
 const DropdownArrow = styled.span`
-  img {
-    width: 2rem;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ArrowImg = styled.img`
+  width: 2rem;
+`;
+
+const DelBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 15%;
+  height: 100%;
+`;
+
+const DelImg = styled.img`
+  width: 1rem;
+  height: 1rem;
 `;
 
 const ReportDetail = styled.div`
@@ -319,6 +352,25 @@ const ActionButton = styled.button`
     width: 1rem;
     margin-right: 0.2rem;
   }
+`;
+
+const DelBtn = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  padding: 0.2rem 0.8rem;
+  font-weight: bold;
+  font-size: 0.8rem;
+  background-color: #FFFDE2;
+  border: 1.2px solid #272A30;
+  border-radius: 6px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #FFF100;
+  }
+
 `;
 
 const LikeButton = styled.div`
