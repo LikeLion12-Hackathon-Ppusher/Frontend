@@ -92,7 +92,7 @@ const Map = () => {
   const [isClikced, setIsClikced] = useState(false);
 
   // 제보 누르면 사용자 추적 멈추기 true면 추적
-  const [wathcedMode, setWatchedMode] = useState(true);
+  const [watcedMode, setWatchedMode] = useState(true);
 
   useEffect(() => {
     initializeMap();
@@ -117,14 +117,15 @@ const Map = () => {
   useEffect(() => {
     // 여거는 로케이션 변경 있을때 => URL에 reprot가 있을떄 없을때 실행되는 useEffect
     // console.log(location);
+
     const queryParams = new URLSearchParams(location.search);
     if (queryParams.get("report") === "true") {
       setSelectedMarkerInfo(null);
+      localStorage.setItem("isWatchedMode", false);
       setIsReporting(true);
-      setWatchedMode(false);
     } else {
+      localStorage.setItem("isWatchedMode", true);
       setIsReporting(false);
-      setWatchedMode(true);
     }
 
     // 현위치 누르면 밑에 함수 실행 그리고 새로고침 을 없애고 그냥 좌표를 측정해서 다시 좌표를 찍음
@@ -425,6 +426,8 @@ const Map = () => {
         const { latitude, longitude } = position.coords;
         const userLatLng = new kakao.maps.LatLng(latitude, longitude);
 
+        console.log(userLatLng);
+
         // 지도이 중심좌표 설정(처음에 보이는 지도의 중심이 이게 되겠지) 그래서 위의 처음 맵 생성을 할 때 옵션에 제주도 좌표가 있으니
         // 제주도 좌표를 보였다가 이동할듯?
         map.setCenter(userLatLng);
@@ -449,21 +452,41 @@ const Map = () => {
           map,
         });
 
+        let lastCenteredLatLng = null;
+        const centerUpdateThreshold = 5; // 중심 업데이트를 위한 임계값
+
         // 실시간 추적 이동이 감지되면 그 이동된 좌표로 markerRef를 움직인다
         navigator.geolocation.watchPosition(
           (position) => {
             const { latitude, longitude } = position.coords;
             const newLatLng = new kakao.maps.LatLng(latitude, longitude);
 
+            console.log(newLatLng);
+
             // 만약 이미 마커가 존재할 경우 마커의 위치를 옮긴다
             if (markerRef.current) {
               markerRef.current.setPosition(newLatLng);
             }
+            let mode = localStorage.getItem("isWatchedMode");
+            console.log(mode);
 
-            console.log(wathcedMode);
-            if (wathcedMode) {
-              console.log(wathcedMode);
-              map.setCenter(newLatLng);
+            //위치가 충분히 변경된 경우에만 지도 중심 조정
+            if (mode) {
+              if (lastCenteredLatLng) {
+                const distance = getDistance(
+                  userLatLng.La,
+                  userLatLng.Ma,
+                  newLatLng.La,
+                  newLatLng.Ma
+                );
+                if (distance > centerUpdateThreshold) {
+                  map.setCenter(newLatLng);
+                  lastCenteredLatLng = newLatLng;
+                }
+              } else {
+                map.setCenter(newLatLng);
+                lastCenteredLatLng = newLatLng;
+              }
             }
 
             checkUserInNoSmokingZone(newLatLng);
