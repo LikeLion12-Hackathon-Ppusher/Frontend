@@ -27,7 +27,7 @@ const Select = () => {
           },
         }
       );
-      console.log(res1);
+
       localStorage.setItem("userType", "SY");
       navigate("/home/map", { state: { userType: "SY", data: res1.data } });
     } else if (activeBox === "nonSmoker") {
@@ -40,7 +40,7 @@ const Select = () => {
           },
         }
       );
-      console.log(res2);
+      // console.log(res2);
       localStorage.setItem("userType", "SN");
       navigate("/home/map", { state: { userType: "SN", data: res2.data } });
     } else {
