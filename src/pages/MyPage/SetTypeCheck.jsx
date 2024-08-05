@@ -26,7 +26,7 @@ const SetTypeCheck = () => {
     }
 
     const status = putUserTypeAPI(token, selectedType);
-    console.log("PUT 응답 상태:", status);
+    // console.log("PUT 응답 상태:", status);
     localStorage.setItem("userType", selectedType);
 
     navigate("/home/set-type-confirm", { state: { userType: selectedType } });

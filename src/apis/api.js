@@ -293,4 +293,21 @@ export const deletePlaceAPI = async (token, reportId) => {
     throw error;
   }
 };
+
+// GET 상세 간접흡연 구역 안내
+export const getLikesCountAPI = async (placeId) => {
+  try {
+    const token = localStorage.getItem('access_token');
+    const response = await axios.get(`${baseURL}/place/shsmoking/${placeId}/`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    console.log('좋아요 수:', response.data.likesCount);
+    return response.data.likesCount;  
+  } catch (error) {
+    console.error('GET 에러(shsmoking):', error);
+    throw error;  
+  }
+};
 export default instance;
