@@ -166,7 +166,7 @@ const LoadingContainer = styled.div`
   justify-content: center;
   align-items: center;
   background-image: url(${loadingBack});
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 
