@@ -106,7 +106,13 @@ const Map = () => {
     // console.log(userType);
   }, []);
 
-  useEffect(() => {}, [selectedMarkerInfo]);
+  useEffect(() => {
+    if (isReporting) {
+      setWatchedMode(false); // 제보 모드에서는 실시간 추적만 하고 중앙 정렬은 하지 않음
+    } else {
+      setWatchedMode(true); // 제보 모드가 아닐 때는 실시간 추적과 중앙 정렬을 모두 수행
+    }
+  }, [isReporting]);
 
   useEffect(() => {
     // 여거는 로케이션 변경 있을때 => URL에 reprot가 있을떄 없을때 실행되는 useEffect
@@ -123,9 +129,9 @@ const Map = () => {
 
     // 현위치 누르면 밑에 함수 실행 그리고 새로고침 을 없애고 그냥 좌표를 측정해서 다시 좌표를 찍음
     if (queryParams.get("currentLocation") === "true") {
+      // 제보 모달창이 열린 상태로 현위치를 누르면 모달창이 사라지게 함
       handleCloseModal();
 
-      // 제보 모달창이 열린 상태로 현위치를 누르면 모달창이 사라지게 함
       moveToCurrentLocation();
 
       // ture확인하면 그 queryParams을 delete로 삭제해서 다시 url이 home/map이 되게 함
@@ -454,9 +460,12 @@ const Map = () => {
               markerRef.current.setPosition(newLatLng);
             }
 
-            if (wathcedMode === true) {
+            console.log(wathcedMode);
+            if (wathcedMode) {
+              console.log(wathcedMode);
               map.setCenter(newLatLng);
             }
+
             checkUserInNoSmokingZone(newLatLng);
           },
           (error) => {
