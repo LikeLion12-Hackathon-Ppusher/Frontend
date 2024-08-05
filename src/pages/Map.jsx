@@ -84,6 +84,10 @@ const Map = () => {
   const [noSmokingZones, setNoSmokingZones] = useState([]); // 금연구역을 저장할 상태입니다.
   const [showNoSmokingModal, setShowNoSmokingModal] = useState(false); // 금연구역 알림 모달의 표시 여부를 상태로 관리합니다.
 
+  // 좋아요 카운트
+  const [likeCount, setLikeCount] = useState(0);
+  const [isClikced, setIsClikced] = useState(false);
+
   useEffect(() => {
     initializeMap();
 
@@ -96,11 +100,14 @@ const Map = () => {
     console.log(userType);
   }, []);
 
+  useEffect(() => {}, [selectedMarkerInfo]);
+
   useEffect(() => {
     // 여거는 로케이션 변경 있을때 => URL에 reprot가 있을떄 없을때 실행되는 useEffect
     // console.log(location);
     const queryParams = new URLSearchParams(location.search);
     if (queryParams.get("report") === "true") {
+      setSelectedMarkerInfo(null);
       setIsReporting(true);
     } else {
       setIsReporting(false);
@@ -143,6 +150,7 @@ const Map = () => {
 
     // 지도를 생성하는 카카오 맵 api 함수
     const map = new kakao.maps.Map(container, options);
+
     // 지도 클릭 이벤트 리스너 추가 지도를 클릭하면 화면에 보이던 Info, 제보 모달창 사라지게 함
     kakao.maps.event.addListener(map, "click", () => {
       setSelectedMarkerInfo(null);
@@ -153,6 +161,114 @@ const Map = () => {
     // useRef훅의 set을 통해 mapInstance에 생성된 카카오 map을 넣는다
     setMapInstance(map);
 
+    // 제보된 간접 흡연 장소 가져오기
+    const reportIndirectSmokingZone = await axios.get(
+      "https://bbuhackathon.p-e.kr/place/shsmoking/"
+    );
+
+    console.log(reportIndirectSmokingZone);
+
+    reportIndirectSmokingZone.data.forEach(async (reportData) => {
+      console.log(reportData);
+      const nowUserType = localStorage.getItem("userType");
+
+      const userId = localStorage.getItem("userId");
+      const access_Token = localStorage.getItem("access_token");
+      const reportIndirectSmokingZoneData = await axios.get(
+        `https://bbuhackathon.p-e.kr/place/shsmoking/${reportData.placeId}/`
+      );
+      // console.log(reportIndirectSmokingZoneData.status);
+      console.log(reportIndirectSmokingZoneData.data);
+
+      const isclickedData = reportIndirectSmokingZoneData.data.isLike;
+      console.log(isclickedData);
+
+      // console.log(reportData.likesCount);
+      if (nowUserType === "SY") {
+        if (reportIndirectSmokingZoneData.likesCount >= 3) {
+          if (reportIndirectSmokingZoneData.isLike === true) {
+            // 공감이 눌린 경우
+            createMarker(
+              map,
+              new kakao.maps.LatLng(reportData.latitude, reportData.longitude),
+              reportData.name,
+              reportImg,
+              reportData.address,
+              "SN", // 비흡연자
+              0,
+              false,
+              true,
+              "nonSmokerReport", // 비흡연자 제보
+              reportData.likesCount,
+              reportData.placeId,
+              true,
+              "indirect"
+            );
+            setIsClikced(isclickedData);
+          } else {
+            // 공감이 눌리지 경우
+            createMarker(
+              map,
+              new kakao.maps.LatLng(reportData.latitude, reportData.longitude),
+              reportData.name,
+              reportImg,
+              reportData.address,
+              "SN", // 비흡연자
+              0,
+              false,
+              true,
+              "nonSmokerReport", // 비흡연자 제보
+              reportData.likesCount,
+              reportData.placeId,
+              isclickedData,
+              "indirect"
+            );
+          }
+          setIsClikced(isclickedData);
+        }
+      } else {
+        if (reportIndirectSmokingZoneData.isLike === true) {
+          // 공감이 눌린 경우
+          createMarker(
+            map,
+            new kakao.maps.LatLng(reportData.latitude, reportData.longitude),
+            reportData.name,
+            reportImg,
+            reportData.address,
+            "SN", // 비흡연자
+            0, // 청결도
+            false, // 재떨이
+            true, // 실내외
+            "nonSmokerReport", // 비흡연자 제보
+            reportData.likesCount,
+            reportData.placeId,
+            isclickedData,
+            "indirect"
+          );
+          setIsClikced(isclickedData);
+        } else {
+          // 공감이 눌리지 경우
+          createMarker(
+            map,
+            new kakao.maps.LatLng(reportData.latitude, reportData.longitude),
+            reportData.name,
+            reportImg,
+            reportData.address,
+            "SN", // 비흡연자
+            0,
+            false,
+            true,
+            "nonSmokerReport", // 비흡연자 제보
+            reportData.likesCount,
+            reportData.placeId,
+            isclickedData,
+            "indirect"
+          );
+          setIsClikced(isclickedData);
+        }
+      }
+    });
+
     // 제보된 흡연 장소 가져오기
     const reportSmokingZone = await axios.get(
       "https://bbuhackathon.p-e.kr/place/reportsmoking/"
@@ -161,9 +277,6 @@ const Map = () => {
     console.log(reportSmokingZone);
 
     reportSmokingZone.data.forEach((reportData) => {
-      // console.log(reportData);
-      // console.log(reportData.isIndoor);
-
       createMarker(
         map,
         new kakao.maps.LatLng(reportData.latitude, reportData.longitude),
@@ -174,7 +287,11 @@ const Map = () => {
         reportData.rate,
         reportData.ashtray,
         reportData.isIndoor,
-        "smokerReport"
+        "smokerReport",
+        0,
+        reportData.placeId,
+        true,
+        "direct"
       );
     });
 
@@ -373,33 +490,6 @@ const Map = () => {
             }
           });
         };
-
-        const handleNoSmokingZone = () => {
-          setShowNoSmokingModal(false);
-        };
-
-        // const savedMarkers = JSON.parse(localStorage.getItem("markers")) || [];
-        // setMarkers(savedMarkers);
-        // console.log(savedMarkers);
-        // savedMarkers.forEach((markerData) => {
-        //   // const markerImageSrc =
-        //   //   markerData.userType === "smoker" ? smokeImg : smokeImg2;
-        //   createMarker(
-        //     map,
-        //     new kakao.maps.LatLng(
-        //       markerData.position.Ma,
-        //       markerData.position.La
-        //     ),
-        //     markerData.title,
-        //     markerData.img,
-        //     markerData.address,
-        //     markerData.userType,
-        //     markerData.cleanlinessRating,
-        //     markerData.hasAshtray,
-        //     markerData.indoorOutdoor,
-        //     markerData.reportType
-        //   );
-        // });
       },
       (error) => {
         console.error("현재 위치를 가져오는 데 실패했습니다.", error);
@@ -484,7 +574,11 @@ const Map = () => {
     cleanlinessRating = 0,
     hasAshtray = false, // 전달된 인수가 없을 떄 기본값
     isindoor = true, // 전달된 인수가 없을 떄 기본값
-    reportType = "smokerReport" // Default to smokerReport
+    reportType = "smokerReport", // Default to smokerReport
+    likesCount = 0,
+    placeId,
+    isClikced = false,
+    isDirect
   ) {
     const smokeImageSize = new kakao.maps.Size(16, 16);
     const smokeImageOption = { offset: new kakao.maps.Point(8, 8) };
@@ -537,16 +631,26 @@ const Map = () => {
 
     // 이 자체는 마커를 만들 때 적용시키므로
     // 마커 클릭 이벤트 설정
-    kakao.maps.event.addListener(marker, "click", function () {
-      console.log(clickedMarker);
-      console.log(firstClickedMarkerType);
-      console.log(reportType);
-      console.log(typeof reportType);
-      console.log(nextClickedMarkerType);
-      console.log(typeof nextClickedMarkerType);
-
+    kakao.maps.event.addListener(marker, "click", async function () {
       // 이전에 클릭된 마커가 있으면 원래 이미지로 변경
       // 없으면 그냥 이미지는 null로 바꾸고 clicked에 저장
+
+      if (isDirect === "indirect") {
+        const checkedClickedIndirectSmokingZone = await axios.get(
+          `https://bbuhackathon.p-e.kr/place/shsmoking/${placeId}/`
+        );
+
+        console.log(checkedClickedIndirectSmokingZone.data);
+
+        const tempLikeCount = checkedClickedIndirectSmokingZone.data.likesCount;
+        const tempIslike = checkedClickedIndirectSmokingZone.data.isLike;
+
+        setLikeCount(tempLikeCount);
+        setIsClikced(tempIslike);
+        console.log("tempLikeCount", tempLikeCount);
+        console.log("tempIslike", tempIslike);
+      } else if (isDirect === "direct") {
+      }
 
       if (clickedMarker) {
         if (nextClickedMarkerType === null) {
@@ -579,7 +683,11 @@ const Map = () => {
       clickedMarker = marker;
 
       setSelectedPublicMarkerInfo(null);
+
+      // setLikeCount(likesCount);
+
       // 선택된 마커 정보 설정
+      setSelectedMarkerInfo(null);
       setSelectedMarkerInfo({
         title,
         img,
@@ -589,6 +697,9 @@ const Map = () => {
         hasAshtray,
         isindoor,
         reportType,
+        likeCount,
+        placeId,
+        isClikced,
       });
     });
 
@@ -688,9 +799,11 @@ const Map = () => {
       const userId = localStorage.getItem("userId");
 
       // UserType마다 post로 보낼 데이터 Body가 다름
+      let reportPlaceId;
+
       if (reportUserType === "SM") {
         console.log(reportUserType);
-        const responseSM = smokerReportAPI(
+        const responseSM = await smokerReportAPI(
           access_Token,
           reportUserType,
           userId,
@@ -703,9 +816,10 @@ const Map = () => {
           title
         );
         console.log(responseSM);
+        reportPlaceId = responseSM.placeId;
       } else {
         console.log(reportUserType);
-        const responseSH = nonSmokerReportAPI(
+        const responseSH = await nonSmokerReportAPI(
           access_Token,
           reportUserType,
           userId,
@@ -715,13 +829,10 @@ const Map = () => {
           title
         );
         console.log(responseSH);
+        reportPlaceId = responseSH.placeId;
       }
 
-      setMarkers((prev) => {
-        const updatedMarkers = [...prev, newMarkerData];
-        localStorage.setItem("markers", JSON.stringify(updatedMarkers));
-        return updatedMarkers;
-      });
+      console.log(reportPlaceId);
 
       createMarker(
         mapInstance,
@@ -733,7 +844,10 @@ const Map = () => {
         cleanlinessRating,
         hasAshtray,
         indoorOutdoor,
-        newMarkerData.reportType
+        newMarkerData.reportType,
+        0,
+        reportPlaceId,
+        false
       );
 
       handleCloseModal();
@@ -755,11 +869,88 @@ const Map = () => {
     setIsReporting(false);
     setHasAshtray(false);
     setCleanlinessRating(0);
+    setLikeCount(likeCount);
     if (reportingMarkerRef.current) {
       reportingMarkerRef.current.setMap(null); // 마커를 지도에서 제거
       reportingMarkerRef.current = null; // 레퍼런스를 초기화
     }
     navigate("/home/map");
+  };
+
+  const handleLikeBtn = async (
+    img,
+    hasAshtray,
+    isindoor,
+    reportType,
+    placeId
+  ) => {
+    // console.log(selectedMarkerInfo.placeId);
+    // console.log(selectedMarkerInfo.isClikced);
+    // console.log(selectedMarkerInfo.likeCount);
+    const userId = localStorage.getItem("userId");
+    const access_Token = localStorage.getItem("access_token");
+
+    const clickLikeBtn = await axios.post(
+      `https://bbuhackathon.p-e.kr/place/shsmoking/${selectedMarkerInfo.placeId}/likes/`,
+      {
+        userId: userId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${access_Token}`,
+        },
+      }
+    );
+
+    console.log("클릭한 버튼 정보", clickLikeBtn.data);
+    console.log("클릭한 버튼 정보의 likesCount", clickLikeBtn.data.likesCount);
+
+    const newLikeCount = clickLikeBtn.data.likesCount;
+
+    console.log("newLikeCount", newLikeCount);
+
+    setLikeCount(newLikeCount);
+    console.log("반영 전 likeCount", likeCount);
+    console.log("반영 전 selectedMarkerInfo", selectedMarkerInfo);
+
+    if (clickLikeBtn.status === 201) {
+      // useState로 newLikeCount와 IsClicked 업데이트
+      setIsClikced(false);
+      setSelectedMarkerInfo({
+        title,
+        img,
+        address,
+        userType,
+        cleanlinessRating,
+        hasAshtray,
+        isindoor,
+        reportType,
+        likeCount,
+        placeId,
+        isClikced,
+      });
+    } else {
+      setIsClikced(true);
+      setSelectedMarkerInfo({
+        title,
+        img,
+        address,
+        userType,
+        cleanlinessRating,
+        hasAshtray,
+        isindoor,
+        reportType,
+        likeCount,
+        placeId,
+        isClikced,
+      });
+    }
+
+    console.log("반영 후 likeCount", likeCount);
+    // selectedMarkerInfo 에 반영 됬는지 확인
+    console.log("반영 후 selectedMarkerInfo", selectedMarkerInfo);
+
+    // window.location.reload();
   };
 
   // selectedMarkerInfo 이게 null이 아닐때 이 InfoPanel이 보이는 것임
@@ -804,6 +995,7 @@ const Map = () => {
         >
           <InfoBox>
             <Box>
+              {/* 여기서 보이는 박스가 다름 흡연자 리포트 or 비흡연자 리포트*/}
               {selectedMarkerInfo.reportType === "smokerReport" ? (
                 <SmokerReportBox>
                   <SmokerReportBoxDiv>
@@ -862,10 +1054,37 @@ const Map = () => {
                       현재 위치는 상습 흡연으로<br></br> 제보된 구역입니다.
                     </h3>
                     <div>근처 흡연구역을 이용해주세요</div>
-                    <LikeButton onClick={() => alert("좋아요 클릭!")}>
-                      <FontAwesomeIcon icon={faThumbsUp} size="2x" />
-                      &nbsp; 공감
-                    </LikeButton>
+                    {selectedMarkerInfo.isClikced ? (
+                      <LikeButtonIsClicked
+                        onClick={() =>
+                          handleLikeBtn(
+                            selectedMarkerInfo.img,
+                            selectedMarkerInfo.hasAshtray,
+                            selectedMarkerInfo.isindoor,
+                            selectedMarkerInfo.reportType,
+                            selectedMarkerInfo.placeId
+                          )
+                        }
+                      >
+                        <FontAwesomeIcon icon={faThumbsUp} size="2x" />
+                        &nbsp; 공감 &nbsp; {likeCount}개
+                      </LikeButtonIsClicked>
+                    ) : (
+                      <LikeButton
+                        onClick={() =>
+                          handleLikeBtn(
+                            selectedMarkerInfo.img,
+                            selectedMarkerInfo.hasAshtray,
+                            selectedMarkerInfo.isindoor,
+                            selectedMarkerInfo.reportType,
+                            selectedMarkerInfo.placeId
+                          )
+                        }
+                      >
+                        <FontAwesomeIcon icon={faThumbsUp} size="2x" />
+                        &nbsp; 공감 &nbsp; {likeCount}개
+                      </LikeButton>
+                    )}
                   </NonSmokerReportBox>
                 </NonSmokerReportContainer>
               )}
@@ -1177,6 +1396,24 @@ const LikeButton = styled.button`
   width: 100%;
   padding: 1rem;
   background: green;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const LikeButtonIsClicked = styled.button`
+  width: 100%;
+  padding: 1rem;
+  background: black;
   color: white;
   border: none;
   border-radius: 0.5rem;
