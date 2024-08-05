@@ -192,7 +192,7 @@ const ReportContainer = styled.div`
   flex-direction: column;
   width: 100%;
   overflow-y: auto;
-  margin-top: 15vh;
+  margin-top: 20vh;
   margin-bottom: 4rem;
   padding: 0 0.5rem;
   box-sizing: border-box;
@@ -240,7 +240,6 @@ const ReportHeader = styled.div`
   align-items: center;
   font-weight: bold;
   margin: 1.5rem 0rem 1.5rem 1.5rem;
-  font-size: 1.2rem;
   color: ${({ isOpen }) => (isOpen ? '#272A30' : '#EDEDED')};
 `;
 
@@ -313,7 +312,7 @@ const StatusGroup = styled.div`
   color: #FFFFFF;
   background-color: #272A30;
   margin-right: 0.5rem;
-  font-size: 0.8rem;
+  font-size: 0.6rem;
   font-weight: bold;
 `;
 
@@ -338,7 +337,7 @@ const ActionButton = styled.button`
   align-items: center;
   padding: 0.2rem 0.8rem;
   font-weight: bold;
-  font-size: 0.8rem;
+  font-size: 0.6rem;
   background-color: #FFFDE2;
   border: 1.2px solid #272A30;
   border-radius: 6px;
@@ -361,7 +360,7 @@ const DelBtn = styled.div`
   align-items: center;
   padding: 0.2rem 0.8rem;
   font-weight: bold;
-  font-size: 0.8rem;
+  font-size: 0.6rem;
   background-color: #FFFDE2;
   border: 1.2px solid #272A30;
   border-radius: 6px;
@@ -380,7 +379,7 @@ const LikeButton = styled.div`
   align-items: center;
   padding: 0.2rem 0.8rem;
   font-weight: bold;
-  font-size: 0.8rem;
+  font-size: 0.6rem;
   background-color: #FFFDE2;
   border: 1.2px solid #272A30;
   border-radius: 6px;
