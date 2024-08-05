@@ -108,6 +108,7 @@ const Btn = styled.button`
   border: 2px solid #272A30;
   padding: 1rem 0;
   margin-top: 3vh;
+  font-size: 1rem;
   width: 100%;
   border-radius: 0.3rem;
   font-weight: bold;
