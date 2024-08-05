@@ -78,7 +78,7 @@ const AppDom = styled.div`
 
   @media (max-width: 600px) {
     width: 100%;
-    height: 92vh;
+    height: 100%;
   }
 `;
 
