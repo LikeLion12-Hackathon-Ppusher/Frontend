@@ -77,11 +77,9 @@ const AppDom = styled.div`
   position: relative;
 
   @media (max-width: 600px) {
-    width: 100%;
+    width: 100vw;
     min-height: 100vh;
-    @supports (-webkit-appearance:none) and (stroke-color: transparent) {
-      min-height: -webkit-fill-available;
-    }
+    min-height: -webkit-fill-available;
   }
 `;
 
