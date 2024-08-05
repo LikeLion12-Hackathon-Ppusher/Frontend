@@ -12,6 +12,7 @@ import indirectSmokingZone from "../assets/간접흡연경고아이콘.png";
 import publicSmokingZone from "../assets/publicSmokingZone.png";
 import selectedPublicSmokingZone from "../assets/selectedpublicSmokingZone.png";
 import publicSmokingZoneImg from "../assets/publicSmokingZoneImg.png";
+import loadMapIcon from "../assets/loadMapIcon.png";
 import { ThemeColorContext } from "../Context/context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp } from "@fortawesome/free-regular-svg-icons";
@@ -99,7 +100,7 @@ const Map = () => {
     // setUserType(state.userType);
 
     // 여기 그냥 home/map 컴포넌트가 호출될때 단 1회 실행 의존 배열이 없으므로 근데 일단 로컬스토리지에 있는 유저타입 내용 가져옴
-    console.log(userType);
+    // console.log(userType);
   }, []);
 
   useEffect(() => {}, [selectedMarkerInfo]);
@@ -131,7 +132,7 @@ const Map = () => {
       });
     }
 
-    console.log(userType);
+    // console.log(userType);
   }, [location.search]);
 
   // isReporting이 true이고 mapInstance가 존재하면 startReporting 함수를 호출하여 제보기능 호출
@@ -168,24 +169,29 @@ const Map = () => {
       "https://bbuhackathon.p-e.kr/place/shsmoking/"
     );
 
-    console.log(reportIndirectSmokingZone);
+    // console.log(reportIndirectSmokingZone);
 
     reportIndirectSmokingZone.data.forEach(async (reportData) => {
       // console.log(reportData);
       const nowUserType = localStorage.getItem("userType");
 
       // const userId = localStorage.getItem("userId");
-      // const access_Token = localStorage.getItem("access_token");
+      const access_Token = localStorage.getItem("access_token");
 
       const reportIndirectSmokingZoneData = await axios.get(
-        `https://bbuhackathon.p-e.kr/place/shsmoking/${reportData.placeId}/`
+        `https://bbuhackathon.p-e.kr/place/shsmoking/${reportData.placeId}/`,
+        {
+          headers: {
+            Authorization: `Bearer ${access_Token}`,
+          },
+        }
       );
 
       // console.log(reportIndirectSmokingZoneData.status);
-      console.log(reportIndirectSmokingZoneData.data);
+      // console.log(reportIndirectSmokingZoneData.data);
 
       const isclickedData = reportIndirectSmokingZoneData.data.isLike;
-      console.log(isclickedData);
+      // console.log(isclickedData);
 
       // console.log(reportData.likesCount);
       if (nowUserType === "SY") {
@@ -280,7 +286,7 @@ const Map = () => {
       "https://bbuhackathon.p-e.kr/place/reportsmoking/"
     );
 
-    console.log(reportSmokingZone);
+    // console.log(reportSmokingZone);
 
     reportSmokingZone.data.forEach((reportData) => {
       createMarker(
@@ -306,7 +312,7 @@ const Map = () => {
       "https://bbuhackathon.p-e.kr/place/smoking/"
     );
 
-    console.log(publicSmokingZone);
+    // console.log(publicSmokingZone);
 
     publicSmokingZone.data.forEach((markerData) => {
       // const markerImageSrc =
@@ -330,7 +336,7 @@ const Map = () => {
       "https://bbuhackathon.p-e.kr/place/nosmoking/"
     );
 
-    console.log(publicNoSmokingZone);
+    // console.log(publicNoSmokingZone);
 
     // 원을 저장할 배열
     const circles = [];
@@ -497,7 +503,7 @@ const Map = () => {
                   }, 5000);
                 }
               } else {
-                console.log("금연구역에 위치하지 않는다");
+                // console.log("금연구역에 위치하지 않는다");
                 // 금연구역을 벗어났을 때 플래그를 초기화
                 isModalVisibleSY = false;
               }
@@ -531,7 +537,7 @@ const Map = () => {
                   }, 5000);
                 }
               } else {
-                console.log("간접 흡연구역에 위치하지 않는다");
+                // console.log("간접 흡연구역에 위치하지 않는다");
                 // 금연구역을 벗어났을 때 플래그를 초기화
                 isModalVisibleSN = false;
               }
@@ -581,7 +587,6 @@ const Map = () => {
 
     kakao.maps.event.addListener(map, "dragend", function () {
       const latlng = map.getCenter();
-      console.log(latlng);
       reportingMarker.setPosition(latlng);
       getAddressFromCoords(latlng);
       setNewMarker(latlng);
@@ -691,15 +696,15 @@ const Map = () => {
           `https://bbuhackathon.p-e.kr/place/shsmoking/${placeId}/`
         );
 
-        console.log(checkedClickedIndirectSmokingZone.data);
+        // console.log(checkedClickedIndirectSmokingZone.data);
 
         const tempLikeCount = checkedClickedIndirectSmokingZone.data.likesCount;
         const tempIslike = checkedClickedIndirectSmokingZone.data.isLike;
 
         setLikeCount(tempLikeCount);
         setIsClikced(tempIslike);
-        console.log("tempLikeCount", tempLikeCount);
-        console.log("tempIslike", tempIslike);
+        // console.log("tempLikeCount", tempLikeCount);
+        // console.log("tempIslike", tempIslike);
       } else if (isDirect === "direct") {
       }
 
@@ -768,7 +773,7 @@ const Map = () => {
     userType, // 필요없음
     cleanlinessRating = 0,
     hasAshtray = false, // 전달된 인수가 없을 떄 기본값
-    isindoor = false, // 전달된 인수가 없을 떄 기본값
+    isindoor, // 개방형, 폐쇄형 등등
     reportType = "public" // Default to smokerReport
   ) {
     const publicSmokingZoneMarkerImageSize = new kakao.maps.Size(16, 24);
@@ -797,7 +802,7 @@ const Map = () => {
     // 이 자체는 마커를 만들 때 적용시키므로
     // 마커 클릭 이벤트 설정
     kakao.maps.event.addListener(marker, "click", function () {
-      console.log(clickedPublicMarker);
+      // console.log(clickedPublicMarker);
       if (clickedPublicMarker) {
         marker.setImage(selectedPublicSmokingZoneMarkerImage);
         clickedPublicMarker.setImage(publicSmokingZoneMarkerImage);
@@ -820,6 +825,7 @@ const Map = () => {
         hasAshtray,
         isindoor,
         reportType,
+        position,
       });
     });
 
@@ -853,7 +859,6 @@ const Map = () => {
       let reportPlaceId;
 
       if (reportUserType === "SM") {
-        console.log(reportUserType);
         const responseSM = await smokerReportAPI(
           access_Token,
           reportUserType,
@@ -866,10 +871,8 @@ const Map = () => {
           cleanlinessRating,
           title
         );
-        console.log(responseSM);
         reportPlaceId = responseSM.placeId;
       } else {
-        console.log(reportUserType);
         const responseSH = await nonSmokerReportAPI(
           access_Token,
           reportUserType,
@@ -879,11 +882,10 @@ const Map = () => {
           address,
           title
         );
-        console.log(responseSH);
         reportPlaceId = responseSH.placeId;
       }
 
-      console.log(reportPlaceId);
+      // console.log(reportPlaceId);
 
       createMarker(
         mapInstance,
@@ -957,28 +959,28 @@ const Map = () => {
       `https://bbuhackathon.p-e.kr/place/shsmoking/${selectedMarkerInfo.placeId}/`
     );
 
-    console.log(getNewData);
+    // console.log(getNewData);
 
-    console.log("클릭한 버튼 정보 clickLikeBtn", clickLikeBtn);
-    console.log("클릭한 버튼 정보 clickLikeBtn.data", clickLikeBtn.data);
-    console.log(
-      "클릭한 버튼 정보의 clickLikeBtn.data.likesCount",
-      clickLikeBtn.data.likesCount
-    );
+    // console.log("클릭한 버튼 정보 clickLikeBtn", clickLikeBtn);
+    // console.log("클릭한 버튼 정보 clickLikeBtn.data", clickLikeBtn.data);
+    // console.log(
+    //   "클릭한 버튼 정보의 clickLikeBtn.data.likesCount",
+    //   clickLikeBtn.data.likesCount
+    // );
 
     const newLikeCount = clickLikeBtn.data.likesCount;
 
-    console.log("newLikeCount", newLikeCount);
+    // console.log("newLikeCount", newLikeCount);
 
-    console.log("반영 전 likeCount", likeCount);
-    console.log("반영 전 selectedMarkerInfo", selectedMarkerInfo);
-    console.log(
-      "반영 전 selectedMarkerInfo.likeCount",
-      selectedMarkerInfo.likeCount
-    );
+    // console.log("반영 전 likeCount", likeCount);
+    // console.log("반영 전 selectedMarkerInfo", selectedMarkerInfo);
+    // console.log(
+    //   "반영 전 selectedMarkerInfo.likeCount",
+    //   selectedMarkerInfo.likeCount
+    // );
 
     setLikeCount(newLikeCount);
-    console.log("반영 후 likeCount", likeCount);
+    // console.log("반영 후 likeCount", likeCount);
     if (clickLikeBtn.status === 201) {
       // useState로 newLikeCount와 IsClicked 업데이트
       setIsClikced(true);
@@ -1013,13 +1015,23 @@ const Map = () => {
     }
 
     // selectedMarkerInfo 에 반영 됬는지 확인
-    console.log("반영 후 selectedMarkerInfo", selectedMarkerInfo);
-    console.log(
-      "반영 후 selectedMarkerInfo.likeCount",
-      selectedMarkerInfo.likeCount
-    );
+    // console.log("반영 후 selectedMarkerInfo", selectedMarkerInfo);
+    // console.log(
+    //   "반영 후 selectedMarkerInfo.likeCount",
+    //   selectedMarkerInfo.likeCount
+    // );
 
     // window.location.reload();
+  };
+
+  const goTokakaomap = (position, goalName) => {
+    // console.log(position);
+    // console.log(goalName);
+
+    window.open(
+      `https://map.kakao.com/link/to/${goalName},${position.Ma},${position.La}`,
+      "_blank"
+    );
   };
 
   // selectedMarkerInfo 이게 null이 아닐때 이 InfoPanel이 보이는 것임
@@ -1036,6 +1048,20 @@ const Map = () => {
             <Box>
               <SmokerPublicReportBox>
                 <SmokerPublicReportBoxDiv>
+                  <LoadMapBtnBox>
+                    <LoadMapBtn
+                      onClick={() => {
+                        goTokakaomap(
+                          selectedPublicMarkerInfo.position,
+                          selectedPublicMarkerInfo.title
+                        );
+                      }}
+                    >
+                      {" "}
+                      <img src={loadMapIcon} alt="" />
+                      <span>길찾기</span>
+                    </LoadMapBtn>
+                  </LoadMapBtnBox>
                   <h4>지정 흡연 제보구역</h4>
                   <h3>주소</h3>
                   <h5>{selectedPublicMarkerInfo.address}</h5>
@@ -1043,7 +1069,7 @@ const Map = () => {
                     <InfosmokerBox
                       infofontbordercolor={mode.infoFontBorderColor}
                     >
-                      {selectedPublicMarkerInfo.indoorOutdoor}
+                      {selectedPublicMarkerInfo.isindoor}
                     </InfosmokerBox>
                   </PlusInfo>
                 </SmokerPublicReportBoxDiv>
@@ -1136,7 +1162,7 @@ const Map = () => {
                         }
                       >
                         <FontAwesomeIcon icon={faThumbsUp} size="2x" />
-                        &nbsp; 공감 &nbsp; {likeCount}개
+                        &nbsp; 공감 &nbsp;{likeCount}개
                       </LikeButtonIsClicked>
                     ) : (
                       <LikeButton
@@ -1151,7 +1177,7 @@ const Map = () => {
                         }
                       >
                         <FontAwesomeIcon icon={faThumbsUp} size="2x" />
-                        &nbsp; 공감 &nbsp; {likeCount}개
+                        &nbsp; 공감 &nbsp;{likeCount}개
                       </LikeButton>
                     )}
                   </NonSmokerReportBox>
@@ -1416,6 +1442,26 @@ const SmokerPublicReportBoxDiv = styled.div`
   width: 100%;
 `;
 
+const LoadMapBtnBox = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  cursor: pointer;
+`;
+
+const LoadMapBtn = styled.div`
+  display: flex;
+  align-items: center;
+  background-color: #f6e800;
+  border-radius: 0.3rem;
+  padding: 0.4rem 1rem;
+  font-weight: bold;
+
+  img {
+    width: 1.5rem;
+  }
+`;
+
 const SmokerReportBox = styled.div`
   display: flex;
   justify-content: space-between;
@@ -1464,15 +1510,6 @@ const CloseButtonBox = styled.div`
   }
 `;
 
-const CloseButton = styled.button`
-  background: none;
-  border: none;
-  // color: ${(props) => props.infofontbordercolor};
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-`;
-
 const ImgBox = styled.div`
   width: 40%;
   img {
@@ -1483,9 +1520,9 @@ const ImgBox = styled.div`
 
 const LikeButton = styled.button`
   width: 100%;
-  padding: 1rem;
-  background: green;
-  color: white;
+  padding: 0.3rem 0rem;
+  background: black;
+  color: #fff43c;
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;
@@ -1501,9 +1538,9 @@ const LikeButton = styled.button`
 
 const LikeButtonIsClicked = styled.button`
   width: 100%;
-  padding: 1rem;
+  padding: 0.3rem 0rem;
   background: black;
-  color: yellow;
+  color: #fff43c;
   border: none;
   border-radius: 0.5rem;
   cursor: pointer;

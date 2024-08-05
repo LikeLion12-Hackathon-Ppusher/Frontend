@@ -9,6 +9,8 @@ const smokeTheme = {
   imgColor: "#B1AD3A",
   borderColor: "#F7F152",
   NavborderColor: "#F7F152",
+  // HomeNav.jsx의 버튼
+  Navbackground: "#000000",
   // 제보하기
   reportBackground: "#FFFEEE",
   reportTextBox: "#FEFBB1",
@@ -31,11 +33,13 @@ const nonSmokeTheme = {
   // Home.jsx의 버튼
   color: "yellow",
   main: "#F7F152",
-  background: "#fffeef",
+  background: "#FFFCC3",
   font: "#000000",
   imgColor: "#4c490e",
   borderColor: "#F7F152",
   NavborderColor: "#F7F152",
+  // HomeNav.jsx의 버튼
+  Navbackground: "#FFFEEE",
   // 제보하기
   reportBackground: "#FEFBB1",
   reportTextBox: "#FFFEEE",

@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import smokerReport from "../assets/제보흡연구역.png";
 import nonSmokerReport from "../assets/상습흡연구역.png";
+import logoImg from "../assets/logo.png";
 import { ThemeColorContext } from "../Context/context";
 
 const HomeNav = () => {
@@ -26,14 +27,13 @@ const HomeNav = () => {
   return (
     <Container>
       <AppBar>
-        <LogoBox>샘플 로고</LogoBox>
-        {/* <LoginBtn onClick={loginHandler}>로그인</LoginBtn> */}
+        <LogoBox></LogoBox>
       </AppBar>
       <HomeContainer>
         <LogoContainer
           fontcolor={mode.font}
           bordercolor={mode.NavborderColor}
-          backgroundcolor={mode.background}
+          backgroundcolor={mode.Navbackground}
         >
           {isReportingMode ? (
             <ReportModeBox>지도를 움직여 위치를 지정해주세요.</ReportModeBox>
@@ -78,7 +78,10 @@ const AppBar = styled.div`
 `;
 
 const LogoBox = styled.div`
-  background-color: gray;
+  text-align: center;
+  img {
+    width: 10%;
+  }
 `;
 
 const HomeContainer = styled.div`
