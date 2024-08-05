@@ -193,7 +193,7 @@ const ReportContainer = styled.div`
   width: 100%;
   overflow-y: auto;
   margin-top: 15vh;
-  margin-bottom: 4rem;
+  margin-bottom: 10vh;
   padding: 0 0.5rem;
   box-sizing: border-box;
 
