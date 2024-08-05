@@ -420,8 +420,8 @@ const Map = () => {
 
         // 유저의 현 위치를 표현할 이미지
         const imageSrc = UserImg;
-        const imageSize = new kakao.maps.Size(24, 30);
-        const imageOption = { offset: new kakao.maps.Point(12, 15) };
+        const imageSize = new kakao.maps.Size(30, 30);
+        const imageOption = { offset: new kakao.maps.Point(15, 15) };
 
         const markerImage = new kakao.maps.MarkerImage(
           imageSrc,
