@@ -64,10 +64,15 @@ const Box = styled.div`
 const Title = styled.div`
   display: flex;
   justify-content: center;
-  width: 100%;
+  max-height: 20vh;
   font-size: 3vw;
   margin-top: 15%;
   color: #535353;
+  @media (min-width: 600px) {
+    font-size: 1.2rem; /* 800px 이상일 때 고정 폰트 크기 */
+    margin-bottom: 1rem;
+  }
+
   p span {
     text-emphasis-style: dot;
   }
