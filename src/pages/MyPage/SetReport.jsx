@@ -72,8 +72,8 @@ const SetAccount = () => {
     setOpenReportId(openReportId === id ? null : id);
   };
 
-  const handleDelete = (reportId) => {
-    deletePlaceAPI(token, reportId)
+  const handleDelete = async (reportId) => {
+    await deletePlaceAPI(token, reportId)
       .then(() => {
         alert('제보가 삭제됩니다.');
         fetchReports();  // 삭제 후 목록을 다시 불러옴
