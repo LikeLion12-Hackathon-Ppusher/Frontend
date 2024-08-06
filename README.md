@@ -1,71 +1,45 @@
-# Getting Started with Create React App
+# 🚭 위하담
+[위하담 배포 사이트](https://wehadam.netlify.app/)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![image](https://github.com/user-attachments/assets/ef5257f8-b20d-4cc2-9deb-f7db009c8076)
 
-## Available Scripts
+# 💡 실행 방법
+```
+git clone https://github.com/LikeLion12-Hackathon-Ppusher/Frontend.git
+cd Frontend
+npm install
+npm start
+```
+# 📌 서비스 소개
+흡연자와 비흡연자 모두를 위한 흡연구역, 간접흡연 위험 구역 위치 정보 제공 서비스
 
-In the project directory, you can run:
+비흡연자의 경우, 간접흡연의 위험을 피하고 싶은 비흡연자(임산부, 어린아이)는 길거리 담배존을 피해 다닐 수 있습니다. 또한 상습적으로 흡연이 발생하는 위치를 제보해 비흡연자의 건강을 보호할 수 있습니다.
 
-### `npm start`
+흡연자의 경우, 흡연 구역의 위치를 쉽게 찾을 수 있습니다. 또한 어린이집, 학교에서 금연 구역 위치를 알림으로 받아볼 수 있어 금연구역에서 과태료를 피할 수 있습니다.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+# 📌 아이디어 배경
+위하담은 흡연자와 비흡연자 모두가 상호 존중하며 공존할 수 있는 환경을 조성하기 위해 기획되었습니다.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+어린이, 임산부와 같이 건강에 예민한 비흡연자는 간접 흡연이 사라지기를 바랍니다. 또한 상습적으로 흡연이 발생하는 위치를 제보하고 싶지만 마땅한 서비스가 없다는 니즈가 있습니다.
 
-### `npm test`
+흡연자는 간접흡연 피해를 주고 싶지 않아도, 주변 흡연부스 위치를 찾기 어렵다는 문제가 있었습니다. 또한 담배 피는 장소가 금연 구역인지 아닌지를 쉽게 알기 어렵다는 니즈가 있습니다.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+위하담은 단순히 흡연자의 금연 참여를 유도하지 않고 새로운 관점에서 간접흡연 문제를 해결하고자 하는 아이디어에서 출발했습니다. 위하담은 흡연자와 비흡연자가 서로 위하는 담배 문화를 만들어갑니다.
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-# Frontend
+# 📌 기능 소개
+- 사용자 유형 선택
+  - 최초 회원가입 시 흡연자, 비흡연자 여부를 선택할 수 있습니다.
+  - 이후 마이페이지에서 사용자 유형을 변경할 수 있습니다.
+- 제보 기능
+  - 흡연자는 흡연장소로 등록되지 않은 장소를 흡연 장소로 제보할 수 있습니다. 흡연 장소의 청결도, 재떨이 유무, 실내 실외 여부를 제보할 수 있습니다.
+  - 비흡연자는 상습 흡연 장소를 제보할 수 있습니다. 해당 흡연 장소는 다른 사용자들이 공감할 수 있고, 공감 지수를 통해 상습 흡연 제보 구역임을 확인할 수 있습니다.
+- 알림 기능
+  - 흡연자는 금연구역에 진입한 경우 금연구역 알림을 받게됩니다.
+  - 비흡연자는 간접흡연 위험 지역 알림을 받알 수 있습니다. 간접흡연 위험 지역은 상습적으로 흡연구역이 아닌데도 흡연이 이뤄진다고 제보된 지역입니다.
+  - 길찾기 버튼을 누르면 카카오 맵으로 연결되어 흡연구역으로 길안내를 받아볼 수 있습니다.
+ 
+# 기술 스택
+- 프론트엔드
+  - 리액트
+- 백엔드
+  - 장고
