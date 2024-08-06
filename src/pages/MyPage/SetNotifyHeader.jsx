@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { putAlarmOptionAPI } from '../../apis/api';
+import { putAlarmOptionAPI } from "../../apis/api";
 
 const SetNotifyHeader = () => {
-  const [isNotificationEnabled, setIsNotificationEnabled] = useState(localStorage.getItem('option') === 'true');
-  const token = localStorage.getItem('access_token');
+  const [isNotificationEnabled, setIsNotificationEnabled] = useState(
+    localStorage.getItem("option") === "true"
+  );
+  const token = localStorage.getItem("access_token");
 
   // 컴포넌트 마운트 시 알림 권한 확인
   useEffect(() => {
-    const option = localStorage.getItem('option');
-    if (option === 'true') {
+    const option = localStorage.getItem("option");
+    if (option === "true") {
       setIsNotificationEnabled(true);
     } else {
       setIsNotificationEnabled(false);
@@ -21,18 +23,18 @@ const SetNotifyHeader = () => {
     if (isOn) {
       if (Notification.permission === "granted") {
         setIsNotificationEnabled(true);
-        localStorage.setItem('option', true);
+        localStorage.setItem("option", true);
         alert("알림이 활성화되었습니다.");
         putAlarmOptionAPI(token, true);
       } else if (Notification.permission !== "denied") {
         Notification.requestPermission().then((permission) => {
           if (permission === "granted") {
             setIsNotificationEnabled(true);
-            localStorage.setItem('option', true);
+            localStorage.setItem("option", true);
             alert("알림이 활성화되었습니다.");
             putAlarmOptionAPI(token, true);
           } else {
-            localStorage.setItem('option', true);
+            localStorage.setItem("option", true);
             alert("알림 권한이 거부되었습니다.");
           }
         });
@@ -40,7 +42,7 @@ const SetNotifyHeader = () => {
     } else {
       setIsNotificationEnabled(false);
       alert("알림이 비활성화되었습니다.");
-      localStorage.setItem('option', false);
+      localStorage.setItem("option", false);
       putAlarmOptionAPI(token, false);
     }
   };
@@ -74,17 +76,17 @@ const TitleContainer = styled.div`
   align-items: center;
   width: 90%;
   height: 3rem;
-  border: 2px solid #272A30;
+  border: 2px solid #272a30;
   border-radius: 0.3rem;
   font-size: 1.2rem;
   font-weight: bold;
-  background-color: #FFFEEE;
-  box-shadow: 0.2rem 0.2rem 0.2rem #FEFBBD;
+  background-color: #fffeee;
+  box-shadow: 0.2rem 0.2rem 0.2rem #fefbbd;
 `;
 
 const Title = styled.div`
   margin-left: 2rem;
-  color: #272A30;
+  color: #272a30;
 `;
 
 const TitleBtnContainer = styled.div`
@@ -109,7 +111,7 @@ const TitleButton = styled.button`
   cursor: pointer;
 
   &:hover {
-    color: #272A30;
-    background-color: #FFF100;
+    color: #272a30;
+    background-color: #fff100;
   }
 `;

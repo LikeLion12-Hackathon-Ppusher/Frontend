@@ -118,10 +118,17 @@ const Map = () => {
     // 여거는 로케이션 변경 있을때 => URL에 reprot가 있을떄 없을때 실행되는 useEffect
     // console.log(location);
 
+    let originOption = localStorage.getItem("option");
     const queryParams = new URLSearchParams(location.search);
     if (queryParams.get("report") === "true") {
       setSelectedMarkerInfo(null);
       setSelectedPublicMarkerInfo(null);
+      localStorage.setItem("isWatchedMode", false);
+
+      // 만일 경고창을 뜨는 와중에 제보를 한다면 경고창을 닫게 한다
+      if (originOption === "true") {
+        localStorage.setItem("option", false);
+      }
       localStorage.setItem("isWatchedMode", false);
       setIsReporting(true);
     } else {
