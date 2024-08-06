@@ -1194,7 +1194,7 @@ const Map = () => {
                           infocleanback={mode.infoCleanback}
                           fontcolor={mode.infoCleanback}
                         >
-                          <h8>청결도&nbsp;&nbsp;</h8>
+                          <h5>청결도&nbsp;&nbsp;</h5>
                           <StarContainer>
                             {[...Array(5)].map((_, index) => (
                               <Star
@@ -1820,8 +1820,11 @@ const CleanBox = styled.div`
   width: 50%;
   justify-content: space-between;
   align-items: center;
+  text-align: center;
+  padding: 0.3rem;
   background-color: white;
   border-radius: 0.3rem;
+  margin: 0.1rem 0 0.6rem;
   background-color: ${(props) => props.infocleanback};
   color: black;
   @media (max-width: 600px) {
