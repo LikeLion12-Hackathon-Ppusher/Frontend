@@ -1100,7 +1100,7 @@ const Map = () => {
                       <span>길찾기</span>
                     </LoadMapBtn>
                   </LoadMapBtnBox>
-                  <h4>지정 흡연 제보구역</h4>
+                  <h4>지정 흡연구역</h4>
                   <h3>주소</h3>
                   <h5>{selectedPublicMarkerInfo.address}</h5>
                   <PlusInfo>
@@ -1135,7 +1135,7 @@ const Map = () => {
                     {" "}
                     <h4>
                       {selectedMarkerInfo.reportType === "smokerReport"
-                        ? "제보 흡연 제보구역"
+                        ? "제보 흡연구역"
                         : "상습 흡연 제보구역"}
                     </h4>
                     <h3>주소</h3>
