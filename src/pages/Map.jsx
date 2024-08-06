@@ -1408,7 +1408,7 @@ const Map = () => {
             </NonSmokingZoneImgBoxSY>
             <p>
               현재 금연구역에 머물고 있습니다. <br></br>
-              <strong>담배생각</strong>이 나신다면 가까운
+              <strong>담배생각</strong>이 나신다면 가까운&nbsp;
               <strong>흡연구역</strong>을 이용해주세요.
             </p>
           </div>
