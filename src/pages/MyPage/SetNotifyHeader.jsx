@@ -18,25 +18,36 @@ const SetNotifyHeader = () => {
 
   const handleNotificationToggle = (isOn) => {
     // 알림 활성화 요청
+    // if (isOn) {
+    //   if (Notification.permission === "granted") {
+    //     setIsNotificationEnabled(true);
+    //     localStorage.setItem('option', true);
+    //     alert("알림이 활성화되었습니다.");
+    //     putAlarmOptionAPI(token, true);
+    //   } else if (Notification.permission !== "denied") {
+    //     Notification.requestPermission().then((permission) => {
+    //       if (permission === "granted") {
+    //         setIsNotificationEnabled(true);
+    //         localStorage.setItem('option', true);
+    //         alert("알림이 활성화되었습니다.");
+    //         putAlarmOptionAPI(token, true);
+    //       } else {
+    //         localStorage.setItem('option', true);
+    //         alert("알림 권한이 거부되었습니다.");
+    //       }
+    //     });
+    //   }
+    // } else {
+    //   setIsNotificationEnabled(false);
+    //   alert("알림이 비활성화되었습니다.");
+    //   localStorage.setItem('option', false);
+    //   putAlarmOptionAPI(token, false);
+    // }
     if (isOn) {
-      if (Notification.permission === "granted") {
-        setIsNotificationEnabled(true);
-        localStorage.setItem('option', true);
-        alert("알림이 활성화되었습니다.");
-        putAlarmOptionAPI(token, true);
-      } else if (Notification.permission !== "denied") {
-        Notification.requestPermission().then((permission) => {
-          if (permission === "granted") {
-            setIsNotificationEnabled(true);
-            localStorage.setItem('option', true);
-            alert("알림이 활성화되었습니다.");
-            putAlarmOptionAPI(token, true);
-          } else {
-            localStorage.setItem('option', true);
-            alert("알림 권한이 거부되었습니다.");
-          }
-        });
-      }
+      setIsNotificationEnabled(true);
+      localStorage.setItem('option', true);
+      alert("알림이 활성화되었습니다.");
+      putAlarmOptionAPI(token, true);
     } else {
       setIsNotificationEnabled(false);
       alert("알림이 비활성화되었습니다.");
