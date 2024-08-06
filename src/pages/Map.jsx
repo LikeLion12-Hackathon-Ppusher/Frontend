@@ -517,7 +517,8 @@ const Map = () => {
 
           if (option) {
             if (userType === "SY") {
-              publicSmokingZone.data.forEach((zone) => {
+              publicNoSmokingZone.data.forEach((zone) => {
+                console.log(publicNoSmokingZone);
                 const zoneLatLng = new kakao.maps.LatLng(
                   zone.latitude,
                   zone.longitude
@@ -596,7 +597,7 @@ const Map = () => {
       },
       {
         enableHighAccuracy: true,
-        maximumAge: 0,
+        maximumAge: 10000,
         timeout: 10000,
       }
     );
