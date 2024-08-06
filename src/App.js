@@ -84,5 +84,5 @@ const AppDom = styled.div`
 
 // 전체 배경을 밀 색으로 설정 그렇다면 다른 요소들에서 white를 직접 주든가 해야지?
 const Outside = styled.div`
-  background-color: wheat;
+  background-color: white;
 `;
