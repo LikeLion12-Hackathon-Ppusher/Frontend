@@ -184,7 +184,7 @@ const Map = () => {
     // console.log(reportIndirectSmokingZone);
 
     reportIndirectSmokingZone.data.forEach(async (reportData) => {
-      // console.log(reportData);
+      console.log(reportData);
       const nowUserType = localStorage.getItem("userType");
 
       // const userId = localStorage.getItem("userId");
@@ -199,13 +199,13 @@ const Map = () => {
         }
       );
 
-      // console.log(reportIndirectSmokingZoneData.status);
-      // console.log(reportIndirectSmokingZoneData.data);
+      console.log(reportIndirectSmokingZoneData.status);
+      console.log(reportIndirectSmokingZoneData.data);
 
       const isclickedData = reportIndirectSmokingZoneData.data.isLike;
-      // console.log(isclickedData);
+      console.log(isclickedData);
 
-      // console.log(reportData.likesCount);
+      console.log(reportData.likesCount);
       if (nowUserType === "SY") {
         if (reportIndirectSmokingZoneData.likesCount >= 3) {
           if (reportIndirectSmokingZoneData.isLike === true) {
@@ -467,11 +467,22 @@ const Map = () => {
             if (markerRef.current) {
               markerRef.current.setPosition(newLatLng);
             }
+
+            // 실시간 모드를 할것인지 안할것인지 true면 계속 실시간 추적 & 맵 중앙 정렬 작동
             let watchMode = localStorage.getItem("isWatchedMode");
-            console.log(watchMode);
+            let watchModeBoolean;
+            if (watchMode === "true") {
+              watchModeBoolean = true;
+            } else if (watchMode === "false") {
+              watchModeBoolean = false;
+            } else {
+              console.log("watchMode가 적용되지 않고 있습니다", watchMode);
+            }
+
+            console.log(watchModeBoolean);
 
             // mode가 true 일때만 적용해서 지도 중심 조정
-            if (watchMode) {
+            if (watchModeBoolean) {
               //위치가 충분히 변경된 경우에만 지도 중심 조정
               if (lastCenteredLatLng) {
                 const distance = getDistance(
@@ -496,7 +507,7 @@ const Map = () => {
           },
           {
             enableHighAccuracy: true,
-            maximumAge: 0,
+            maximumAge: 5000,
             timeout: 10000,
           }
         );
@@ -516,7 +527,18 @@ const Map = () => {
           console.log(option);
 
           console.log(publicNoSmokingZone.data);
-          if (option) {
+
+          let optionBoolean;
+          if (option === "true") {
+            optionBoolean = true;
+          } else if (option === "false") {
+            optionBoolean = false;
+          } else {
+            console.log("option이 불린값이 아닙니다");
+          }
+
+          console.log("option 값", optionBoolean);
+          if (optionBoolean) {
             if (userType === "SY") {
               publicNoSmokingZone.data.forEach((zone) => {
                 const zoneLatLng = new kakao.maps.LatLng(
@@ -532,12 +554,17 @@ const Map = () => {
                 );
 
                 if (distance <= 50) {
-                  console.log(distance);
+                  console.log("distance값", distance);
+                  console.log("isModalVisibleSY 값", isModalVisibleSY);
                   // 금연구역 지정 거리 안에 있을때
                   if (!isModalVisibleSY) {
                     // 모달이 보이지 않는 경우에만 모달을 띄움
-                    setShowNoSmokingModalSY(true);
                     isModalVisibleSY = true;
+                    setShowNoSmokingModalSY(optionBoolean);
+                    console.log(
+                      "showNoSmokingModalSY 모달이 보이는가 값",
+                      showNoSmokingModalSY
+                    );
 
                     // // 2초 뒤에 모달 창을 숨기고 플래그를 초기화
                     // setTimeout(() => {
@@ -549,10 +576,15 @@ const Map = () => {
                   // console.log("금연구역에 위치하지 않는다");
                   // 금연구역을 벗어났을 때 플래그를 초기화
                   isModalVisibleSY = false;
-                  setShowNoSmokingModalSY(false);
+                  setShowNoSmokingModalSY(!optionBoolean);
+                  console.log(
+                    "showNoSmokingModalSY else문인데 왜 실행 됨?",
+                    showNoSmokingModalSY
+                  );
                 }
               });
             } else {
+              // 제보된 흡연장소 데이터
               reportSmokingZone.data.forEach((zone) => {
                 const zoneLatLng = new kakao.maps.LatLng(
                   zone.latitude,
@@ -589,6 +621,8 @@ const Map = () => {
               });
             }
           } else {
+            setShowNoSmokingModalSY(optionBoolean);
+            setShowNoSmokingModalSN(optionBoolean);
             console.log("알람이 OFF 상태입니다");
           }
         };
@@ -598,7 +632,7 @@ const Map = () => {
       },
       {
         enableHighAccuracy: true,
-        maximumAge: 10000,
+        maximumAge: 0,
         timeout: 10000,
       }
     );
@@ -1365,12 +1399,12 @@ const Map = () => {
                 src={noSmokingZone}
                 alt="asdf
               "
-              ></img>{" "}
+              ></img>
               <h2>금연구역</h2>
-            </NonSmokingZoneImgBoxSY>{" "}
+            </NonSmokingZoneImgBoxSY>
             <p>
               현재 금연구역에 머물고 있습니다. <br></br>
-              <strong>담배생각</strong>이 나신다면 가까운{" "}
+              <strong>담배생각</strong>이 나신다면 가까운
               <strong>흡연구역</strong>을 이용해주세요.
             </p>
           </div>
