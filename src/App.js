@@ -16,10 +16,16 @@ import SetTypeConfirm from "./pages/MyPage/SetTypeConfirm";
 import SetNotify from "./pages/MyPage/SetNotify";
 import SetNotifyNonSmoker from "./pages/MyPage/SetNotifyNonSmoker";
 import SetReport from "./pages/MyPage/SetReport";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { ThemeColorContext } from "./Context/context";
 
 function App() {
+  let vh = 0;
+
+  useEffect(() => {
+    vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  }, []);
   return (
     <Outside>
       <AppDom>
@@ -69,7 +75,7 @@ export default App;
 
 const AppDom = styled.div`
   width: 600px;
-  height: 100vh;
+  height: 100vh; // 웹 뷰
   margin: 0 auto;
   display: flex;
   justify-content: center;
@@ -77,8 +83,8 @@ const AppDom = styled.div`
   position: relative;
 
   @media (max-width: 600px) {
-    width: 100%;
-    height: 95vh;
+    width: 100vw;
+    height: calc(var(--vh, 1vh) * 100);
   }
 `;
 

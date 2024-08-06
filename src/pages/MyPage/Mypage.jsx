@@ -105,13 +105,14 @@ const MyPageBtnContainer = styled.div`
 `;
 
 const Btn = styled.button`
-  padding: 1.2rem 0rem;
-  margin-top: 2rem;
+  border: 2px solid #272A30;
+  padding: 1rem 0;
+  margin-top: 3vh;
+  font-size: 1rem;
   width: 100%;
-  border-radius: 6px;
-  border: none;
+  border-radius: 0.3rem;
+  font-weight: bold;
   background-color: #272A30;
-  font-size: 1.2rem;
   color: #FFF100;
   transition: background-color 0.3s ease, transform 0.3s ease;
   box-shadow: 0.2rem 0.2rem 0.2rem;

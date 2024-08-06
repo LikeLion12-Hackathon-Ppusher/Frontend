@@ -20,25 +20,36 @@ const SetNotifyHeader = () => {
 
   const handleNotificationToggle = (isOn) => {
     // 알림 활성화 요청
+    // if (isOn) {
+    //   if (Notification.permission === "granted") {
+    //     setIsNotificationEnabled(true);
+    //     localStorage.setItem('option', true);
+    //     alert("알림이 활성화되었습니다.");
+    //     putAlarmOptionAPI(token, true);
+    //   } else if (Notification.permission !== "denied") {
+    //     Notification.requestPermission().then((permission) => {
+    //       if (permission === "granted") {
+    //         setIsNotificationEnabled(true);
+    //         localStorage.setItem('option', true);
+    //         alert("알림이 활성화되었습니다.");
+    //         putAlarmOptionAPI(token, true);
+    //       } else {
+    //         localStorage.setItem('option', true);
+    //         alert("알림 권한이 거부되었습니다.");
+    //       }
+    //     });
+    //   }
+    // } else {
+    //   setIsNotificationEnabled(false);
+    //   alert("알림이 비활성화되었습니다.");
+    //   localStorage.setItem('option', false);
+    //   putAlarmOptionAPI(token, false);
+    // }
     if (isOn) {
-      if (Notification.permission === "granted") {
-        setIsNotificationEnabled(true);
-        localStorage.setItem("option", true);
-        alert("알림이 활성화되었습니다.");
-        putAlarmOptionAPI(token, true);
-      } else if (Notification.permission !== "denied") {
-        Notification.requestPermission().then((permission) => {
-          if (permission === "granted") {
-            setIsNotificationEnabled(true);
-            localStorage.setItem("option", true);
-            alert("알림이 활성화되었습니다.");
-            putAlarmOptionAPI(token, true);
-          } else {
-            localStorage.setItem("option", true);
-            alert("알림 권한이 거부되었습니다.");
-          }
-        });
-      }
+      setIsNotificationEnabled(true);
+      localStorage.setItem("option", true);
+      alert("알림이 활성화되었습니다.");
+      putAlarmOptionAPI(token, true);
     } else {
       setIsNotificationEnabled(false);
       alert("알림이 비활성화되었습니다.");
@@ -72,20 +83,20 @@ export default SetNotifyHeader;
 
 const TitleContainer = styled.div`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
   width: 90%;
   height: 3rem;
   border: 2px solid #272a30;
   border-radius: 0.3rem;
-  font-size: 1.2rem;
   font-weight: bold;
   background-color: #fffeee;
   box-shadow: 0.2rem 0.2rem 0.2rem #fefbbd;
 `;
 
 const Title = styled.div`
-  margin-left: 2rem;
+  width: 40%;
+  text-align: center;
   color: #272a30;
 `;
 
@@ -93,17 +104,15 @@ const TitleBtnContainer = styled.div`
   width: 60%;
   height: 90%;
   display: flex;
-  justify-content: space-around;
-  margin-left: 3rem;
+  justify-content: space-evenly;
   align-items: center;
 `;
 
 const TitleButton = styled.button`
-  width: 45%;
+  width: 40%;
   height: 80%;
   color: ${(props) => (props.isActive ? "#FFF100" : "#272A30")};
   background-color: ${(props) => (props.isActive ? "#272A30" : "#D9D9D9")};
-  font-size: 1rem;
   font-weight: bold;
   text-align: center;
   border: 0.08rem;
