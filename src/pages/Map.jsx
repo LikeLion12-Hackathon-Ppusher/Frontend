@@ -1771,7 +1771,7 @@ const StarBox = styled.div`
   background-color: black;
   border-radius: 0.3rem;
   padding: 0.1rem 0.6rem;
-  margin: 0.3rem;
+  margin: 0.2rem 0 0.2rem 0;
   color: white;
 `;
 
