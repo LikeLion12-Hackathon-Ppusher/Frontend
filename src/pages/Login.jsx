@@ -9,19 +9,15 @@ const Login = () => {
   const REDIRECT_URI_LOCAL = process.env.REACT_APP_REDIRECT_URL_LOCAL;
   const REDIRECT_URI_PRODUCTION = process.env.REACT_APP_REDIRECT_URL_PRODUCTION;
   console.log(REDIRECT_URI_PRODUCTION);
-
   // 현재 URL이 localhost인 경우 로컬 리다이렉트 URI를 사용
   const REDIRECT_URI =
     window.location.hostname === "localhost"
       ? REDIRECT_URI_LOCAL
       : REDIRECT_URI_PRODUCTION;
-
   console.log("REDIRECT_URI:", REDIRECT_URI);
   console.log("REST_API_KEY:", REST_API_KEY);
   console.log("REDIRECT_URI:", REDIRECT_URI);
-
   const link = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-
   const loginHandler = () => {
     window.location.href = link;
   };
@@ -41,7 +37,6 @@ const Login = () => {
     </LoginBox>
   );
 };
-
 export default Login;
 
 const LoginBox = styled.div`
@@ -69,10 +64,14 @@ const Box = styled.div`
 const Title = styled.div`
   display: flex;
   justify-content: center;
-  width: 100%;
+  max-height: 20vh;
   font-size: 3vw;
   margin-top: 15%;
   color: #535353;
+  @media (min-width: 600px) {
+    font-size: 1.2rem; /* 800px 이상일 때 고정 폰트 크기 */
+    margin-bottom: 1rem;
+  }
   p span {
     text-emphasis-style: dot;
   }
