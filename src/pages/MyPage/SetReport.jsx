@@ -261,7 +261,7 @@ const DelBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 15%;
+  width: 20%;
   height: 100%;
 `;
 
