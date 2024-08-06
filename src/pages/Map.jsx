@@ -122,6 +122,7 @@ const Map = () => {
     const queryParams = new URLSearchParams(location.search);
     if (queryParams.get("report") === "true") {
       setSelectedMarkerInfo(null);
+      setSelectedPublicMarkerInfo(null);
       localStorage.setItem("isWatchedMode", false);
       setIsReporting(true);
     } else {
