@@ -1647,7 +1647,7 @@ const LikeButtonIsClicked = styled.button`
 
 const ModalOverlay = styled.div`
   position: absolute;
-  bottom: 15%;
+  bottom: 12.5%;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -1662,9 +1662,6 @@ const ModalOverlay = styled.div`
   }
   h4 {
     margin-bottom: 0.2rem;
-  }
-  @media (max-width: 600px) {
-    bottom: 12.5%;
   }
 `;
 
