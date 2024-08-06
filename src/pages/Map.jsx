@@ -124,11 +124,12 @@ const Map = () => {
       setSelectedMarkerInfo(null);
       setSelectedPublicMarkerInfo(null);
       localStorage.setItem("isWatchedMode", false);
-
+      localStorage.setItem("suboption", false);
       localStorage.setItem("isWatchedMode", false);
       setIsReporting(true);
     } else {
       localStorage.setItem("isWatchedMode", true);
+      localStorage.setItem("suboption", true);
       setIsReporting(false);
     }
 
@@ -527,7 +528,12 @@ const Map = () => {
           // 유저가 선택한 알림 거리
           const userDistance = localStorage.getItem("distance");
 
+          // 알람 true, false 옵션값
           const option = localStorage.getItem("option");
+          console.log(option);
+
+          // 알람 중 제보창 처리용 suboption
+          const suboption = localStorage.getItem("suboption");
           console.log(option);
 
           console.log(publicNoSmokingZone.data);
@@ -541,8 +547,17 @@ const Map = () => {
             console.log("option이 불린값이 아닙니다");
           }
 
+          let suboptionBoolean;
+          if (suboption === "true") {
+            suboptionBoolean = true;
+          } else if (suboption === "false") {
+            suboptionBoolean = false;
+          } else {
+            console.log("suboption이 불린값이 아닙니다");
+          }
+
           console.log("option 값", optionBoolean);
-          if (optionBoolean) {
+          if (optionBoolean && suboptionBoolean) {
             if (userType === "SY") {
               publicNoSmokingZone.data.forEach((zone) => {
                 const zoneLatLng = new kakao.maps.LatLng(
