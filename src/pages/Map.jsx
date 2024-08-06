@@ -25,6 +25,7 @@ import NoSmokingZoneChecker from "./NoSmokingZoneChecker";
 import { getDistance } from "../apis/distance";
 import { smokerReportAPI } from "../apis/api";
 import { nonSmokerReportAPI } from "../apis/api";
+import closeX from "../assets/black_x.png";
 
 const { kakao } = window;
 
@@ -1159,7 +1160,7 @@ const Map = () => {
                           infocleanback={mode.infoCleanback}
                           fontcolor={mode.infoCleanback}
                         >
-                          <h5>청결도&nbsp;&nbsp;</h5>
+                          <h8>청결도&nbsp;&nbsp;</h8>
                           <StarContainer>
                             {[...Array(5)].map((_, index) => (
                               <Star
@@ -1249,7 +1250,11 @@ const Map = () => {
             fontcolor={mode.reportfont}
             bordercolor={mode.reportBorderColor}
           >
-            <h4>제보하기</h4>
+            <ModalTitle>
+              <h4>제보하기</h4>
+              {/* <Button2 onClick={handleCloseModal}>취소</Button2> */}
+              <img src={closeX} alt="취소" onClick={handleCloseModal}></img>
+            </ModalTitle>
             <Form>
               <h4>{address}</h4>
               {/* <Label>
@@ -1329,8 +1334,7 @@ const Map = () => {
                 />
               </TextConatiner>
               <ButtonBox>
-                <Button2 onClick={handleSubmit}>제출</Button2>
-                <Button2 onClick={handleCloseModal}>취소</Button2>
+                <Button2 onClick={handleSubmit}>제보</Button2>
               </ButtonBox>
             </Form>
           </ModalContent>
@@ -1439,6 +1443,9 @@ const InfoPanel = styled.div`
   h4 {
     margin-top: 0;
   }
+  @media (min-width: 600px) {
+    bottom: 20%;
+  }
 `;
 
 const InfoBox = styled.div`
@@ -1469,7 +1476,7 @@ const InfosmokerBox = styled.div`
   border: 2px solid ${(props) => props.infofontbordercolor};
   color: ${(props) => props.infofontbordercolor};
   border-radius: 0.2rem;
-  padding: 0.2rem 0.3rem;
+  padding: 0.3rem 0.3rem;
   margin-right: 0.5rem;
   font-weight: bold;
 `;
@@ -1606,7 +1613,7 @@ const LikeButtonIsClicked = styled.button`
 
 const ModalOverlay = styled.div`
   position: absolute;
-  bottom: 15%;
+  bottom: 10%;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -1626,17 +1633,17 @@ const ModalOverlay = styled.div`
 
 const ModalContent = styled.div`
   background: white;
-  padding: 1rem 2rem;
+  padding: 1rem 1rem;
   border-radius: 0.5rem;
   width: 90%;
   max-width: 500px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   background-color: ${(props) => props.modalboxcolor};
-  border: 3px solid ${(props) => props.bordercolor};
+  border: 4px solid ${(props) => props.bordercolor};
   color: ${(props) => props.fontcolor};
 
   @media (max-width: 600px) {
-    width: 70%;
+    width: 80%;
   }
 `;
 
@@ -1646,19 +1653,20 @@ const Form = styled.div`
 `;
 
 const Label = styled.label`
-  // margin-bottom: 1rem;
+  margin: 0.2rem 0 0.2rem;
   font-weight: bold;
 `;
 const TextConatiner = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 0.3rem;
 `;
 
 const Input = styled.input`
-  width: 95%;
+  width: 100%;
   padding: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
   border: none;
   border-radius: 0.5rem;
   background-color: ${(props) => props.textboxcolor};
@@ -1673,9 +1681,13 @@ const Input = styled.input`
 
 const ModalBtnBox = styled.div`
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin: 0.4rem 0;
+  margin: 0.3rem 0 0.3rem;
+  padding: 0.3rem 0 0.3rem;
+  border-top: 2px solid #FFF100;
+  border-bottom: 2px solid #FFF100;
 `;
 
 const ThankYouModal = styled.div`
@@ -1726,10 +1738,11 @@ const Button = styled.button`
 
 const Button2 = styled.button`
   background-color: black;
-  color: white;
+  color: #FAF030;
+  width: 100%;
+  font-weight: bold;
   border: 2px solid black;
-  padding: 0.1rem 0.5em;
-  margin: 0rem 0.3rem;
+  padding: 0.3rem 0.6em;
   border-radius: 4px;
   cursor: pointer;
 `;
@@ -1741,7 +1754,8 @@ const RatingContainer = styled.div`
 `;
 
 const RatingStar = styled.div`
-  font-size: 1.5rem;
+  padding: 0.05rem;
+  font-size: 1rem;
   cursor: pointer;
   color: ${({ isActive }) => (isActive ? "#fffa85" : "white")};
 `;
@@ -1756,7 +1770,8 @@ const StarBox = styled.div`
   align-items: center;
   background-color: black;
   border-radius: 0.3rem;
-  padding: 0 0.5rem;
+  padding: 0.1rem 0.6rem;
+  margin: 0.3rem;
   color: white;
 `;
 
@@ -1839,5 +1854,14 @@ const NonSmokingZoneImgBoxSN = styled.div`
   img {
     width: 2.5rem;
     margin-right: 0.5rem;
+  }
+`;
+
+const ModalTitle = styled.div`
+  display: flex;
+  justify-content: space-between;
+  img {
+    width: 0.8rem;
+    height: 0.8rem;
   }
 `;
