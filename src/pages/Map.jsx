@@ -300,7 +300,7 @@ const Map = () => {
       "https://bbuhackathon.p-e.kr/place/reportsmoking/"
     );
 
-    // console.log(reportSmokingZone);
+    console.log(reportSmokingZone);
 
     reportSmokingZone.data.forEach((reportData) => {
       createMarker(
@@ -326,7 +326,7 @@ const Map = () => {
       "https://bbuhackathon.p-e.kr/place/smoking/"
     );
 
-    // console.log(publicSmokingZone);
+    console.log(publicSmokingZone);
 
     publicSmokingZone.data.forEach((markerData) => {
       // const markerImageSrc =
@@ -1603,9 +1603,9 @@ const CloseButtonBox = styled.div`
 `;
 
 const ImgBox = styled.div`
-  width: 40%;
+  width: 65%;
   img {
-    width: 90%;
+    width: 100%;
     height: auto;
   }
 `;
