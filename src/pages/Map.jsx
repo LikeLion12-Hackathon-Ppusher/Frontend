@@ -534,11 +534,11 @@ const Map = () => {
                   setShowNoSmokingModalSY(true);
                   isModalVisibleSY = true;
 
-                  // 2초 뒤에 모달 창을 숨기고 플래그를 초기화
-                  setTimeout(() => {
-                    setShowNoSmokingModalSY(false);
-                    isModalVisibleSY = false;
-                  }, 5000);
+                  // // 2초 뒤에 모달 창을 숨기고 플래그를 초기화
+                  // setTimeout(() => {
+                  //   setShowNoSmokingModalSY(false);
+                  //   isModalVisibleSY = false;
+                  // }, 5000);
                 }
               } else {
                 // console.log("금연구역에 위치하지 않는다");
@@ -561,18 +561,18 @@ const Map = () => {
               );
 
               if (distance <= userDistance) {
-                // 금연구역 지정 거리 안에 있을때
+                // 흡연 구역 지정 거리 안에 있을때
 
                 if (!isModalVisibleSN) {
                   // 모달이 보이지 않는 경우에만 모달을 띄움
                   setShowNoSmokingModalSN(true);
                   isModalVisibleSN = true;
 
-                  // 2초 뒤에 모달 창을 숨기고 플래그를 초기화
-                  setTimeout(() => {
-                    setShowNoSmokingModalSN(false);
-                    isModalVisibleSN = false;
-                  }, 5000);
+                  // // 2초 뒤에 모달 창을 숨기고 플래그를 초기화
+                  // setTimeout(() => {
+                  //   setShowNoSmokingModalSN(false);
+                  //   isModalVisibleSN = false;
+                  // }, 5000);
                 }
               } else {
                 // console.log("간접 흡연구역에 위치하지 않는다");
