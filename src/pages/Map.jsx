@@ -207,8 +207,8 @@ const Map = () => {
 
       console.log(reportData.likesCount);
       if (nowUserType === "SY") {
-        if (reportIndirectSmokingZoneData.likesCount >= 3) {
-          if (reportIndirectSmokingZoneData.isLike === true) {
+        if (reportIndirectSmokingZoneData.data.likesCount >= 3) {
+          if (reportIndirectSmokingZoneData.data.isLike === true) {
             // 공감이 눌린 경우
             createMarker(
               map,
@@ -223,7 +223,7 @@ const Map = () => {
               "nonSmokerReport", // 비흡연자 제보
               reportData.likesCount,
               reportData.placeId,
-              true,
+              isclickedData,
               "indirect"
             );
             setIsClikced(isclickedData);
@@ -249,7 +249,7 @@ const Map = () => {
           setIsClikced(isclickedData);
         }
       } else {
-        if (reportIndirectSmokingZoneData.isLike === true) {
+        if (reportIndirectSmokingZoneData.data.isLike === true) {
           // 공감이 눌린 경우
           createMarker(
             map,
