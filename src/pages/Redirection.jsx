@@ -127,16 +127,7 @@ const Redirection = () => {
       localStorage.setItem("access_token", token);
       localStorage.setItem("userType", res.data.user.userType);
       localStorage.setItem("userId", res.data.user.userId);
-
-      // 초기 setting 정보
-      if (res.data.setting.distance !== 10 && res.data.setting.distance !== 20 && res.data.setting.distance !== 30) {
-        // res.data.setting.distance가 10, 20, 30 중 하나가 아닐 때 실행
-        putMyPageDistAPI(token, 30);
-        localStorage.setItem("distance", 30);
-      } else {
-        // res.data.setting.distance가 10, 20, 30 중 하나일 때 실행
-        localStorage.setItem("distance", res.data.setting.distance);
-      }
+      localStorage.setItem("distance", res.data.setting.distance);
       localStorage.setItem("option", res.data.setting.option);
       handleRoute(status);
     } catch (err) {

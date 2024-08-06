@@ -49,6 +49,14 @@ const SetAccount = () => {
     }
   };
 
+  const handleDistance = (distance) => {
+    if (distance === 2) {
+      return 30;
+    } else {
+      return distance;
+    };
+  };
+
   useEffect(() => {
     getAccountInfo();
   }, []);
@@ -64,7 +72,7 @@ const SetAccount = () => {
             <InfoBox><Title>사용자 유형</Title><Content>{handleType(userInfo.userType)}</Content></InfoBox>
             <InfoBox><Title>카카오 이메일</Title><Content>{userInfo.kakaoEmail}</Content></InfoBox>
             <InfoBox><Title>이름</Title><Content>{userInfo.name}</Content></InfoBox>
-            {userInfo.userType === "SN" && (<InfoBox><Title>설정거리</Title><Content>{userInfo.distance}M</Content></InfoBox>)}
+            {userInfo.userType === "SN" && (<InfoBox><Title>설정거리</Title><Content>{handleDistance(userInfo.distance)}M</Content></InfoBox>)}
             <InfoBox><Title>알림설정 여부</Title><Content>{handleAlarm(userInfo.option)}</Content></InfoBox>
           </DotsContainer>
         </UserInfo>
