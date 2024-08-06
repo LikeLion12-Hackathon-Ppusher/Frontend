@@ -1647,7 +1647,7 @@ const LikeButtonIsClicked = styled.button`
 
 const ModalOverlay = styled.div`
   position: absolute;
-  bottom: 12.5%;
+  bottom: 15%;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -1719,9 +1719,6 @@ const ModalBtnBox = styled.div`
   justify-content: space-between;
   align-items: center;
   margin: 0.3rem 0 0.3rem;
-  padding: 0.3rem 0 0.3rem;
-  border-top: 2px solid #FFF100;
-  border-bottom: 2px solid #FFF100;
 `;
 
 const ThankYouModal = styled.div`
