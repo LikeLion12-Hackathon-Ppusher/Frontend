@@ -1673,7 +1673,7 @@ const ModalContent = styled.div`
   max-width: 500px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   background-color: ${(props) => props.modalboxcolor};
-  border: 4px solid ${(props) => props.bordercolor};
+  border: 2px solid ${(props) => props.bordercolor};
   color: ${(props) => props.fontcolor};
 
   @media (max-width: 600px) {
