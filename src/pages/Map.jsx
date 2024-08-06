@@ -515,10 +515,10 @@ const Map = () => {
           const option = localStorage.getItem("option");
           console.log(option);
 
+          console.log(publicNoSmokingZone.data);
           if (option) {
             if (userType === "SY") {
               publicNoSmokingZone.data.forEach((zone) => {
-                console.log(publicNoSmokingZone);
                 const zoneLatLng = new kakao.maps.LatLng(
                   zone.latitude,
                   zone.longitude
@@ -532,6 +532,7 @@ const Map = () => {
                 );
 
                 if (distance <= 50) {
+                  console.log(distance);
                   // 금연구역 지정 거리 안에 있을때
                   if (!isModalVisibleSY) {
                     // 모달이 보이지 않는 경우에만 모달을 띄움
