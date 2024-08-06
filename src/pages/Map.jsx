@@ -1653,20 +1653,20 @@ const Form = styled.div`
 `;
 
 const Label = styled.label`
-  margin: 0.2rem 0 0.2rem;
   font-weight: bold;
 `;
+
 const TextConatiner = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 0.3rem;
+  margin-top: 0.1rem;
 `;
 
 const Input = styled.input`
   width: 100%;
   padding: 0.5rem;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.4rem;
   border: none;
   border-radius: 0.5rem;
   background-color: ${(props) => props.textboxcolor};
@@ -1786,10 +1786,8 @@ const CleanBox = styled.div`
   width: 50%;
   justify-content: space-between;
   align-items: center;
-  padding: 0.3rem;
   background-color: white;
   border-radius: 0.3rem;
-  margin: 0.3rem 0;
   background-color: ${(props) => props.infocleanback};
   color: black;
   @media (max-width: 600px) {
