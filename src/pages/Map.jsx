@@ -467,11 +467,12 @@ const Map = () => {
             if (markerRef.current) {
               markerRef.current.setPosition(newLatLng);
             }
-            let mode = localStorage.getItem("isWatchedMode");
-            console.log(mode);
+            let watchMode = localStorage.getItem("isWatchedMode");
+            console.log(watchMode);
 
-            //위치가 충분히 변경된 경우에만 지도 중심 조정
-            if (mode) {
+            // mode가 true 일때만 적용해서 지도 중심 조정
+            if (watchMode) {
+              //위치가 충분히 변경된 경우에만 지도 중심 조정
               if (lastCenteredLatLng) {
                 const distance = getDistance(
                   userLatLng.La,
@@ -484,7 +485,6 @@ const Map = () => {
                   lastCenteredLatLng = newLatLng;
                 }
               } else {
-                map.setCenter(newLatLng);
                 lastCenteredLatLng = newLatLng;
               }
             }
@@ -512,74 +512,82 @@ const Map = () => {
           // 유저가 선택한 알림 거리
           const userDistance = localStorage.getItem("distance");
 
-          if (userType === "SY") {
-            publicSmokingZone.data.forEach((zone) => {
-              const zoneLatLng = new kakao.maps.LatLng(
-                zone.latitude,
-                zone.longitude
-              );
+          const option = localStorage.getItem("option");
+          console.log(option);
 
-              const distance = getDistance(
-                userLatLng.La,
-                userLatLng.Ma,
-                zoneLatLng.La,
-                zoneLatLng.Ma
-              );
+          if (option) {
+            if (userType === "SY") {
+              publicSmokingZone.data.forEach((zone) => {
+                const zoneLatLng = new kakao.maps.LatLng(
+                  zone.latitude,
+                  zone.longitude
+                );
 
-              if (distance <= 50) {
-                // 금연구역 지정 거리 안에 있을때
+                const distance = getDistance(
+                  userLatLng.La,
+                  userLatLng.Ma,
+                  zoneLatLng.La,
+                  zoneLatLng.Ma
+                );
 
-                if (!isModalVisibleSY) {
-                  // 모달이 보이지 않는 경우에만 모달을 띄움
-                  setShowNoSmokingModalSY(true);
-                  isModalVisibleSY = true;
+                if (distance <= 50) {
+                  // 금연구역 지정 거리 안에 있을때
+                  if (!isModalVisibleSY) {
+                    // 모달이 보이지 않는 경우에만 모달을 띄움
+                    setShowNoSmokingModalSY(true);
+                    isModalVisibleSY = true;
 
-                  // // 2초 뒤에 모달 창을 숨기고 플래그를 초기화
-                  // setTimeout(() => {
-                  //   setShowNoSmokingModalSY(false);
-                  //   isModalVisibleSY = false;
-                  // }, 5000);
+                    // // 2초 뒤에 모달 창을 숨기고 플래그를 초기화
+                    // setTimeout(() => {
+                    //   setShowNoSmokingModalSY(false);
+                    //   isModalVisibleSY = false;
+                    // }, 5000);
+                  }
+                } else {
+                  // console.log("금연구역에 위치하지 않는다");
+                  // 금연구역을 벗어났을 때 플래그를 초기화
+                  isModalVisibleSY = false;
+                  setShowNoSmokingModalSY(false);
                 }
-              } else {
-                // console.log("금연구역에 위치하지 않는다");
-                // 금연구역을 벗어났을 때 플래그를 초기화
-                isModalVisibleSY = false;
-              }
-            });
+              });
+            } else {
+              reportSmokingZone.data.forEach((zone) => {
+                const zoneLatLng = new kakao.maps.LatLng(
+                  zone.latitude,
+                  zone.longitude
+                );
+
+                const distance = getDistance(
+                  userLatLng.La,
+                  userLatLng.Ma,
+                  zoneLatLng.La,
+                  zoneLatLng.Ma
+                );
+
+                if (distance <= userDistance) {
+                  // 흡연 구역 지정 거리 안에 있을때
+
+                  if (!isModalVisibleSN) {
+                    // 모달이 보이지 않는 경우에만 모달을 띄움
+                    setShowNoSmokingModalSN(true);
+                    isModalVisibleSN = true;
+
+                    // // 2초 뒤에 모달 창을 숨기고 플래그를 초기화
+                    // setTimeout(() => {
+                    //   setShowNoSmokingModalSN(false);
+                    //   isModalVisibleSN = false;
+                    // }, 5000);
+                  }
+                } else {
+                  // console.log("간접 흡연구역에 위치하지 않는다");
+                  // 금연구역을 벗어났을 때 플래그를 초기화
+                  isModalVisibleSN = false;
+                  setShowNoSmokingModalSN(false);
+                }
+              });
+            }
           } else {
-            reportSmokingZone.data.forEach((zone) => {
-              const zoneLatLng = new kakao.maps.LatLng(
-                zone.latitude,
-                zone.longitude
-              );
-
-              const distance = getDistance(
-                userLatLng.La,
-                userLatLng.Ma,
-                zoneLatLng.La,
-                zoneLatLng.Ma
-              );
-
-              if (distance <= userDistance) {
-                // 흡연 구역 지정 거리 안에 있을때
-
-                if (!isModalVisibleSN) {
-                  // 모달이 보이지 않는 경우에만 모달을 띄움
-                  setShowNoSmokingModalSN(true);
-                  isModalVisibleSN = true;
-
-                  // // 2초 뒤에 모달 창을 숨기고 플래그를 초기화
-                  // setTimeout(() => {
-                  //   setShowNoSmokingModalSN(false);
-                  //   isModalVisibleSN = false;
-                  // }, 5000);
-                }
-              } else {
-                // console.log("간접 흡연구역에 위치하지 않는다");
-                // 금연구역을 벗어났을 때 플래그를 초기화
-                isModalVisibleSN = false;
-              }
-            });
+            console.log("알람이 OFF 상태입니다");
           }
         };
       },
@@ -840,6 +848,8 @@ const Map = () => {
     // 이 자체는 마커를 만들 때 적용시키므로
     // 마커 클릭 이벤트 설정
     kakao.maps.event.addListener(marker, "click", function () {
+      handleCloseModal();
+
       // console.log(clickedPublicMarker);
       if (clickedPublicMarker) {
         marker.setImage(selectedPublicSmokingZoneMarkerImage);
