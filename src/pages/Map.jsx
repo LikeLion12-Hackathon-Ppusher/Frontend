@@ -184,7 +184,7 @@ const Map = () => {
     // console.log(reportIndirectSmokingZone);
 
     reportIndirectSmokingZone.data.forEach(async (reportData) => {
-      console.log(reportData);
+      // console.log(reportData);
       const nowUserType = localStorage.getItem("userType");
 
       // const userId = localStorage.getItem("userId");
@@ -199,13 +199,13 @@ const Map = () => {
         }
       );
 
-      console.log(reportIndirectSmokingZoneData.status);
-      console.log(reportIndirectSmokingZoneData.data);
+      // console.log(reportIndirectSmokingZoneData.status);
+      // console.log(reportIndirectSmokingZoneData.data);
 
       const isclickedData = reportIndirectSmokingZoneData.data.isLike;
-      console.log(isclickedData);
+      // console.log(isclickedData);
 
-      console.log(reportData.likesCount);
+      // console.log(reportData.likesCount);
       if (nowUserType === "SY") {
         if (reportIndirectSmokingZoneData.data.likesCount >= 3) {
           if (reportIndirectSmokingZoneData.data.isLike === true) {
@@ -360,7 +360,7 @@ const Map = () => {
           markerData.latitude,
           markerData.longitude
         ), // 원의 중심좌표 입니다
-        radius: 50, // 미터 단위의 원의 반지름입니다
+        radius: 20, // 미터 단위의 원의 반지름입니다
         strokeWeight: 1.5, // 선의 두께니다
         strokeColor: "red", // 선의 색깔입니다
         strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
@@ -553,7 +553,7 @@ const Map = () => {
                   zoneLatLng.Ma
                 );
 
-                if (distance <= 50) {
+                if (distance <= 20) {
                   console.log("distance값", distance);
                   console.log("isModalVisibleSY 값", isModalVisibleSY);
                   // 금연구역 지정 거리 안에 있을때
