@@ -48,14 +48,12 @@ const SetNotifyHeader = () => {
     if (isOn) {
       setIsNotificationEnabled(true);
       localStorage.setItem("option", true);
-      localStorage.setItem("suboption", true);
       alert("알림이 활성화되었습니다.");
       putAlarmOptionAPI(token, true);
     } else {
       setIsNotificationEnabled(false);
       alert("알림이 비활성화되었습니다.");
       localStorage.setItem("option", false);
-      localStorage.setItem("suboption", false);
       putAlarmOptionAPI(token, false);
     }
   };
