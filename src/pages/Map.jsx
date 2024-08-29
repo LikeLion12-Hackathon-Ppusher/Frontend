@@ -549,12 +549,12 @@ const Map = () => {
                   if (!isModalVisibleSY) {
                     // 모달이 보이지 않는 경우에만 모달을 띄움
                     isModalVisibleSY = true;
-                    setShowNoSmokingModalSY(optionBoolean);
+                    setShowNoSmokingModalSY(suboptionBoolean);
                   }
                 } else {
                   // 금연구역을 벗어났을 때 플래그를 초기화
                   isModalVisibleSY = false;
-                  setShowNoSmokingModalSY(!optionBoolean);
+                  setShowNoSmokingModalSY(!suboptionBoolean);
                 }
               });
             } else {
