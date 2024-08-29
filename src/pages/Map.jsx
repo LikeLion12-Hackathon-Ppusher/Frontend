@@ -1211,20 +1211,10 @@ const Map = () => {
           >
             <ModalTitle>
               <h4>제보하기</h4>
-              {/* <Button2 onClick={handleCloseModal}>취소</Button2> */}
               <img src={closeX} alt="취소" onClick={handleCloseModal}></img>
             </ModalTitle>
             <Form>
               <h4>{address}</h4>
-              {/* <Label>
-                이미지 업로드:
-                <Input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                />
-              </Label>
-              {img && <ImagePreview src={img} alt="Preview" />} */}
               {userType === "SY" && (
                 <>
                   <Label>
