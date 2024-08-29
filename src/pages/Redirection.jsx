@@ -72,17 +72,16 @@
 
 // 백엔드 연동할 때 쓸 코드
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import loadingBack from '../assets/initial_background.png';
 import '../App.css';
 import logoImage from '../assets/loading.svg';
-import { putMyPageDistAPI } from "../apis/api";
 
 const Redirection = () => {
-  const [distance, setDistance] = useState();
+
 
   const navigate = useNavigate();
   const REST_API_KEY = process.env.REACT_APP_REST_API_KEY;
@@ -123,16 +122,16 @@ const Redirection = () => {
       console.log("응답 상태:", status);
       console.log(res.data);
       // 필요한 정보를 localStorage에 저장
-      const token = res.data.access_token;
-      localStorage.setItem("access_token", token);
+      localStorage.setItem("access_token", res.data.access_token);
       localStorage.setItem("userType", res.data.user.userType);
       localStorage.setItem("userId", res.data.user.userId);
+      // 초기 setting 정보
       localStorage.setItem("distance", res.data.setting.distance);
       localStorage.setItem("option", res.data.setting.option);
       handleRoute(status);
     } catch (err) {
       console.error(err);
-    }
+    } 
   };
 
   const handleRoute = (status) => {
@@ -141,7 +140,7 @@ const Redirection = () => {
       navigate("/home/map");
     } else if (status === 201) {
       // 회원 가입
-      navigate("/select");
+      navigate("/home/select");
     } else {
       alert("응답이 이상해요");
     }
@@ -157,14 +156,14 @@ const Redirection = () => {
 };
 
 const LoadingContainer = styled.div`
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-image: url(${loadingBack});
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 

@@ -117,13 +117,13 @@ const Map = () => {
 
   useEffect(() => {
     // 여거는 로케이션 변경 있을때 => URL에 reprot가 있을떄 없을때 실행되는 useEffect
-    // console.log(location);
 
     const queryParams = new URLSearchParams(location.search);
     if (queryParams.get("report") === "true") {
       setSelectedMarkerInfo(null);
       setSelectedPublicMarkerInfo(null);
       localStorage.setItem("isWatchedMode", false);
+      localStorage.setItem("suboption", false);
       setIsReporting(true);
     } else {
       localStorage.setItem("isWatchedMode", true);
@@ -139,15 +139,11 @@ const Map = () => {
       moveToCurrentLocation();
 
       // ture확인하면 그 queryParams을 delete로 삭제해서 다시 url이 home/map이 되게 함
-      // console.log(queryParams.get("currentLocation"));
-      // console.log("Moving to current location");
       queryParams.delete("currentLocation");
       navigate({
         search: queryParams.toString(),
       });
     }
-
-    // console.log(userType);
   }, [location.search]);
 
   // isReporting이 true이고 mapInstance가 존재하면 startReporting 함수를 호출하여 제보기능 호출
@@ -184,13 +180,9 @@ const Map = () => {
       "https://bbuhackathon.p-e.kr/place/shsmoking/"
     );
 
-    // console.log(reportIndirectSmokingZone);
-
     reportIndirectSmokingZone.data.forEach(async (reportData) => {
-      // console.log(reportData);
       const nowUserType = localStorage.getItem("userType");
 
-      // const userId = localStorage.getItem("userId");
       const access_Token = localStorage.getItem("access_token");
 
       const reportIndirectSmokingZoneData = await axios.get(
@@ -202,13 +194,8 @@ const Map = () => {
         }
       );
 
-      // console.log(reportIndirectSmokingZoneData.status);
-      // console.log(reportIndirectSmokingZoneData.data);
-
       const isclickedData = reportIndirectSmokingZoneData.data.isLike;
-      // console.log(isclickedData);
 
-      // console.log(reportData.likesCount);
       if (nowUserType === "SY") {
         if (reportIndirectSmokingZoneData.data.likesCount >= 3) {
           if (reportIndirectSmokingZoneData.data.isLike === true) {
@@ -326,8 +313,6 @@ const Map = () => {
     );
 
     publicSmokingZone.data.forEach((markerData) => {
-      // const markerImageSrc =
-      //   markerData.userType === "smoker" ? smokeImg : smokeImg2;
       createPublickSmokingZoneMarker(
         map,
         new kakao.maps.LatLng(markerData.latitude, markerData.longitude),
@@ -346,8 +331,6 @@ const Map = () => {
     const publicNoSmokingZone = await axios.get(
       "https://bbuhackathon.p-e.kr/place/nosmoking/"
     );
-
-    // console.log(publicNoSmokingZone);
 
     // 원을 저장할 배열
     const circles = [];
@@ -478,8 +461,6 @@ const Map = () => {
               console.log("watchMode가 적용되지 않고 있습니다", watchMode);
             }
 
-            console.log(watchModeBoolean);
-
             // mode가 true 일때만 적용해서 지도 중심 조정
             if (watchModeBoolean) {
               //위치가 충분히 변경된 경우에만 지도 중심 조정
@@ -525,6 +506,9 @@ const Map = () => {
           // 알람 true, false 옵션값
           const option = localStorage.getItem("option");
 
+          // 알람 true, false sub 옵션값
+          const suboption = localStorage.getItem("suboption");
+
           let optionBoolean;
           if (option === "true") {
             optionBoolean = true;
@@ -534,7 +518,16 @@ const Map = () => {
             console.log("option이 불린값이 아닙니다");
           }
 
-          if (optionBoolean) {
+          let suboptionBoolean;
+          if (suboption === "true") {
+            suboptionBoolean = true;
+          } else if (suboption === "false") {
+            suboptionBoolean = false;
+          } else {
+            console.log("suboption이 불린값이 아닙니다");
+          }
+
+          if (optionBoolean && suboptionBoolean) {
             if (userType === "SY") {
               publicNoSmokingZone.data.forEach((zone) => {
                 const zoneLatLng = new kakao.maps.LatLng(
@@ -557,26 +550,11 @@ const Map = () => {
                     // 모달이 보이지 않는 경우에만 모달을 띄움
                     isModalVisibleSY = true;
                     setShowNoSmokingModalSY(optionBoolean);
-                    console.log(
-                      "showNoSmokingModalSY 모달이 보이는가 값",
-                      showNoSmokingModalSY
-                    );
-
-                    // // 2초 뒤에 모달 창을 숨기고 플래그를 초기화
-                    // setTimeout(() => {
-                    //   setShowNoSmokingModalSY(false);
-                    //   isModalVisibleSY = false;
-                    // }, 5000);
                   }
                 } else {
-                  // console.log("금연구역에 위치하지 않는다");
                   // 금연구역을 벗어났을 때 플래그를 초기화
                   isModalVisibleSY = false;
                   setShowNoSmokingModalSY(!optionBoolean);
-                  console.log(
-                    "showNoSmokingModalSY else문인데 왜 실행 됨?",
-                    showNoSmokingModalSY
-                  );
                 }
               });
             } else {
@@ -601,15 +579,8 @@ const Map = () => {
                     // 모달이 보이지 않는 경우에만 모달을 띄움
                     setShowNoSmokingModalSN(true);
                     isModalVisibleSN = true;
-
-                    // // 2초 뒤에 모달 창을 숨기고 플래그를 초기화
-                    // setTimeout(() => {
-                    //   setShowNoSmokingModalSN(false);
-                    //   isModalVisibleSN = false;
-                    // }, 5000);
                   }
                 } else {
-                  // console.log("간접 흡연구역에 위치하지 않는다");
                   // 금연구역을 벗어났을 때 플래그를 초기화
                   isModalVisibleSN = false;
                   setShowNoSmokingModalSN(false);
@@ -617,8 +588,8 @@ const Map = () => {
               });
             }
           } else {
-            setShowNoSmokingModalSY(optionBoolean);
-            setShowNoSmokingModalSN(optionBoolean);
+            setShowNoSmokingModalSY(suboptionBoolean);
+            setShowNoSmokingModalSN(suboptionBoolean);
             console.log("알람이 OFF 상태입니다");
           }
         };
@@ -774,15 +745,11 @@ const Map = () => {
           `https://bbuhackathon.p-e.kr/place/shsmoking/${placeId}/`
         );
 
-        // console.log(checkedClickedIndirectSmokingZone.data);
-
         const tempLikeCount = checkedClickedIndirectSmokingZone.data.likesCount;
         const tempIslike = checkedClickedIndirectSmokingZone.data.isLike;
 
         setLikeCount(tempLikeCount);
         setIsClikced(tempIslike);
-        // console.log("tempLikeCount", tempLikeCount);
-        // console.log("tempIslike", tempIslike);
       } else if (isDirect === "direct") {
       }
 
@@ -817,8 +784,6 @@ const Map = () => {
       clickedMarker = marker;
 
       setSelectedPublicMarkerInfo(null);
-
-      // setLikeCount(likesCount);
 
       // 선택된 마커 정보 설정
       setSelectedMarkerInfo(null);
@@ -965,8 +930,6 @@ const Map = () => {
         reportPlaceId = responseSH.placeId;
       }
 
-      // console.log(reportPlaceId);
-
       createMarker(
         mapInstance,
         new kakao.maps.LatLng(newMarker.getLat(), newMarker.getLng()),
@@ -985,7 +948,7 @@ const Map = () => {
 
       handleCloseModal();
 
-      // 감사 모달 창 설정
+      // 제보에 대한 감사문구 모달 창 설정
       setShowThankYouModal(true); // 감사 모달 상태 변경
 
       setTimeout(() => {
@@ -1017,9 +980,6 @@ const Map = () => {
     reportType,
     placeId
   ) => {
-    // console.log(selectedMarkerInfo.placeId);
-    // console.log(selectedMarkerInfo.isClikced);
-    // console.log(selectedMarkerInfo.likeCount);
     const userId = localStorage.getItem("userId");
     const access_Token = localStorage.getItem("access_token");
 
@@ -1039,28 +999,10 @@ const Map = () => {
       `https://bbuhackathon.p-e.kr/place/shsmoking/${selectedMarkerInfo.placeId}/`
     );
 
-    // console.log(getNewData);
-
-    // console.log("클릭한 버튼 정보 clickLikeBtn", clickLikeBtn);
-    // console.log("클릭한 버튼 정보 clickLikeBtn.data", clickLikeBtn.data);
-    // console.log(
-    //   "클릭한 버튼 정보의 clickLikeBtn.data.likesCount",
-    //   clickLikeBtn.data.likesCount
-    // );
-
     const newLikeCount = clickLikeBtn.data.likesCount;
 
-    // console.log("newLikeCount", newLikeCount);
-
-    // console.log("반영 전 likeCount", likeCount);
-    // console.log("반영 전 selectedMarkerInfo", selectedMarkerInfo);
-    // console.log(
-    //   "반영 전 selectedMarkerInfo.likeCount",
-    //   selectedMarkerInfo.likeCount
-    // );
-
     setLikeCount(newLikeCount);
-    // console.log("반영 후 likeCount", likeCount);
+
     if (clickLikeBtn.status === 201) {
       // useState로 newLikeCount와 IsClicked 업데이트
       setIsClikced(true);
@@ -1093,21 +1035,9 @@ const Map = () => {
         isClikced,
       });
     }
-
-    // selectedMarkerInfo 에 반영 됬는지 확인
-    // console.log("반영 후 selectedMarkerInfo", selectedMarkerInfo);
-    // console.log(
-    //   "반영 후 selectedMarkerInfo.likeCount",
-    //   selectedMarkerInfo.likeCount
-    // );
-
-    // window.location.reload();
   };
 
   const goTokakaomap = (position, goalName) => {
-    // console.log(position);
-    // console.log(goalName);
-
     window.open(
       `https://map.kakao.com/link/to/${goalName},${position.Ma},${position.La}`,
       "_blank"
