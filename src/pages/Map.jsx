@@ -716,20 +716,26 @@ const Map = () => {
       publicSmokingZoneMarkerImageOption
     );
 
+    // 공공 흡연장소는 이미 따로 createMarker로 있으니 필요 없지 않나?
     let marker;
-    if (reportType === "public") {
-      marker = new kakao.maps.Marker({
-        position,
-        map,
-        image: publicSmokingZoneMarkerImage,
-      });
-    } else {
-      marker = new kakao.maps.Marker({
-        position,
-        map,
-        image: smokeMarkerImage,
-      });
-    }
+    marker = new kakao.maps.Marker({
+      position,
+      map,
+      image: smokeMarkerImage,
+    });
+    // if (reportType === "public") {
+    //   marker = new kakao.maps.Marker({
+    //     position,
+    //     map,
+    //     image: publicSmokingZoneMarkerImage,
+    //   });
+    // } else {
+    //   marker = new kakao.maps.Marker({
+    //     position,
+    //     map,
+    //     image: smokeMarkerImage,
+    //   });
+    // }
 
     // 이 자체는 마커를 만들 때 적용시키므로
     // 마커 클릭 이벤트 설정
@@ -753,28 +759,54 @@ const Map = () => {
       } else if (isDirect === "direct") {
       }
 
-      if (clickedMarker) {
-        if (nextClickedMarkerType === null) {
+      kakao.maps.event.addListener(map, "click", () => {
+        if (clickedMarker) {
           if (firstClickedMarkerType === "smokerReport") {
             clickedMarker.setImage(smokeReportMarkerImage);
+            firstClickedMarkerType = reportType;
           } else if (firstClickedMarkerType === "nonSmokerReport") {
             clickedMarker.setImage(nonSmokeReportMarkerImage);
+            firstClickedMarkerType = reportType;
           } else {
             clickedMarker.setImage(publicSmokingZoneMarkerImage);
+            firstClickedMarkerType = reportType;
           }
-          marker.setImage(null);
-          nextClickedMarkerType = reportType;
-        } else {
-          if (nextClickedMarkerType === "smokerReport") {
-            clickedMarker.setImage(smokeReportMarkerImage);
-          } else if (firstClickedMarkerType === "nonSmokerReport") {
-            clickedMarker.setImage(nonSmokeReportMarkerImage);
-          } else {
-            clickedMarker.setImage(publicSmokingZoneMarkerImage);
-          }
-          marker.setImage(null);
-          nextClickedMarkerType = reportType;
         }
+      });
+
+      if (clickedMarker) {
+        // if (nextClickedMarkerType === null) {
+        //   if (firstClickedMarkerType === "smokerReport") {
+        //     clickedMarker.setImage(smokeReportMarkerImage);
+        //   } else if (firstClickedMarkerType === "nonSmokerReport") {
+        //     clickedMarker.setImage(nonSmokeReportMarkerImage);
+        //   } else {
+        //     clickedMarker.setImage(publicSmokingZoneMarkerImage);
+        //   }
+        //   marker.setImage(null);
+        //   nextClickedMarkerType = reportType;
+        // } else {
+        //   if (nextClickedMarkerType === "smokerReport") {
+        //     clickedMarker.setImage(smokeReportMarkerImage);
+        //   } else if (firstClickedMarkerType === "nonSmokerReport") {
+        //     clickedMarker.setImage(nonSmokeReportMarkerImage);
+        //   } else {
+        //     clickedMarker.setImage(publicSmokingZoneMarkerImage);
+        //   }
+        //   marker.setImage(null);
+        //   nextClickedMarkerType = reportType;
+        // }
+        if (firstClickedMarkerType === "smokerReport") {
+          clickedMarker.setImage(smokeReportMarkerImage);
+          firstClickedMarkerType = reportType;
+        } else if (firstClickedMarkerType === "nonSmokerReport") {
+          clickedMarker.setImage(nonSmokeReportMarkerImage);
+          firstClickedMarkerType = reportType;
+        } else {
+          clickedMarker.setImage(publicSmokingZoneMarkerImage);
+          firstClickedMarkerType = reportType;
+        }
+        marker.setImage(null);
       } else {
         firstClickedMarkerType = reportType;
         marker.setImage(null);
@@ -820,10 +852,17 @@ const Map = () => {
     reportType = "public" // Default to smokerReport
   ) {
     const publicSmokingZoneMarkerImageSize = new kakao.maps.Size(16, 24);
+    const selectedPublicSmokingZoneMarkerImageSize = new kakao.maps.Size(
+      24,
+      36
+    );
     const publicSmokingZoneMarkerImageOption = {
-      offset: new kakao.maps.Point(8, 12),
+      offset: new kakao.maps.Point(8, 24),
     };
 
+    const selectedpublicSmokingZoneMarkerImageOption = {
+      offset: new kakao.maps.Point(12, 36),
+    };
     const publicSmokingZoneMarkerImage = new kakao.maps.MarkerImage(
       publicSmokingZone,
       publicSmokingZoneMarkerImageSize,
@@ -832,8 +871,8 @@ const Map = () => {
 
     const selectedPublicSmokingZoneMarkerImage = new kakao.maps.MarkerImage(
       selectedPublicSmokingZone,
-      publicSmokingZoneMarkerImageSize,
-      publicSmokingZoneMarkerImageOption
+      selectedPublicSmokingZoneMarkerImageSize,
+      selectedpublicSmokingZoneMarkerImageOption
     );
 
     const marker = new kakao.maps.Marker({
@@ -842,20 +881,25 @@ const Map = () => {
       image: publicSmokingZoneMarkerImage,
     });
 
+    // 선택된 마커가 지도가 클릭되면 다시 원래 이미지로 돌아오게 함
+    kakao.maps.event.addListener(map, "click", () => {
+      if (clickedPublicMarker) {
+        clickedPublicMarker.setImage(publicSmokingZoneMarkerImage);
+      }
+      clickedPublicMarker = null;
+    });
+
     // 이 자체는 마커를 만들 때 적용시키므로
     // 마커 클릭 이벤트 설정
     kakao.maps.event.addListener(marker, "click", function () {
       handleCloseModal();
 
-      // console.log(clickedPublicMarker);
       if (clickedPublicMarker) {
         marker.setImage(selectedPublicSmokingZoneMarkerImage);
         clickedPublicMarker.setImage(publicSmokingZoneMarkerImage);
       } else {
         marker.setImage(selectedPublicSmokingZoneMarkerImage);
       }
-
-      // marker.setImage(selectedPublicSmokingZoneMarkerImage);
 
       // 클릭된 마커를 갱신
       clickedPublicMarker = marker;
@@ -948,6 +992,9 @@ const Map = () => {
 
       handleCloseModal();
 
+      // 새로고침해서 다시 불러오게 한다 (제보된 마커 불러온 마커를 따로 관리하지 않게 됨)
+      navigate(0);
+
       // 제보에 대한 감사문구 모달 창 설정
       setShowThankYouModal(true); // 감사 모달 상태 변경
 
@@ -971,6 +1018,7 @@ const Map = () => {
       reportingMarkerRef.current = null; // 레퍼런스를 초기화
     }
     navigate("/home/map");
+    console.log("homemap");
   };
 
   const handleLikeBtn = async (
