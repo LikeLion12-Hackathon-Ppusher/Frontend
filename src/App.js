@@ -1,6 +1,7 @@
-import "./App.css";
-import styled from "styled-components";
+import { useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
+import styled from "styled-components";
+import "./App.css";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Map from "./pages/Map";
@@ -16,8 +17,6 @@ import SetTypeConfirm from "./pages/MyPage/SetTypeConfirm";
 import SetNotify from "./pages/MyPage/SetNotify";
 import SetNotifyNonSmoker from "./pages/MyPage/SetNotifyNonSmoker";
 import SetReport from "./pages/MyPage/SetReport";
-import { useContext, useState, useEffect } from "react";
-import { ThemeColorContext } from "./Context/context";
 
 function App() {
   let vh = 0;
@@ -26,6 +25,7 @@ function App() {
     vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
   }, []);
+
   return (
     <Outside>
       <AppDom>

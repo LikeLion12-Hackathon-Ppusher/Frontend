@@ -12,7 +12,6 @@ const SetNotifyNonSmoker = () => {
 
   useEffect(() => {
     const selectedDistance = localStorage.getItem('distance') + 'm';
-    console.log(selectedDistance);
     if (selectedDistance) {
       setActiveBox(selectedDistance);
       setSelectedDistance(selectedDistance);
@@ -21,10 +20,10 @@ const SetNotifyNonSmoker = () => {
 
   const handleBoxClick = (box, distance) => {
     const token = localStorage.getItem('access_token');
-
     setActiveBox(box);
     setSelectedDistance(distance);
     localStorage.setItem('distance', distance);
+
     putMyPageDistAPI(token, distance);
   };
 
@@ -40,7 +39,8 @@ const SetNotifyNonSmoker = () => {
     <SelectContainer>
       <SetNotifyHeader></SetNotifyHeader>
       <Box>
-        <DotsBox>        <h3>간접흡연 위험구역 알림 설정</h3>
+        <DotsBox>
+          <h3>간접흡연 위험구역 알림 설정</h3>
           <div>
             간접흡연 위험 지역에서
             <br /> 알림을 받을 수 있습니다.
@@ -138,7 +138,7 @@ const Btn = styled.div`
     background-color: #f7f152;
     color: #272A30;
 
-    outline: none; /* 포커스 시에 기본 아웃라인을 없애기 위해 */
+    outline: none;
     border: 2px solid #272A30;
   }
 

@@ -27,12 +27,14 @@ const Container = styled.div`
 `;
 
 const BackButton = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
   position: absolute;
   top: 4%;
   left: 3%;
+  border: none;
+  background: none;
+
+  cursor: pointer;
+
   img {
     width: 1.5rem;
     height: 1.5rem;
@@ -40,10 +42,10 @@ const BackButton = styled.button`
 `;
 
 const TypeHeader = styled.h1`
-  font-size: 1.5rem;
-  color: #272A30;
   position: absolute;
   top: 8%;
   left: 5%;
+  font-size: 1.5rem;
+  color: #272A30;
   background: linear-gradient(to top, #FFF100 40%, transparent 40%);
 `;

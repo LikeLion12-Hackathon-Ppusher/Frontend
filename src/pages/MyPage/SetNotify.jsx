@@ -9,7 +9,6 @@ const SetNotify = () => {
   const [userType, setUserType] = useState(null);
 
   useEffect(() => {
-    // (임시) 로컬스토리지에서 사용자 유형 정보를 가져옵니다.
     const userType = localStorage.getItem('userType');
     setUserType(userType);
   }, []);

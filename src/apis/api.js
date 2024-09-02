@@ -1,10 +1,12 @@
 // src/services/api.js
 import axios from "axios";
+
 // 기본 설정
 const instance = axios.create({
   baseURL: "https://bbuhackathon.p-e.kr",
 });
 const baseURL = "https://bbuhackathon.p-e.kr";
+
 // POST 로그아웃
 export const logOut = async (token) => {
   try {
@@ -23,6 +25,7 @@ export const logOut = async (token) => {
     throw error;
   }
 };
+
 // GET 흡연 구역 안내
 export const getPlaceSmokingAPI = async (token) => {
   try {
@@ -40,6 +43,7 @@ export const getPlaceSmokingAPI = async (token) => {
     throw error;
   }
 };
+
 // GET 상세 흡연 구역 안내
 export const getPlaceSmokingIDAPI = async (token, id) => {
   try {
@@ -55,6 +59,7 @@ export const getPlaceSmokingIDAPI = async (token, id) => {
     throw error;
   }
 };
+
 // GET 사용자 정보
 export const getMyPageAPI = async (token) => {
   try {
@@ -69,6 +74,7 @@ export const getMyPageAPI = async (token) => {
     throw error;
   }
 };
+
 // PUT 사용자 유형
 export const putUserTypeAPI = async (token, type) => {
   try {
@@ -89,6 +95,7 @@ export const putUserTypeAPI = async (token, type) => {
     throw error;
   }
 };
+
 // 흡연자의 흡연구역 제보
 export const smokerReportAPI = async (
   access_Token,
@@ -139,6 +146,7 @@ export const smokerReportAPI = async (
     throw error;
   }
 };
+
 // 비흡연자의 흡연구역 제보
 export const nonSmokerReportAPI = async (
   access_Token,
@@ -181,6 +189,7 @@ export const nonSmokerReportAPI = async (
     throw error;
   }
 };
+
 // PUT 알림설정
 export const putAlarmOptionAPI = async (token, opt) => {
   try {
@@ -278,6 +287,7 @@ export const putMyPageTimeAPI = async (token, tm) => {
     throw error;
   }
 };
+
 // DELETE 내 제보내역 삭제
 export const deletePlaceAPI = async (token, reportId) => {
   try {

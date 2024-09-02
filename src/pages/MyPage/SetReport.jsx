@@ -9,39 +9,12 @@ import coloredX from "../../assets/colored_trashcan.png";
 import reportBckgrnd from '../../assets/report_background.png';
 import likeImg from '../../assets/like.png';
 
-// const reports = [
-//   { id: 1, address: '주소 어쩌구1', detail: '상세 위치 설명 썰라썰라' },
-//   { id: 2, address: '주소 어쩌구2', detail: '상세 위치 설명 썰라썰라' },
-//   { id: 3, address: '주소 어쩌구3', detail: '상세 위치 설명 썰라썰라' },
-//   { id: 4, address: '주소 어쩌구4', detail: '상세 위치 설명 썰라썰라' },
-//   { id: 5, address: '주소 어쩌구5', detail: '상세 위치 설명 썰라썰라' },
-//   { id: 6, address: '주소 어쩌구6', detail: '상세 위치 설명 썰라썰라' },
-//   { id: 7, address: '주소 어쩌구7', detail: '상세 위치 설명 썰라썰라' },
-//   { id: 8, address: '주소 어쩌구8', detail: '상세 위치 설명 썰라썰라' },
-//   { id: 9, address: '주소 어쩌구9', detail: '상세 위치 설명 썰라썰라' },
-//   { id: 10, address: '주소 어쩌구10', detail: '상세 위치 설명 썰라썰라' }
-// ];
-// const ports = await getMyPageReportAPI();
-// console.log('나의 제보 내역:', ports);
-// const transformData = async () => {
-//   const ports = await getMyPageReportAPI();
-//   console.log('나의 제보 내역:', ports);
-
-//   const report = ports.
-// };
-
-// console.log('나의 제보 내역:', rports);
-// rports.forEach(item => {
-//   console.log(`아이디: ${item.reportId}`);
-//   // console.log(`주소: ${item.reportSmokingPlace.address}`);
-// });
-
 const SetAccount = () => {
-  const [openReportId, setOpenReportId] = useState(null);
-  const [rports, setRports] = useState([]);
   const token = localStorage.getItem('access_token');
   const [noReports, setNoReports] = useState();
   const [likes, setLikes] = useState();
+  const [openReportId, setOpenReportId] = useState(null);
+  const [rports, setRports] = useState([]);
 
   useEffect(() => {
     setNoReports(false);
@@ -76,7 +49,7 @@ const SetAccount = () => {
     await deletePlaceAPI(token, reportId)
       .then(() => {
         alert('제보가 삭제됩니다.');
-        fetchReports();  // 삭제 후 목록을 다시 불러옴
+        fetchReports();  // reload reports after delete report
       })
       .catch(err => {
         console.error('Error deleting report:', err);

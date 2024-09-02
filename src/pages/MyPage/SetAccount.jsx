@@ -6,20 +6,6 @@ import detailBackgroundImage from '../../assets/mypage_detail_background.png';
 import dotsImg from '../../assets/background_dots.png';
 
 const SetAccount = () => {
-  // 프론트 단독 사용자 정보 호출 코드
-  // const navigate = useNavigate();
-  // const [accessToken, setAccessToken] = useState(null);
-  // const handleUserInfo = async () => {
-  //   const response = await axios.get('https://kapi.kakao.com/v2/user/me', {
-  //     headers: {
-  //       'Authorization': `Bearer ${accessToken}`
-  //     }
-  //   }).then(response => {
-  //     console.log(response.data);
-  //     setUserInfo(response.data);
-  //   })
-  // };
-
   const [userInfo, setUserInfo] = useState(null);
 
   const getAccountInfo = async () => {
@@ -39,6 +25,7 @@ const SetAccount = () => {
       return '비흡연자';
     }
   };
+
   const handleAlarm = (option) => {
     if (option) {
       return '켜짐';
@@ -64,8 +51,6 @@ const SetAccount = () => {
       <SetHeader headerText="카카오 계정 관리"></SetHeader>
       {userInfo && (
         <UserInfo>
-          {/* <p>이메일: {userInfo.kakao_account.email}</p> */}
-          {/* <p>아이디: {userInfo.userId}</p> */}
           <DotsContainer>
             <InfoBox><Title>사용자 유형</Title><Content>{handleType(userInfo.userType)}</Content></InfoBox>
             <InfoBox><Title>카카오 이메일</Title><Content>{userInfo.kakaoEmail}</Content></InfoBox>
@@ -75,7 +60,6 @@ const SetAccount = () => {
           </DotsContainer>
         </UserInfo>
       )}
-      {/* <button onClick={handleUserInfo}>사용자 정보 불러오기</button> */}
     </AccountContainer>
   );
 };

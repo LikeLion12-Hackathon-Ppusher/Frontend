@@ -65,21 +65,21 @@ const MyPageContainer = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
+  padding-bottom: 6rem;
   background-image: url(${backgroundImage}); 
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  padding-bottom: 6rem;
   z-index: 700;
 `;
 
 const MyPageHeader = styled.div`
   align-self: flex-start; 
   text-align: left;
-  background: linear-gradient(to top, #FFF100 40%, transparent 40%);
+  margin-left: 5%;
   font-size: 1.6rem;
   font-weight: bold;
-  margin-left: 5%;
+  background: linear-gradient(to top, #FFF100 40%, transparent 40%);
 `;
 
 const MyPageBtnContainer = styled.div`
@@ -90,15 +90,15 @@ const MyPageBtnContainer = styled.div`
 `;
 
 const Btn = styled.button`
-  border: 2px solid #272A30;
-  padding: 1rem 0;
-  margin-top: 3vh;
-  font-size: 1rem;
   width: 100%;
+  margin-top: 3vh;
+  border: 2px solid #272A30;
   border-radius: 0.3rem;
+  padding: 1rem 0;
+  font-size: 1rem;
   font-weight: bold;
-  background-color: #272A30;
   color: #FFF100;
+  background-color: #272A30;
   transition: background-color 0.3s ease, transform 0.3s ease;
   box-shadow: 0.2rem 0.2rem 0.2rem;
 
@@ -106,10 +106,10 @@ const Btn = styled.button`
 
   &:hover,
   &:focus {
+    outline: none; 
     color: #272A30;
     background-color: #FFF100;
     transform: scale(1.005);
-    outline: none; 
   }
 
   &.active {

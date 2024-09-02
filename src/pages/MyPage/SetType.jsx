@@ -11,7 +11,6 @@ const SetType = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // 로컬 스토리지에서 사용자 유형을 가져와 상태를 초기화합니다.
     const storedUserType = localStorage.getItem("userType");
     if (storedUserType) {
       setActiveBox(storedUserType);
@@ -65,12 +64,12 @@ const SetType = () => {
 export default SetType;
 
 const SelectContainer = styled.div`
-  width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  height: 100%;
   background-image: url(${detailBackgroundImage}); 
   background-color: white;
   background-size: cover;
@@ -84,42 +83,37 @@ const SelectContainer = styled.div`
 `;
 
 const SmokeSelect = styled.div`
-  width: 90%;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 90%;
   margin: 10% 0;
 `;
 
 const SmokerBox = styled.div`
-  background-color: #212121;
-  width: 48%;
-  height: 16rem;
-  border: 2px solid #f7f152;
-  border-radius: 0.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
+  width: 48%;
+  height: 16rem;
+  border: 2px solid #f7f152;
+  border-radius: 0.5rem;
+  background-color: #212121;
   transition: background-color 0.3s ease, transform 0.3s ease;
   box-shadow: 0.25rem 0.25rem 0.25rem #D9D9D9;
+
   cursor: pointer;
 
   &:hover,
   &:focus {
-    // background-color: #c0c0c0;
     transform: scale(1.05);
-    outline: none; /* 포커스 시에 기본 아웃라인을 없애기 위해 */
+    outline: none;
   }
 
   &.active {
-    // background-color: gray;
     transform: scale(1.05);
-  }
-
-  img {
-    width: 30%;
   }
 
   h3 {
@@ -133,37 +127,37 @@ const SmokerBox = styled.div`
     line-height: 1.2rem;
     color: #bbbbbb;
   }
+  
+  img {
+    width: 30%;
+  }
+
 `;
 
 const NonSmokerBox = styled.div`
-  background-color: #f7f152;
-  width: 48%;
-  height: 16rem;
-  border: 2px solid #272A30;
-  border-radius: 0.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
+  width: 48%;
+  height: 16rem;
+  border: 2px solid #272A30;
+  border-radius: 0.5rem;
+  background-color: #f7f152;
   transition: background-color 0.3s ease, transform 0.3s ease;
   box-shadow: 0.25rem 0.25rem 0.25rem #D9D9D9;
+
   cursor: pointer;
 
   &:hover,
   &:focus {
-    // background-color: #c0c0c0;
     transform: scale(1.05);
-    outline: none; /* 포커스 시에 기본 아웃라인을 없애기 위해 */
+    outline: none;
   }
 
   &.active {
-    // background-color: gray;
     transform: scale(1.05);
-  }
-
-  img {
-    width: 30%;
   }
 
   h3 {
@@ -175,15 +169,20 @@ const NonSmokerBox = styled.div`
     font-size: 0.9rem;
     line-height: 1.2rem;
   }
+
+  img {
+    width: 30%;
+  }
 `;
 
 const SelectBtn = styled.div`
+  text-align: center;
   width: 90%;
-  background-color: #FFFFFF;
-  padding: 1rem 0;
   border: 2px solid #272A30;
   border-radius: 0.3rem;
-  text-align: center;
-  cursor: pointer;
+  padding: 1rem 0;
   font-weight: bold;
+  background-color: #FFFFFF;
+
+  cursor: pointer;
 `;

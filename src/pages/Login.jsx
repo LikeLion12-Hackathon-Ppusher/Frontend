@@ -65,13 +65,15 @@ const Title = styled.div`
   display: flex;
   justify-content: center;
   max-height: 20vh;
-  font-size: 3vw;
   margin-top: 15%;
+  font-size: 3vw;
   color: #535353;
+
   @media (min-width: 600px) {
-    font-size: 1.2rem; /* 800px 이상일 때 고정 폰트 크기 */
     margin-bottom: 1rem;
+    font-size: 1.2rem; /* 800px 이상일 때 고정 폰트 크기 */
   }
+
   p span {
     text-emphasis-style: dot;
   }
@@ -79,11 +81,11 @@ const Title = styled.div`
 
 const LogoImg = styled.img`
   display: flex;
-  padding-right: 10%;
   width: 60%;
+  padding-right: 10%;
 `;
 
 const LoginBtn = styled.img`
-  margin-top: 30%;
   width: 50%;
+  margin-top: 30%;
 `;
