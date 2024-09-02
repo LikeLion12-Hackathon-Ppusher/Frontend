@@ -772,6 +772,7 @@ const Map = () => {
             firstClickedMarkerType = reportType;
           }
         }
+        clickedMarker = null;
       });
 
       if (clickedMarker) {
