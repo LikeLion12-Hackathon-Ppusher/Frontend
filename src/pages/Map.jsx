@@ -664,7 +664,6 @@ const Map = () => {
 
   let clickedMarker = null; // 클릭된 마커를 저장하는 변수
   let firstClickedMarkerType = null; // 클릭된 마커를 저장하는 변수
-  let nextClickedMarkerType = null; // 클릭된 마커를 저장하는 변수
 
   function createMarker(
     map,
@@ -723,19 +722,6 @@ const Map = () => {
       map,
       image: smokeMarkerImage,
     });
-    // if (reportType === "public") {
-    //   marker = new kakao.maps.Marker({
-    //     position,
-    //     map,
-    //     image: publicSmokingZoneMarkerImage,
-    //   });
-    // } else {
-    //   marker = new kakao.maps.Marker({
-    //     position,
-    //     map,
-    //     image: smokeMarkerImage,
-    //   });
-    // }
 
     // 이 자체는 마커를 만들 때 적용시키므로
     // 마커 클릭 이벤트 설정
@@ -776,27 +762,6 @@ const Map = () => {
       });
 
       if (clickedMarker) {
-        // if (nextClickedMarkerType === null) {
-        //   if (firstClickedMarkerType === "smokerReport") {
-        //     clickedMarker.setImage(smokeReportMarkerImage);
-        //   } else if (firstClickedMarkerType === "nonSmokerReport") {
-        //     clickedMarker.setImage(nonSmokeReportMarkerImage);
-        //   } else {
-        //     clickedMarker.setImage(publicSmokingZoneMarkerImage);
-        //   }
-        //   marker.setImage(null);
-        //   nextClickedMarkerType = reportType;
-        // } else {
-        //   if (nextClickedMarkerType === "smokerReport") {
-        //     clickedMarker.setImage(smokeReportMarkerImage);
-        //   } else if (firstClickedMarkerType === "nonSmokerReport") {
-        //     clickedMarker.setImage(nonSmokeReportMarkerImage);
-        //   } else {
-        //     clickedMarker.setImage(publicSmokingZoneMarkerImage);
-        //   }
-        //   marker.setImage(null);
-        //   nextClickedMarkerType = reportType;
-        // }
         if (firstClickedMarkerType === "smokerReport") {
           clickedMarker.setImage(smokeReportMarkerImage);
           firstClickedMarkerType = reportType;
@@ -993,9 +958,6 @@ const Map = () => {
 
       handleCloseModal();
 
-      // 새로고침해서 다시 불러오게 한다 (제보된 마커 불러온 마커를 따로 관리하지 않게 됨)
-      navigate(0);
-
       // 제보에 대한 감사문구 모달 창 설정
       setShowThankYouModal(true); // 감사 모달 상태 변경
 
@@ -1019,7 +981,6 @@ const Map = () => {
       reportingMarkerRef.current = null; // 레퍼런스를 초기화
     }
     navigate("/home/map");
-    console.log("homemap");
   };
 
   const handleLikeBtn = async (
