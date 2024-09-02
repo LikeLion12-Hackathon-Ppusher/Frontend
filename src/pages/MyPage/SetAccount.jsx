@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import axios from 'axios';
 import SetHeader from './SetHeader';
 import detailBackgroundImage from '../../assets/mypage_detail_background.png';
 import { getMyPageAPI } from '../../apis/api';

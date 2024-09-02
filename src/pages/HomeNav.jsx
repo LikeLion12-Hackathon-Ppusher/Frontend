@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import smokerReport from "../assets/제보흡연구역.png";
 import nonSmokerReport from "../assets/상습흡연구역.png";
-import logoImg from "../assets/logo.png";
 import { ThemeColorContext } from "../Context/context";
 
 const HomeNav = () => {

@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import SetNotifyHeader from "./SetNotifyHeader";
 import dotsImg from '../../assets/background_dots.png';
-import { putMyPageTimeAPI } from "../../apis/api";
 
 const SetNotifySmoker = () => {
   const navigate = useNavigate();

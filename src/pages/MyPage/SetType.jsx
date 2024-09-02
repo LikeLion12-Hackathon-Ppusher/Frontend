@@ -4,7 +4,6 @@ import styled from "styled-components";
 import smokerImg from "../../assets/smoker.png";
 import nonSmokerImg from "../../assets/nonSmoker.png";
 import SetHeader from "./SetHeader";
-import dotsBox from '../../assets/background_dots.png';
 import detailBackgroundImage from '../../assets/mypage_detail_background.png';
 
 const SetType = () => {

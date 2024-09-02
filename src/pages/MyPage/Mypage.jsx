@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 import styled from "styled-components";
 import backgroundImage from '../../assets/mypage_background.png';
-import axios from "axios";
 import { getPlaceSmokingAPI, logOut } from "../../apis/api";
 
 const Mypage = () => {
