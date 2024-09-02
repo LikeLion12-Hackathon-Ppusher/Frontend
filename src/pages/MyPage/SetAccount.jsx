@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import SetHeader from './SetHeader';
-import detailBackgroundImage from '../../assets/mypage_detail_background.png';
 import { getMyPageAPI } from '../../apis/api';
+import detailBackgroundImage from '../../assets/mypage_detail_background.png';
 import dotsImg from '../../assets/background_dots.png';
 
 const SetAccount = () => {

@@ -2,8 +2,8 @@ import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import SetHeader from "./SetHeader";
-import detailBackgroundImage from "../../assets/mypage_detail_background.png";
 import { putUserTypeAPI } from "../../apis/api";
+import detailBackgroundImage from "../../assets/mypage_detail_background.png";
 import dotsImg from '../../assets/background_dots.png';
 
 const SetTypeCheck = () => {

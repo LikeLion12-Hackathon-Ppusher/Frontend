@@ -1,9 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import backButtonImg from "../../assets/arrow-back.png";
-import detailBackgroundImage from '../../assets/mypage_detail_background.png';
 import SetHeader from './SetHeader';
+import detailBackgroundImage from '../../assets/mypage_detail_background.png';
 import dotsImg from '../../assets/background_dots.png';
 
 const SetTypeConfirm = () => {

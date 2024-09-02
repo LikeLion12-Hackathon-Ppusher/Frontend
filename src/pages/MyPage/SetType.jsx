@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import SetHeader from "./SetHeader";
 import smokerImg from "../../assets/smoker.png";
 import nonSmokerImg from "../../assets/nonSmoker.png";
-import SetHeader from "./SetHeader";
 import detailBackgroundImage from '../../assets/mypage_detail_background.png';
 
 const SetType = () => {

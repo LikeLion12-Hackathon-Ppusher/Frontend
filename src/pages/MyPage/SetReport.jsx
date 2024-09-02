@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import SetHeader from './SetHeader';
+import { deletePlaceAPI, getLikesCountAPI, getMyPageReportAPI, getReportDetailAPI } from '../../apis/api';
 import bottomButtonImg from "../../assets/down.png";
 import upButtonImg from "../../assets/up.png";
 import blackX from "../../assets/trashcan.png";
 import coloredX from "../../assets/colored_trashcan.png";
-import SetHeader from './SetHeader';
 import reportBckgrnd from '../../assets/report_background.png';
-import { deletePlaceAPI, getLikesCountAPI, getMyPageReportAPI, getReportDetailAPI } from '../../apis/api';
 import likeImg from '../../assets/like.png';
 
 // const reports = [

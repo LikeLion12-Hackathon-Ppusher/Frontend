@@ -1,14 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 import styled from "styled-components";
+import logOut from "../../apis/api";
 import backgroundImage from '../../assets/mypage_background.png';
-import { getPlaceSmokingAPI, logOut } from "../../apis/api";
 
 const Mypage = () => {
   const navigate = useNavigate();
-  const [data, setData] = useState(null);
-  const [err, setErr] = useState(null);
-
   const accessToken = localStorage.getItem('access_token');
 
   const handleAccount = () => {
@@ -29,21 +26,14 @@ const Mypage = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await logOut(accessToken);
-      // const response = await axios.post('https://bbuhackathon.p-e.kr/oauth/logout/',
-      //   {},
-      //   {
-      //     headers: {
-      //       'Authorization': `Bearer ${accessToken}`
-      //     }
-      //   });
+      const response = await logOut(accessToken); // call logOut API with access token
       if (response) {
         const msg = response.data.message;
         alert('로그아웃 되었습니다.');
         localStorage.clear();
         navigate("/login");
       } else {
-        throw new Error('응답 메세지가 업습니다.');
+        throw new Error('응답 메세지가 없습니다.');
       }
     } catch (err) {
       alert('API 호출 실패. 로컬에서 로그아웃됩니다.');
@@ -51,9 +41,6 @@ const Mypage = () => {
     }
   };
 
-  const handlePlaceSmoking = async () => {
-    const response = await getPlaceSmokingAPI(accessToken);
-  };
   return (
     <MyPageContainer>
       <MyPageHeader>마이페이지</MyPageHeader>
@@ -64,7 +51,6 @@ const Mypage = () => {
         <Btn onClick={handleNotify}>알림 설정</Btn>
         <Btn onClick={handleReport}>내 제보 내역</Btn>
         <Btn onClick={handleLogout}>로그아웃</Btn>
-        {/* <button onClick={handlePlaceSmoking}>흡연구역 안내</button> */}
       </MyPageBtnContainer>
     </MyPageContainer>
   );
