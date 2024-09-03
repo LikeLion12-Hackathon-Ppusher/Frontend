@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import SetHeader from './SetHeader';
+import SharedHeader from '../../components/SharedHeader';
 import { getMyPageAPI } from '../../apis/api';
-import { Container } from '../../theme/SharedContainer';
+import { handleType, handleAlarm, handleDistance } from '../../utils/utils';
+import { Container } from '../../components/SharedContainer';
 import detailBackgroundImage from '../../assets/mypage_detail_background.png';
 import dotsImg from '../../assets/background_dots.png';
 
@@ -19,37 +20,13 @@ const SetAccount = () => {
     }
   };
 
-  const handleType = (type) => {
-    if (type === 'SY') {
-      return '흡연자';
-    } else {
-      return '비흡연자';
-    }
-  };
-
-  const handleAlarm = (option) => {
-    if (option) {
-      return '켜짐';
-    } else {
-      return '꺼짐';
-    }
-  };
-
-  const handleDistance = (distance) => {
-    if (distance === 2) {
-      return 30;
-    } else {
-      return distance;
-    };
-  };
-
   useEffect(() => {
     getAccountInfo();
   }, []);
 
   return (
     <AccountContainer>
-      <SetHeader headerText="카카오 계정 관리"></SetHeader>
+      <SharedHeader headerText="카카오 계정 관리"></SharedHeader>
       {userInfo && (
         <UserInfo>
           <DotsContainer>

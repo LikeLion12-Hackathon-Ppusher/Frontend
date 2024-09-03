@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import SetHeader from "./SetHeader";
-import { Container, Container } from "../../theme/SharedContainer";
+import SharedHeader from "../../components/SharedHeader";
+import { Container } from "../../components/SharedContainer";
 import detailBackgroundImage from "../../assets/mypage_detail_background.png";
 import dotsImg from '../../assets/background_dots.png';
 
@@ -29,7 +29,7 @@ const SetTypeCheck = () => {
 
   return (
     <TypeCheckContainer>
-      <SetHeader headerText={"사용자 유형 변경"}></SetHeader>
+      <SharedHeader headerText={"사용자 유형 변경"}></SharedHeader>
       <Box>
         <DotsBox>
           <p>

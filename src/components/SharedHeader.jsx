@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import backButtonImg from "../../assets/arrow-back.png";
+import backButtonImg from "../assets/arrow-back.png";
 
-const SetHeader = ({ headerText }) => {
+const SharedHeader = ({ headerText }) => {
   const navigate = useNavigate();
 
   return (
@@ -16,7 +16,7 @@ const SetHeader = ({ headerText }) => {
   );
 };
 
-export default SetHeader;
+export default SharedHeader;
 
 const Container = styled.div`
   display: flex;

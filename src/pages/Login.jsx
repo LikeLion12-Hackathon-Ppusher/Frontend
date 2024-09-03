@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Container } from '../theme/SharedContainer';
+import { Container } from '../components/SharedContainer';
 import LoginBtnImg from "../assets/kakao_login_medium_narrow.png";
 import InitialBckgrnd from "../assets/initial_background.png";
 import Logo from "../assets/logo.png";

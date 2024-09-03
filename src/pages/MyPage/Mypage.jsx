@@ -2,8 +2,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import logOut from "../../apis/api";
-import { myPageBtns } from "../../data/mypageBtns";
-import { Container } from "../../theme/SharedContainer";
+import { myPageBtns } from "../../data/myPageBtns";
+import { Container } from "../../components/SharedContainer";
 import backgroundImage from '../../assets/mypage_background.png';
 
 const Mypage = () => {
@@ -12,9 +12,8 @@ const Mypage = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await logOut(accessToken); // call logOut API
+      const response = await logOut(accessToken);
       if (response) {
-        const msg = response.data.message;
         alert('로그아웃 되었습니다.');
         localStorage.clear();
         navigate("/login");

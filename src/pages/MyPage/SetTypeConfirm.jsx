@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import SetHeader from './SetHeader';
-import { Container } from '../../theme/SharedContainer';
+import SharedHeader from '../../components/SharedHeader';
+import { Container } from '../../components/SharedContainer';
 import detailBackgroundImage from '../../assets/mypage_detail_background.png';
 import dotsImg from '../../assets/background_dots.png';
 
@@ -15,7 +15,7 @@ const SetTypeConfirm = () => {
 
   return (
     <ConfirmContainer>
-      <SetHeader headerText="사용자 유형 변경"></SetHeader>
+      <SharedHeader headerText="사용자 유형 변경"></SharedHeader>
       <Box>
         <DotsBox>
           <p>변경이 <strong>완료</strong>되었습니다.</p>

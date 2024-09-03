@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import SetHeader from './SetHeader';
-import CleanRateBox from './CleanRateBox';
+import SharedHeader from '../../components/SharedHeader';
+import CleanRateBox from '../../components/CleanRateBox';
 import { deletePlaceAPI, getLikesCountAPI, getMyPageReportAPI, getReportDetailAPI } from '../../apis/api';
 import bottomButtonImg from "../../assets/down.png";
 import upButtonImg from "../../assets/up.png";
@@ -78,7 +78,7 @@ const SetAccount = () => {
 
   return (
     <AccountContainer>
-      <SetHeader headerText="제보 내역"></SetHeader>
+      <SharedHeader headerText="제보 내역"></SharedHeader>
       {noReports ? (
         <NoDataMessage>제보 내역이 없습니다.</NoDataMessage>
       ) : (

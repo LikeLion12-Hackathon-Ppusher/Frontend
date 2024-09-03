@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import SetHeader from './SetHeader';
+import SharedHeader from '../../components/SharedHeader';
 import SetNotifySmoker from './SetNotifySmoker';
 import SetNotifyNonSmoker from './SetNotifyNonSmoker';
-import { Container } from '../../theme/SharedContainer';
+import { Container } from '../../components/SharedContainer';
 import detailBackgroundImage from '../../assets/mypage_detail_background.png';
 
 const SetNotify = () => {
@@ -16,7 +16,7 @@ const SetNotify = () => {
 
   return (
     <NotifyContainer>
-      <SetHeader headerText="알림 설정"></SetHeader>
+      <SharedHeader headerText="알림 설정"></SharedHeader>
       {userType === 'SY' && <SetNotifySmoker />}
       {userType === 'SN' && <SetNotifyNonSmoker />}
     </NotifyContainer>
