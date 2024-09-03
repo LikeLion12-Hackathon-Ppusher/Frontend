@@ -1,29 +1,14 @@
 import React from "react";
-import { useNavigate, Outlet } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import logOut from "../../apis/api";
+import { myPageBtns } from "../../data/mypageBtns";
 import { Container } from "../../theme/SharedContainer";
 import backgroundImage from '../../assets/mypage_background.png';
 
 const Mypage = () => {
   const navigate = useNavigate();
   const accessToken = localStorage.getItem('access_token');
-
-  const handleAccount = () => {
-    navigate("/home/account")
-  };
-
-  const handleUserType = () => {
-    navigate("/home/type");
-  };
-
-  const handleNotify = () => {
-    navigate("/home/notify");
-  };
-
-  const handleReport = () => {
-    navigate("/home/report");
-  };
 
   const handleLogout = async () => {
     try {
@@ -42,16 +27,18 @@ const Mypage = () => {
     }
   };
 
+  const buttons = myPageBtns(handleLogout, navigate);
+
   return (
     <MyPageContainer>
       <MyPageHeader>마이페이지</MyPageHeader>
       <MyPageBtnContainer>
-        <Btn onClick={handleAccount}>카카오 계정 관리</Btn>
-        <Btn onClick={handleUserType}>사용자 유형 변경</Btn>
-        <Outlet />
-        <Btn onClick={handleNotify}>알림 설정</Btn>
-        <Btn onClick={handleReport}>내 제보 내역</Btn>
-        <Btn onClick={handleLogout}>로그아웃</Btn>
+        {buttons.map((button, idx) => (
+          <MyPageBtn key={idx} onClick={button.onClick}>
+            {button.text}
+          </MyPageBtn>
+        ))
+        }
       </MyPageBtnContainer>
     </MyPageContainer>
   );
@@ -80,7 +67,7 @@ const MyPageBtnContainer = styled.div`
   width: 90%;
 `;
 
-const Btn = styled.button`
+const MyPageBtn = styled.button`
   width: 100%;
   margin-top: 3vh;
   border: 2px solid #272A30;

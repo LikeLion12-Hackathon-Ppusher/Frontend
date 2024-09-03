@@ -46,7 +46,7 @@ function App() {
           ></Route>
           <Route path="/home/*" element={<Home></Home>}>
             <Route path="map" element={<Map></Map>}></Route>
-            <Route path="mypage/*" element={<Mypage></Mypage>}></Route>
+            <Route path="mypage" element={<Mypage></Mypage>}></Route>
             <Route path="type" element={<SetType></SetType>}></Route>
             <Route
               path="set-type-check"
