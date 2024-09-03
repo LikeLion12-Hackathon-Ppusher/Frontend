@@ -74,12 +74,12 @@ const SetNotifyNonSmoker = () => {
 export default SetNotifyNonSmoker;
 
 const SelectContainer = styled.div`
-  width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  height: 100%;
 
   img {
     width: 10%;
@@ -87,16 +87,16 @@ const SelectContainer = styled.div`
 `;
 
 const Box = styled.div`
-  background-color: #FFF100;
-  width: 90%;
-  height: 15rem;
-  border-radius: 0.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
+  width: 90%;
+  height: 15rem;
   margin: 5% 0 15% 0;
+  border-radius: 0.5rem;
+  background-color: #FFF100;
 
   h3 {
     font-size: 1.2rem;
@@ -118,46 +118,49 @@ const DotsBox = styled.div`
 `;
 
 const BtnBox = styled.div`
-  margin-top: 2rem;
-  margin-bottom: 1rem;
   display: flex;
   justify-content: space-evenly;
   width: 90%;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
 `;
 
 const Btn = styled.div`
-  padding: 0.8rem 1.2rem;
-  background-color: #272A30;
-  border-radius: 0.4rem;
-  cursor: pointer;
-  color: white;
   border: 2px solid transparent;
+  border-radius: 0.4rem;
+  padding: 0.8rem 1.2rem;
+  color: white;
+  background-color: #272A30;
   font-weight: bold;
+  
+  cursor: pointer;
+
   &:hover,
   &:focus {
-    background-color: #f7f152;
     color: #272A30;
+    background-color: #f7f152;
 
     outline: none;
     border: 2px solid #272A30;
   }
 
   &.active {
-    background-color: #f7f152;
     color: #272A30;
+    background-color: #f7f152;
     border: 2px solid #272A30;
   }
 `;
 
 const SelectBtn = styled.div`
-  color: white;
-  background-color: #272A30;
   width: 90%;
-  padding: 1rem 0;
   border: 2px solid black;
   border-radius: 0.3rem;
+  padding: 1rem 0;
   text-align: center;
-  cursor: pointer;
   font-weight: bold;
+  color: white;
+  background-color: #272A30;
   box-shadow: 0.2rem 0.2rem 0.2rem #FEFBBD;
+
+  cursor: pointer;
 `;

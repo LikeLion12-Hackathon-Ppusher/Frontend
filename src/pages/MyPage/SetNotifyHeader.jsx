@@ -35,29 +35,29 @@ const SetNotifyHeader = () => {
   }, []);
 
   return (
-    <TitleContainer>
-      <Title>알림사용</Title>
-      <TitleBtnContainer>
-        <TitleButton
+    <NotifyHeaderContainer>
+      <NotifyTitle>알림사용</NotifyTitle>
+      <NotifyBtnContainer>
+        <NotifyBtn
           isActive={isNotificationEnabled}
           onClick={() => handleNotificationToggle(true)}
         >
           ON
-        </TitleButton>
-        <TitleButton
+        </NotifyBtn>
+        <NotifyBtn
           isActive={!isNotificationEnabled}
           onClick={() => handleNotificationToggle(false)}
         >
           OFF
-        </TitleButton>
-      </TitleBtnContainer>
-    </TitleContainer>
+        </NotifyBtn>
+      </NotifyBtnContainer>
+    </NotifyHeaderContainer>
   );
 };
 
 export default SetNotifyHeader;
 
-const TitleContainer = styled.div`
+const NotifyHeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -70,29 +70,30 @@ const TitleContainer = styled.div`
   box-shadow: 0.2rem 0.2rem 0.2rem #fefbbd;
 `;
 
-const Title = styled.div`
+const NotifyTitle = styled.div`
   width: 40%;
   text-align: center;
   color: #272a30;
 `;
 
-const TitleBtnContainer = styled.div`
-  width: 60%;
-  height: 90%;
+const NotifyBtnContainer = styled.div`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  width: 60%;
+  height: 90%;
 `;
 
-const TitleButton = styled.button`
+const NotifyBtn = styled.button`
   width: 40%;
   height: 80%;
-  color: ${(props) => (props.isActive ? "#FFF100" : "#272A30")};
-  background-color: ${(props) => (props.isActive ? "#272A30" : "#D9D9D9")};
-  font-weight: bold;
-  text-align: center;
   border: 0.08rem;
   border-radius: 0.4rem;
+  text-align: center;
+  font-weight: bold;
+  color: ${(props) => (props.isActive ? "#FFF100" : "#272A30")};
+  background-color: ${(props) => (props.isActive ? "#272A30" : "#D9D9D9")};
+  
   cursor: pointer;
 
   &:hover {

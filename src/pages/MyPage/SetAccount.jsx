@@ -28,15 +28,15 @@ const SetAccount = () => {
     <AccountContainer>
       <SharedHeader headerText="카카오 계정 관리"></SharedHeader>
       {userInfo && (
-        <UserInfo>
-          <DotsContainer>
-            <InfoBox><Title>사용자 유형</Title><Content>{handleType(userInfo.userType)}</Content></InfoBox>
-            <InfoBox><Title>카카오 이메일</Title><Content>{userInfo.kakaoEmail}</Content></InfoBox>
-            <InfoBox><Title>이름</Title><Content>{userInfo.name}</Content></InfoBox>
-            {userInfo.userType === "SN" && (<InfoBox><Title>설정거리</Title><Content>{handleDistance(userInfo.distance)}M</Content></InfoBox>)}
-            <InfoBox><Title>알림설정 여부</Title><Content>{handleAlarm(userInfo.option)}</Content></InfoBox>
-          </DotsContainer>
-        </UserInfo>
+        <AccountBox>
+          <BoxBackground>
+            <InfoBox><BoxTitle>사용자 유형</BoxTitle><BoxContent>{handleType(userInfo.userType)}</BoxContent></InfoBox>
+            <InfoBox><BoxTitle>카카오 이메일</BoxTitle><BoxContent>{userInfo.kakaoEmail}</BoxContent></InfoBox>
+            <InfoBox><BoxTitle>이름</BoxTitle><BoxContent>{userInfo.name}</BoxContent></InfoBox>
+            {userInfo.userType === "SN" && (<InfoBox><BoxTitle>설정거리</BoxTitle><BoxContent>{handleDistance(userInfo.distance)}M</BoxContent></InfoBox>)}
+            <InfoBox><BoxTitle>알림설정 여부</BoxTitle><BoxContent>{handleAlarm(userInfo.option)}</BoxContent></InfoBox>
+          </BoxBackground>
+        </AccountBox>
       )}
     </AccountContainer>
   );
@@ -49,7 +49,7 @@ const AccountContainer = styled(Container)`
   background-image: url(${detailBackgroundImage}); 
 `
 
-const UserInfo = styled.div`
+const AccountBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -63,7 +63,7 @@ const UserInfo = styled.div`
   box-shadow: 0.5rem 0.5rem 0.5rem #D9D9D9;
 `;
 
-const DotsContainer = styled.div`
+const BoxBackground = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -85,7 +85,7 @@ const InfoBox = styled.div`
   margin-bottom: 1rem;
 `;
 
-const Title = styled.div`
+const BoxTitle = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -98,7 +98,7 @@ const Title = styled.div`
   box-shadow: inset 0 -0.6rem 0 #E2D600;
 `;
 
-const Content = styled.div`
+const BoxContent = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
