@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import SharedHeader from '../../components/SharedHeader';
 import { getMyPageAPI } from '../../apis/api';
 import { handleType, handleAlarm, handleDistance } from '../../utils/utils';
-import { Container } from '../../components/SharedContainer';
+import { Container } from '../../styles/SharedContainer';
 import detailBackgroundImage from '../../assets/mypage_detail_background.png';
 import dotsImg from '../../assets/background_dots.png';
 

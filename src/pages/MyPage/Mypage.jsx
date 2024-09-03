@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import logOut from "../../apis/api";
 import { myPageBtns } from "../../data/myPageBtns";
-import { Container } from "../../components/SharedContainer";
+import { Container } from "../../styles/SharedContainer";
 import backgroundImage from '../../assets/mypage_background.png';
 
 const Mypage = () => {

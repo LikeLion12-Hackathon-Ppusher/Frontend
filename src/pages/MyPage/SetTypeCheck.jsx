@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import SharedHeader from "../../components/SharedHeader";
-import { Container } from "../../components/SharedContainer";
+import { Container } from "../../styles/SharedContainer";
 import detailBackgroundImage from "../../assets/mypage_detail_background.png";
 import dotsImg from '../../assets/background_dots.png';
 

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { SelectContainer, SharedBox, DotsBox, BtnBox, Btn, SelectBtn } from '../../styles/NotifyStyle';
 import SetNotifyHeader from "./SetNotifyHeader";
-import dotsImg from '../../assets/background_dots.png';
 
 const SetNotifySmoker = () => {
   const navigate = useNavigate();
@@ -90,6 +90,10 @@ const SetNotifySmoker = () => {
 
 export default SetNotifySmoker;
 
+const Box = styled(SharedBox)`
+  color: #4A4A4A;
+`;
+
 const Guide = styled.div`
   margin-bottom: 1rem;
   font-size: 1rem;
@@ -98,33 +102,6 @@ const Guide = styled.div`
   strong {
     color: #4A4A4A;
   }
-`;
-
-const SelectContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-
-  img {
-    width: 10%;
-  }
-`;
-
-const Box = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  width: 90%;
-  height: 15rem;
-  margin: 5% 0 15% 0;
-  border-radius: 0.5rem;
-  color: #4A4A4A;
-  background-color: #FFF100;
 `;
 
 const PlaceholderBox = styled.div`
@@ -142,66 +119,4 @@ const PlaceholderBox = styled.div`
   h3 {
     font-size: 1.2rem;
   }
-`;
-
-const DotsBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  width: 96%;
-  height: 94%;
-  background-image: url(${dotsImg});  
-  background-size: 50%;  
-  background-repeat: no-repeat; 
-  background-position: left top; 
-`;
-
-
-const BtnBox = styled.div`
-  display: flex;
-  justify-content: space-evenly;
-  width: 90%;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-`;
-
-const Btn = styled.div`
-  border: 2px solid transparent;
-  border-radius: 0.4rem;
-  padding: 0.8rem 1.2rem;
-  color: white;
-  background-color: #272A30;
-
-  cursor: pointer;
-
-  &:hover,
-  &:focus {
-    color: black;
-    background-color: #f7f152;
-
-    outline: none; 
-    border: 2px solid black;
-  }
-
-  &.active {
-    color: black;
-    background-color: #f7f152;
-    border: 2px solid black;
-  }
-`;
-
-const SelectBtn = styled.div`
-  width: 90%;
-  border: 2px solid black;
-  border-radius: 0.3rem;
-  padding: 1rem 0;
-  text-align: center;
-  font-weight: bold;
-  color: white;
-  background-color: #272A30;
-  box-shadow: 0.2rem 0.2rem 0.2rem #FEFBBD;
-
-  cursor: pointer;
 `;

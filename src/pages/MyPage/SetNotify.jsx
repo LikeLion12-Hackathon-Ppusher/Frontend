@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import SharedHeader from '../../components/SharedHeader';
 import SetNotifySmoker from './SetNotifySmoker';
 import SetNotifyNonSmoker from './SetNotifyNonSmoker';
-import { Container } from '../../components/SharedContainer';
+import { Container } from '../../styles/SharedContainer';
 import detailBackgroundImage from '../../assets/mypage_detail_background.png';
 
 const SetNotify = () => {
