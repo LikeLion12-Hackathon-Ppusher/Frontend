@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { SelectContainer, SharedBox, DotsBox, BtnBox, Btn, SelectBtn } from '../../styles/NotifyStyle';
 import SetNotifyHeader from "./SetNotifyHeader";
-import dotsImg from '../../assets/background_dots.png';
-import { putMyPageTimeAPI } from "../../apis/api";
 
 const SetNotifySmoker = () => {
   const navigate = useNavigate();
@@ -20,7 +19,8 @@ const SetNotifySmoker = () => {
       setSelectedTime(selectedTime);
     }
 
-    if (userType === 'SY') { // 흡연자인 경우
+    // smoker
+    if (userType === 'SY') {
       setUserType();
     }
   }, []);
@@ -31,9 +31,7 @@ const SetNotifySmoker = () => {
   };
 
   const handleConfirmClick = () => {
-    const token = localStorage.getItem('access_token');
     if (selectedTime !== null) {
-      // putMyPageTimeAPI(token, selectedTime); 시간 설정 API 미사용
       navigate("/home/mypage", { state: { time: selectedTime } });
     } else {
       alert("시간을 선택해 주세요.");
@@ -92,115 +90,33 @@ const SetNotifySmoker = () => {
 
 export default SetNotifySmoker;
 
+const Box = styled(SharedBox)`
+  color: #4A4A4A;
+`;
+
 const Guide = styled.div`
+  margin-bottom: 1rem;
   font-size: 1rem;
   color: #272A30;
-  margin-bottom: 1rem;
+
   strong {
     color: #4A4A4A;
   }
 `;
 
-const SelectContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  img {
-    width: 10%;
-  }
-`;
-
-const Box = styled.div`
-  color: #4A4A4A;
-  background-color: #FFF100;
-  width: 90%;
-  height: 15rem;
-  border-radius: 0.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  margin: 5% 0 15% 0;
-`;
-
 const PlaceholderBox = styled.div`
-  background-color: #FFF100;
-  width: 90%;
-  height: 15rem;
-  border-radius: 0.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
+  width: 90%;
+  height: 15rem;
   margin: 5% 0 15% 0;
+  border-radius: 0.5rem;
+  background-color: #FFF100;
 
   h3 {
     font-size: 1.2rem;
   }
-`;
-
-
-const DotsBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-image: url(${dotsImg});  
-  background-size: 50%;  
-  background-repeat: no-repeat; 
-  background-position: left top; 
-  text-align: center;
-  width: 96%;
-  height: 94%;
-`;
-
-
-const BtnBox = styled.div`
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-  display: flex;
-  justify-content: space-evenly;
-  width: 90%;
-`;
-
-const Btn = styled.div`
-  padding: 0.8rem 1.2rem;
-  background-color: #272A30;
-  border-radius: 0.4rem;
-  cursor: pointer;
-  color: white;
-  border: 2px solid transparent;
-  &:hover,
-  &:focus {
-    background-color: #f7f152;
-    color: black;
-
-    outline: none; /* 포커스 시에 기본 아웃라인을 없애기 위해 */
-    border: 2px solid black;
-  }
-
-  &.active {
-    background-color: #f7f152;
-    color: black;
-    border: 2px solid black;
-  }
-`;
-
-const SelectBtn = styled.div`
-  color: white;
-  background-color: #272A30;
-  width: 90%;
-  padding: 1rem 0;
-  border: 2px solid black;
-  border-radius: 0.3rem;
-  text-align: center;
-  cursor: pointer;
-  font-weight: bold;
-  box-shadow: 0.2rem 0.2rem 0.2rem #FEFBBD;
 `;

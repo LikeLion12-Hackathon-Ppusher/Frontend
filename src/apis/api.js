@@ -1,10 +1,11 @@
-// src/services/api.js
 import axios from "axios";
-// 기본 설정
+
+// Base setting
 const instance = axios.create({
   baseURL: "https://bbuhackathon.p-e.kr",
 });
 const baseURL = "https://bbuhackathon.p-e.kr";
+
 // POST 로그아웃
 export const logOut = async (token) => {
   try {
@@ -23,6 +24,7 @@ export const logOut = async (token) => {
     throw error;
   }
 };
+
 // GET 흡연 구역 안내
 export const getPlaceSmokingAPI = async (token) => {
   try {
@@ -31,15 +33,16 @@ export const getPlaceSmokingAPI = async (token) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log("흡연 구역 안내:", response.data);
-    const placeId = response.data.placeId;
-    console.log("placeId:", placeId);
+    // console.log("흡연 구역 안내:", response.data);
+    // const placeId = response.data.placeId;
+    // console.log("placeId:", placeId);
     return response.data;
   } catch (error) {
     console.error("GET 에러(place/smoking):", error);
     throw error;
   }
 };
+
 // GET 상세 흡연 구역 안내
 export const getPlaceSmokingIDAPI = async (token, id) => {
   try {
@@ -48,13 +51,14 @@ export const getPlaceSmokingIDAPI = async (token, id) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log("상세 흡연 구역 안내:", response.data);
+    // console.log("상세 흡연 구역 안내:", response.data);
     // return response.data;
   } catch (error) {
     console.error("GET 에러(place/smoking/{id}):", error);
     throw error;
   }
 };
+
 // GET 사용자 정보
 export const getMyPageAPI = async (token) => {
   try {
@@ -69,6 +73,7 @@ export const getMyPageAPI = async (token) => {
     throw error;
   }
 };
+
 // PUT 사용자 유형
 export const putUserTypeAPI = async (token, type) => {
   try {
@@ -89,6 +94,7 @@ export const putUserTypeAPI = async (token, type) => {
     throw error;
   }
 };
+
 // 흡연자의 흡연구역 제보
 export const smokerReportAPI = async (
   access_Token,
@@ -103,13 +109,13 @@ export const smokerReportAPI = async (
   title
 ) => {
   try {
-    console.log(reportUserType);
-    console.log(userId);
-    console.log(Lat);
-    console.log(Lng);
-    console.log(address);
-    console.log(title);
-    console.log(indoorOutdoor);
+    // console.log(reportUserType);
+    // console.log(userId);
+    // console.log(Lat);
+    // console.log(Lng);
+    // console.log(address);
+    // console.log(title);
+    // console.log(indoorOutdoor);
     const response = await axios.post(
       `${baseURL}/report/`,
       {
@@ -132,13 +138,14 @@ export const smokerReportAPI = async (
         },
       }
     );
-    console.log(response);
+    // console.log(response);
     return response.data;
   } catch (error) {
     console.error("흡연자 제보 에러", error);
     throw error;
   }
 };
+
 // 비흡연자의 흡연구역 제보
 export const nonSmokerReportAPI = async (
   access_Token,
@@ -150,12 +157,12 @@ export const nonSmokerReportAPI = async (
   title
 ) => {
   try {
-    console.log(reportUserType);
-    console.log(userId);
-    console.log(Lat);
-    console.log(Lng);
-    console.log(address);
-    console.log(title);
+    // console.log(reportUserType);
+    // console.log(userId);
+    // console.log(Lat);
+    // console.log(Lng);
+    // console.log(address);
+    // console.log(title);
     const response = await axios.post(
       `${baseURL}/report/`,
       {
@@ -181,6 +188,7 @@ export const nonSmokerReportAPI = async (
     throw error;
   }
 };
+
 // PUT 알림설정
 export const putAlarmOptionAPI = async (token, opt) => {
   try {
@@ -195,7 +203,7 @@ export const putAlarmOptionAPI = async (token, opt) => {
         },
       }
     );
-    console.log(response.data);
+    // console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("PUT 에러(alarm)", error);
@@ -212,7 +220,7 @@ export const getMyPageReportAPI = async () => {
         Authorization: `Bearer ${token}`
       }
     });
-    console.log('나의 제보 내역:', response.data);
+    // console.log('나의 제보 내역:', response.data);
     return response.data;  
   } catch (error) {
     console.error('GET 에러(mypage/report):', error);
@@ -229,7 +237,7 @@ export const getReportDetailAPI = async (reportId) => {
         Authorization: `Bearer ${token}`
       }
     });
-    console.log('나의 제보 상세 내역:', response.data);
+    // console.log('나의 제보 상세 내역:', response.data);
     return response.data;  
   } catch (error) {
     console.error('GET 에러(mypage):', error);
@@ -278,6 +286,7 @@ export const putMyPageTimeAPI = async (token, tm) => {
     throw error;
   }
 };
+
 // DELETE 내 제보내역 삭제
 export const deletePlaceAPI = async (token, reportId) => {
   try {
@@ -286,7 +295,7 @@ export const deletePlaceAPI = async (token, reportId) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log("흡연 구역 삭제:", response.data);
+    // console.log("흡연 구역 삭제:", response.data);
     return response.data;
   } catch (error) {
     console.error("DELETE 에러(report):", error);
@@ -303,7 +312,7 @@ export const getLikesCountAPI = async (placeId) => {
         Authorization: `Bearer ${token}`
       }
     });
-    console.log('좋아요 수:', response.data.likesCount);
+    // console.log('좋아요 수:', response.data.likesCount);
     return response.data.likesCount;  
   } catch (error) {
     console.error('GET 에러(shsmoking):', error);

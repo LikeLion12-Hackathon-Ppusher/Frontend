@@ -1,50 +1,24 @@
-import React, { useState } from "react";
-import { useNavigate, Outlet } from "react-router-dom";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import logOut from "../../apis/api";
+import { myPageBtns } from "../../data/myPageBtns";
+import { Container } from "../../styles/SharedContainer";
 import backgroundImage from '../../assets/mypage_background.png';
-import axios from "axios";
-import { getPlaceSmokingAPI, logOut } from "../../apis/api";
 
 const Mypage = () => {
   const navigate = useNavigate();
-  const [data, setData] = useState(null);
-  const [err, setErr] = useState(null);
-
   const accessToken = localStorage.getItem('access_token');
-
-  const handleAccount = () => {
-    navigate("/home/account")
-  };
-
-  const handleUserType = () => {
-    navigate("/home/type");
-  };
-
-  const handleNotify = () => {
-    navigate("/home/notify");
-  };
-
-  const handleReport = () => {
-    navigate("/home/report");
-  };
 
   const handleLogout = async () => {
     try {
       const response = await logOut(accessToken);
-      // const response = await axios.post('https://bbuhackathon.p-e.kr/oauth/logout/',
-      //   {},
-      //   {
-      //     headers: {
-      //       'Authorization': `Bearer ${accessToken}`
-      //     }
-      //   });
       if (response) {
-        const msg = response.data.message;
         alert('로그아웃 되었습니다.');
         localStorage.clear();
         navigate("/login");
       } else {
-        throw new Error('응답 메세지가 업습니다.');
+        throw new Error('응답 메세지가 없습니다.');
       }
     } catch (err) {
       alert('API 호출 실패. 로컬에서 로그아웃됩니다.');
@@ -52,20 +26,17 @@ const Mypage = () => {
     }
   };
 
-  const handlePlaceSmoking = async () => {
-    const response = await getPlaceSmokingAPI(accessToken);
-  };
+  const buttons = myPageBtns(handleLogout, navigate);
+
   return (
     <MyPageContainer>
       <MyPageHeader>마이페이지</MyPageHeader>
       <MyPageBtnContainer>
-        <Btn onClick={handleAccount}>카카오 계정 관리</Btn>
-        <Btn onClick={handleUserType}>사용자 유형 변경</Btn>
-        <Outlet />
-        <Btn onClick={handleNotify}>알림 설정</Btn>
-        <Btn onClick={handleReport}>내 제보 내역</Btn>
-        <Btn onClick={handleLogout}>로그아웃</Btn>
-        {/* <button onClick={handlePlaceSmoking}>흡연구역 안내</button> */}
+        {buttons.map((button, idx) => (
+          <MyPageBtn key={idx} onClick={button.onClick}>
+            {button.text}
+          </MyPageBtn>
+        ))}
       </MyPageBtnContainer>
     </MyPageContainer>
   );
@@ -73,28 +44,18 @@ const Mypage = () => {
 
 export default Mypage;
 
-const MyPageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
+const MyPageContainer = styled(Container)`
   background-image: url(${backgroundImage}); 
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   padding-bottom: 6rem;
-  z-index: 700;
-`;
+`
 
 const MyPageHeader = styled.div`
   align-self: flex-start; 
   text-align: left;
-  background: linear-gradient(to top, #FFF100 40%, transparent 40%);
+  margin-left: 5%;
   font-size: 1.6rem;
   font-weight: bold;
-  margin-left: 5%;
+  background: linear-gradient(to top, #FFF100 40%, transparent 40%);
 `;
 
 const MyPageBtnContainer = styled.div`
@@ -104,16 +65,16 @@ const MyPageBtnContainer = styled.div`
   width: 90%;
 `;
 
-const Btn = styled.button`
-  border: 2px solid #272A30;
-  padding: 1rem 0;
-  margin-top: 3vh;
-  font-size: 1rem;
+const MyPageBtn = styled.button`
   width: 100%;
+  margin-top: 3vh;
+  border: 2px solid #272A30;
   border-radius: 0.3rem;
+  padding: 1rem 0;
+  font-size: 1rem;
   font-weight: bold;
-  background-color: #272A30;
   color: #FFF100;
+  background-color: #272A30;
   transition: background-color 0.3s ease, transform 0.3s ease;
   box-shadow: 0.2rem 0.2rem 0.2rem;
 
@@ -121,10 +82,10 @@ const Btn = styled.button`
 
   &:hover,
   &:focus {
+    outline: none; 
     color: #272A30;
     background-color: #FFF100;
     transform: scale(1.005);
-    outline: none; 
   }
 
   &.active {

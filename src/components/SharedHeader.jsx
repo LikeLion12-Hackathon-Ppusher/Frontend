@@ -1,9 +1,10 @@
+// 마이페이지 내부에서 공용으로 사용되는 헤더 컴포넌트입니다.
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import backButtonImg from "../../assets/arrow-back.png";
+import backButtonImg from "../assets/arrow-back.png";
 
-const SetHeader = ({ headerText }) => {
+const SharedHeader = ({ headerText }) => {
   const navigate = useNavigate();
 
   return (
@@ -16,7 +17,7 @@ const SetHeader = ({ headerText }) => {
   );
 };
 
-export default SetHeader;
+export default SharedHeader;
 
 const Container = styled.div`
   display: flex;
@@ -27,12 +28,14 @@ const Container = styled.div`
 `;
 
 const BackButton = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
   position: absolute;
   top: 4%;
   left: 3%;
+  border: none;
+  background: none;
+
+  cursor: pointer;
+
   img {
     width: 1.5rem;
     height: 1.5rem;
@@ -40,10 +43,10 @@ const BackButton = styled.button`
 `;
 
 const TypeHeader = styled.h1`
-  font-size: 1.5rem;
-  color: #272A30;
   position: absolute;
   top: 8%;
   left: 5%;
+  font-size: 1.5rem;
+  color: #272A30;
   background: linear-gradient(to top, #FFF100 40%, transparent 40%);
 `;
