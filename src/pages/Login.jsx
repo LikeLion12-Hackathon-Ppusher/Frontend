@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { Container } from '../theme/SharedContainer';
 import LoginBtnImg from "../assets/kakao_login_medium_narrow.png";
 import InitialBckgrnd from "../assets/initial_background.png";
 import Logo from "../assets/logo.png";
@@ -39,17 +40,8 @@ const Login = () => {
 };
 export default Login;
 
-const LoginBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
+const LoginBox = styled(Container)`
   background-image: url(${InitialBckgrnd});
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
 `;
 
 const Box = styled.div`
