@@ -1,3 +1,4 @@
+// SetTypeCheck.jsx, SetTypeConfirm.jsx 의 중복 스타일을 관리합니다.
 import styled from 'styled-components';
 import dotsImg from '../assets/background_dots.png';
 

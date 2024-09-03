@@ -1,3 +1,4 @@
+// 마이페이지 내부에서 공용으로 사용되는 헤더 컴포넌트입니다.
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';

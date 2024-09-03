@@ -1,3 +1,4 @@
+// 모든 페이지에서 공통으로 사용되는 배경 컨테이너 스타일을 관리합니다.
 import styled from 'styled-components';
 
 export const Container = styled.div`

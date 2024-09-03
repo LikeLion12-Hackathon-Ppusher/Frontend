@@ -36,8 +36,7 @@ const Mypage = () => {
           <MyPageBtn key={idx} onClick={button.onClick}>
             {button.text}
           </MyPageBtn>
-        ))
-        }
+        ))}
       </MyPageBtnContainer>
     </MyPageContainer>
   );

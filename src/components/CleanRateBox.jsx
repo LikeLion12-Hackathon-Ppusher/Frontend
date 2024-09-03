@@ -1,3 +1,4 @@
+// SetReort.jsx 에서 청결도 박스에 해당하는 컴포넌트입니다.
 import React from 'react';
 import styled from 'styled-components';
 

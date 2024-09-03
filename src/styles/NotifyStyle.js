@@ -1,8 +1,9 @@
+// SetNotifyNonSmoker.jsx, SetNotifySmoker.jsx 의 스타일을 관리합니다.
+// without 'Shared' means use it directly
+// with 'Shared' means it has been customed
 import styled from 'styled-components';
 import dotsImg from '../assets/background_dots.png';
 
-// without 'Shared' means use it directly
-// with 'Shared' means it has been customed
 export const SelectContainer = styled.div`
   display: flex;
   flex-direction: column;

@@ -122,7 +122,6 @@ const SmokerBox = styled.div`
   img {
     width: 30%;
   }
-
 `;
 
 const NonSmokerBox = styled.div`
