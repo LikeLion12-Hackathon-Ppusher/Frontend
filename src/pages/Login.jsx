@@ -9,15 +9,11 @@ const Login = () => {
   const REST_API_KEY = process.env.REACT_APP_REST_API_KEY;
   const REDIRECT_URI_LOCAL = process.env.REACT_APP_REDIRECT_URL_LOCAL;
   const REDIRECT_URI_PRODUCTION = process.env.REACT_APP_REDIRECT_URL_PRODUCTION;
-  console.log(REDIRECT_URI_PRODUCTION);
   // 현재 URL이 localhost인 경우 로컬 리다이렉트 URI를 사용
   const REDIRECT_URI =
     window.location.hostname === "localhost"
       ? REDIRECT_URI_LOCAL
       : REDIRECT_URI_PRODUCTION;
-  console.log("REDIRECT_URI:", REDIRECT_URI);
-  console.log("REST_API_KEY:", REST_API_KEY);
-  console.log("REDIRECT_URI:", REDIRECT_URI);
   const link = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
   const loginHandler = () => {
     window.location.href = link;
