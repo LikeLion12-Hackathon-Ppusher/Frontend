@@ -12,16 +12,16 @@ import likeImg from '../../assets/like.png';
 const SetAccount = () => {
   const token = localStorage.getItem('access_token');
   const [noReports, setNoReports] = useState();
+  const [responses, setResponses] = useState([]);
   const [likes, setLikes] = useState();
   const [openReportId, setOpenReportId] = useState(null);
-  const [rports, setRports] = useState([]);
 
   useEffect(() => {
     setNoReports(false);
     getMyPageReportAPI()
       .then(res => {
         if (res.length > 0) {
-          setRports(res);
+          setResponses(res);
         } else {
           setNoReports(true);
         }
@@ -29,7 +29,8 @@ const SetAccount = () => {
       .catch(err => console.error('Error fetching reports:', err));
   }, []);
 
-  const reports = rports.map(item => ({
+  // 나의 제보 내역을 호출하고 필요한 항목을 매핑합니다.
+  const reports = responses.map(item => ({
     id: item.reportId,
     address: item.reportType === "SM" ? item.reportSmokingPlace.address : item.secondhandSmokingPlace.address,
     description: item.description,
@@ -39,7 +40,7 @@ const SetAccount = () => {
     placeId: item.reportType === "SM" ? item.reportSmokingPlace.placeId : item.secondhandSmokingPlace.placeId,
     reportType: item.reportType,
   }));
-  // console.log('응답:', reports);
+
   const handleToggle = (id) => {
     getReportDetailAPI(id);
     setOpenReportId(openReportId === id ? null : id);
@@ -49,7 +50,7 @@ const SetAccount = () => {
     await deletePlaceAPI(token, reportId)
       .then(() => {
         alert('제보가 삭제됩니다.');
-        fetchReports();  // reload reports after delete report
+        fetchReports();  // 리로드
       })
       .catch(err => {
         console.error('Error deleting report:', err);
@@ -60,36 +61,18 @@ const SetAccount = () => {
   const handleLike = async (placeId) => {
     const likeCount = await getLikesCountAPI(placeId);
     setLikes(likeCount);
-    // console.log("공감 수:", likes);
-    // console.log("placeId:", placeId);
   };
 
   const fetchReports = () => {
     getMyPageReportAPI()
       .then(res => {
         if (res.length > 0) {
-          setRports(res);
+          setResponses(res);
         } else {
           setNoReports(true);
         }
       })
       .catch(err => console.error('Error fetching reports:', err));
-  };
-
-  const StatusGroupComponent = ({ rate }) => {
-    const totalCircles = 5;
-    const filledCircles = parseInt(rate, 10); // rate를 숫자로 변환
-
-    return (
-      <StatusGroup>
-        <span>청결도 </span>
-        <div>
-          {Array.from({ length: totalCircles }, (_, index) => (
-            <StatusCircle key={index} filled={index < filledCircles} />
-          ))}
-        </div>
-      </StatusGroup>
-    );
   };
 
   return (
@@ -135,6 +118,22 @@ const SetAccount = () => {
 
 export default SetAccount;
 
+const StatusGroupComponent = ({ rate }) => {
+  const totalCircles = 5;
+  const filledCircles = parseInt(rate, 10); // rate를 숫자로 변환
+
+  return (
+    <StatusGroup>
+      <span>청결도 </span>
+      <div>
+        {Array.from({ length: totalCircles }, (_, index) => (
+          <StatusCircle key={index} filled={index < filledCircles} />
+        ))}
+      </div>
+    </StatusGroup>
+  );
+};
+
 const AccountContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -152,13 +151,12 @@ const AccountContainer = styled.div`
 
 const NoDataMessage = styled.div`
   display: flex;
-  margin-top: 45vh;
-  color: #D9D9D9;
-  font-size: 1.2rem; 
   text-align: center; 
+  margin-top: 45vh;
+  font-size: 1.2rem; 
   font-weight: bold;
+  color: #D9D9D9;
 `;
-
 
 const ReportContainer = styled.div`
   display: flex;
@@ -185,15 +183,15 @@ const ReportContainer = styled.div`
 `;
 
 const ReportItem = styled.div`
-  width: 100%;
-  background-color: ${({ isOpen }) => (isOpen ? '#FEFBBD' : '#272A30')}; 
-  border-radius: 0.5rem;
-  margin-bottom: 1rem;
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 100%;
+  margin-bottom: 1rem;
   border: 2px solid #272A30;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  background-color: ${({ isOpen }) => (isOpen ? '#FEFBBD' : '#272A30')}; 
   cursor: pointer;
 `;
 
@@ -208,11 +206,11 @@ const NewHeader = styled.div`
 
 const ReportHeader = styled.div`
   display: flex;
-  width: 100%;
   justify-content: space-between;
   align-items: center;
-  font-weight: bold;
+  width: 100%;
   margin: 1.5rem 0rem 1.5rem 1.5rem;
+  font-weight: bold;
   color: ${({ isOpen }) => (isOpen ? '#272A30' : '#EDEDED')};
 `;
 
@@ -246,11 +244,11 @@ const DelImg = styled.img`
 const ReportDetail = styled.div`
   max-height: ${({ isOpen }) => (isOpen ? '100vh' : '0')};
   margin: ${({ isOpen }) => (isOpen ? '0rem 1rem 1rem' : '0rem 1rem 0rem')};
+  border-radius: 0.5rem;
   padding: ${({ isOpen }) => (isOpen ? '1rem' : '0rem 1rem 0rem')};
   overflow: hidden;
   transition: 0.25s ease-in-out; 
   color: #272A30;
-  border-radius: 0.5rem;
   background-color: white;
 `;
 
@@ -268,7 +266,6 @@ const Status = styled.div`
 
   span {
     margin-right: 0.5rem;
-
   }
 
   div {
@@ -279,22 +276,22 @@ const Status = styled.div`
 
 const StatusGroup = styled.div`
   display: flex;
+  margin-right: 0.5rem;
   border: 1px solid #272A30;
   border-radius: 6px;
   padding: 0.2rem 0.4rem;
-  color: #FFFFFF;
-  background-color: #272A30;
-  margin-right: 0.5rem;
   font-size: 0.6rem;
   font-weight: bold;
+  color: #FFFFFF;
+  background-color: #272A30;
 `;
 
 const StatusCircle = styled.div`
   width: 0.5rem;
   height: 0.5rem;
   margin-right: 0.2rem;
-  border-radius: 50%;
   border: 0.1rem solid #FFFDE2;
+  border-radius: 50%;
   background-color: ${props => (props.filled ? '#FFFDE2' : '#272A30')};
 `;
 
@@ -308,12 +305,12 @@ const ActionButton = styled.button`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  border: 1.2px solid #272A30;
+  border-radius: 6px;
   padding: 0.2rem 0.8rem;
   font-weight: bold;
   font-size: 0.6rem;
   background-color: #FFFDE2;
-  border: 1.2px solid #272A30;
-  border-radius: 6px;
   cursor: pointer;
 
   &:hover {
@@ -326,37 +323,20 @@ const ActionButton = styled.button`
   }
 `;
 
-const DelBtn = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  align-items: center;
-  padding: 0.2rem 0.8rem;
-  font-weight: bold;
-  font-size: 0.6rem;
-  background-color: #FFFDE2;
-  border: 1.2px solid #272A30;
-  border-radius: 6px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #FFF100;
-  }
-
-`;
-
 const LikeButton = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  border: 1.2px solid #272A30;
+  border-radius: 6px;
   padding: 0.2rem 0.8rem;
   font-weight: bold;
   font-size: 0.6rem;
   background-color: #FFFDE2;
-  border: 1.2px solid #272A30;
-  border-radius: 6px;
+
   cursor: pointer;
+
   img {
     width: 1rem;
     margin-right: 0.2rem;

@@ -86,12 +86,12 @@ const UserInfo = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-bottom: 6rem;
-  background-color: #FFF100;  
   text-align: center;
   width: 90%;
   height: 45%;
+  margin-bottom: 6rem;
   border-radius: 1rem;
+  background-color: #FFF100;  
   box-shadow: 0.5rem 0.5rem 0.5rem #D9D9D9;
 `;
 
@@ -100,20 +100,20 @@ const DotsContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
+  width: 95%;
+  height: 95%;
   background-image: url(${dotsImg});  
   background-size: 50%;  
   background-repeat: no-repeat;  
   background-position: left top;  
-  text-align: center;
-  width: 95%;
-  height: 95%;
 `;
 
 const InfoBox = styled.div`
   display: flex;
-  width: 90%;
   justify-content: space-between;
   align-items: center;
+  width: 90%;
   margin-bottom: 1rem;
 `;
 
@@ -123,23 +123,23 @@ const Title = styled.div`
   justify-content: center;
   align-items: center;
   height: 60%;
+  line-height: 1rem;
   font-size: 1.2rem;
   font-weight: bold;
   color: #272A30;
   box-shadow: inset 0 -0.6rem 0 #E2D600;
-  line-height: 1rem;
 `;
 
 const Content = styled.div`
   display: flex;
-  padding: 0.6rem;
+  justify-content: center;
+  align-items: center;
   width: 50%;
   min-width: relative;
+  border-radius: 0.5rem;
+  padding: 0.6rem;
   font-size: 1rem;
+  font-weight: bold;
   color: #272A30;
   background-color: #FFFFFF;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.5rem;
-  font-weight: bold;
 `;

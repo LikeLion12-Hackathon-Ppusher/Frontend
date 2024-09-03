@@ -26,7 +26,7 @@ const Mypage = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await logOut(accessToken); // call logOut API with access token
+      const response = await logOut(accessToken); // call logOut API
       if (response) {
         const msg = response.data.message;
         alert('로그아웃 되었습니다.');
@@ -65,11 +65,11 @@ const MyPageContainer = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
-  padding-bottom: 6rem;
   background-image: url(${backgroundImage}); 
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  padding-bottom: 6rem;
   z-index: 700;
 `;
 
