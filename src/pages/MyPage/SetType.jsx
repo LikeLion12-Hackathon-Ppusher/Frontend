@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import SetHeader from "./SetHeader";
+import { Container } from "../../theme/SharedContainer";
 import smokerImg from "../../assets/smoker.png";
 import nonSmokerImg from "../../assets/nonSmoker.png";
 import detailBackgroundImage from '../../assets/mypage_detail_background.png';
@@ -63,24 +64,14 @@ const SetType = () => {
 
 export default SetType;
 
-const SelectContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  background-image: url(${detailBackgroundImage}); 
-  background-color: white;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  z-index: 700;
-
+const SelectContainer = styled(Container)`
+  background-image: url(${detailBackgroundImage});
+  background-color: #FFFFFF; 
+  
   h2 {
     background: linear-gradient(to top, #fff100 40%, transparent 40%);
   }
-`;
+`
 
 const SmokeSelect = styled.div`
   display: flex;

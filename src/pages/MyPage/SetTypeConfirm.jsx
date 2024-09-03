@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import SetHeader from './SetHeader';
+import { Container } from '../../theme/SharedContainer';
 import detailBackgroundImage from '../../assets/mypage_detail_background.png';
 import dotsImg from '../../assets/background_dots.png';
 
@@ -13,7 +14,7 @@ const SetTypeConfirm = () => {
   };
 
   return (
-    <Container>
+    <ConfirmContainer>
       <SetHeader headerText="사용자 유형 변경"></SetHeader>
       <Box>
         <DotsBox>
@@ -23,24 +24,14 @@ const SetTypeConfirm = () => {
           </ButtonContainer>
         </DotsBox>
       </Box>
-    </Container>
+    </ConfirmContainer>
   );
 };
 
 export default SetTypeConfirm;
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
+const ConfirmContainer = styled(Container)`
   background-image: url(${detailBackgroundImage}); 
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  z-index: 700;
 `;
 
 const Box = styled.div`

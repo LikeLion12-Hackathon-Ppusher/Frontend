@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import SetHeader from './SetHeader';
 import SetNotifySmoker from './SetNotifySmoker';
 import SetNotifyNonSmoker from './SetNotifyNonSmoker';
+import { Container } from '../../theme/SharedContainer';
 import detailBackgroundImage from '../../assets/mypage_detail_background.png';
 
 const SetNotify = () => {
@@ -14,27 +15,17 @@ const SetNotify = () => {
   }, []);
 
   return (
-    <AccountContainer>
+    <NotifyContainer>
       <SetHeader headerText="알림 설정"></SetHeader>
       {userType === 'SY' && <SetNotifySmoker />}
       {userType === 'SN' && <SetNotifyNonSmoker />}
-    </AccountContainer>
+    </NotifyContainer>
   );
 };
 
 export default SetNotify;
 
-const AccountContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
+const NotifyContainer = styled(Container)`
   background-image: url(${detailBackgroundImage}); 
-  background-color: white;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  z-index: 700;
-`;
+  background-color: #FFFFFF;
+`

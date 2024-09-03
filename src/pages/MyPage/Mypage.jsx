@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 import styled from "styled-components";
 import logOut from "../../apis/api";
+import { Container } from "../../theme/SharedContainer";
 import backgroundImage from '../../assets/mypage_background.png';
 
 const Mypage = () => {
@@ -58,20 +59,10 @@ const Mypage = () => {
 
 export default Mypage;
 
-const MyPageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
+const MyPageContainer = styled(Container)`
   background-image: url(${backgroundImage}); 
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  z-index: 700;
   padding-bottom: 6rem;
-`;
+`
 
 const MyPageHeader = styled.div`
   align-self: flex-start; 

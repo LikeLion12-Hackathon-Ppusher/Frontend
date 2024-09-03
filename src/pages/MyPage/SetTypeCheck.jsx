@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import SetHeader from "./SetHeader";
+import { Container, Container } from "../../theme/SharedContainer";
 import detailBackgroundImage from "../../assets/mypage_detail_background.png";
 import dotsImg from '../../assets/background_dots.png';
 
@@ -27,7 +28,7 @@ const SetTypeCheck = () => {
   };
 
   return (
-    <Container>
+    <TypeCheckContainer>
       <SetHeader headerText={"사용자 유형 변경"}></SetHeader>
       <Box>
         <DotsBox>
@@ -40,25 +41,15 @@ const SetTypeCheck = () => {
           </ButtonContainer>
         </DotsBox>
       </Box>
-    </Container>
+    </TypeCheckContainer>
   );
 };
 
 export default SetTypeCheck;
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
+const TypeCheckContainer = styled(Container)`
   background-image: url(${detailBackgroundImage});
-  background-color: #FFFFFF;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  z-index: 700;
+  background-color: #fbc1c1;
 `;
 
 const Box = styled.div`

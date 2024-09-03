@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import SetHeader from './SetHeader';
 import { getMyPageAPI } from '../../apis/api';
+import { Container } from '../../theme/SharedContainer';
 import detailBackgroundImage from '../../assets/mypage_detail_background.png';
 import dotsImg from '../../assets/background_dots.png';
 
@@ -66,20 +67,10 @@ const SetAccount = () => {
 
 export default SetAccount;
 
-const AccountContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  background-image: url(${detailBackgroundImage}); 
+const AccountContainer = styled(Container)`
   background-color: #FFFFFF;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  z-index: 700;
-`;
+  background-image: url(${detailBackgroundImage}); 
+`
 
 const UserInfo = styled.div`
   display: flex;
