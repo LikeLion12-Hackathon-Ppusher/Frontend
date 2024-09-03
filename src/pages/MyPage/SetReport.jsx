@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import SetHeader from './SetHeader';
+import CleanRateBox from './CleanRateBox';
 import { deletePlaceAPI, getLikesCountAPI, getMyPageReportAPI, getReportDetailAPI } from '../../apis/api';
 import bottomButtonImg from "../../assets/down.png";
 import upButtonImg from "../../assets/up.png";
@@ -101,7 +102,7 @@ const SetAccount = () => {
                 </ReportContent>
                 <DetailText>{report.description}</DetailText>
                 <Status>
-                  {report.rate && <StatusGroupComponent rate={report.rate} />}
+                  {report.rate && <CleanRateBox rate={report.rate} />}
                   <ButtonGroup>
                     {(report.reportType === "SM" && (report.isIndoor ? <ActionButton>실내</ActionButton> : <ActionButton>실외</ActionButton>))}
                     {(report.reportType === "SM" && (report.ashtray ? <ActionButton>재떨이 O</ActionButton> : <ActionButton>재떨이 X</ActionButton>))}
@@ -117,22 +118,6 @@ const SetAccount = () => {
 };
 
 export default SetAccount;
-
-const StatusGroupComponent = ({ rate }) => {
-  const totalCircles = 5;
-  const filledCircles = parseInt(rate, 10); // rate를 숫자로 변환
-
-  return (
-    <StatusGroup>
-      <span>청결도 </span>
-      <div>
-        {Array.from({ length: totalCircles }, (_, index) => (
-          <StatusCircle key={index} filled={index < filledCircles} />
-        ))}
-      </div>
-    </StatusGroup>
-  );
-};
 
 const AccountContainer = styled.div`
   display: flex;
@@ -272,27 +257,6 @@ const Status = styled.div`
     display: flex;
     align-items: center;
   }
-`;
-
-const StatusGroup = styled.div`
-  display: flex;
-  margin-right: 0.5rem;
-  border: 1px solid #272A30;
-  border-radius: 6px;
-  padding: 0.2rem 0.4rem;
-  font-size: 0.6rem;
-  font-weight: bold;
-  color: #FFFFFF;
-  background-color: #272A30;
-`;
-
-const StatusCircle = styled.div`
-  width: 0.5rem;
-  height: 0.5rem;
-  margin-right: 0.2rem;
-  border: 0.1rem solid #FFFDE2;
-  border-radius: 50%;
-  background-color: ${props => (props.filled ? '#FFFDE2' : '#272A30')};
 `;
 
 const ButtonGroup = styled.div`

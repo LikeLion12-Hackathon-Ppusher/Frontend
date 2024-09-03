@@ -69,8 +69,8 @@ const MyPageContainer = styled.div`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  padding-bottom: 6rem;
   z-index: 700;
+  padding-bottom: 6rem;
 `;
 
 const MyPageHeader = styled.div`
