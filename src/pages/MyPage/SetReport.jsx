@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import styled from 'styled-components';
 import SharedHeader from '../../components/SharedHeader';
 import CleanRateBox from '../../components/CleanRateBox';
@@ -30,8 +30,7 @@ const SetAccount = () => {
       .catch(err => console.error('Error fetching reports:', err));
   }, []);
 
-  // 나의 제보 내역을 호출하고 필요한 항목을 매핑합니다.
-  const reports = responses.map(item => ({
+  const reports = useMemo(() => responses.map(item => ({
     id: item.reportId,
     address: item.reportType === "SM" ? item.reportSmokingPlace.address : item.secondhandSmokingPlace.address,
     description: item.description,
@@ -40,14 +39,14 @@ const SetAccount = () => {
     ashtray: item.reportType === "SM" ? item.reportSmokingPlace.ashtray : null,
     placeId: item.reportType === "SM" ? item.reportSmokingPlace.placeId : item.secondhandSmokingPlace.placeId,
     reportType: item.reportType,
-  }));
+  })), [responses]);  // 'responses'가 변경될 때만 reports 재계산
 
   const handleToggle = (id) => {
     getReportDetailAPI(id);
     setOpenReportId(openReportId === id ? null : id);
   };
 
-  const handleDelete = async (reportId) => {
+  const handleDelete = useCallback(async (reportId) => {
     await deletePlaceAPI(token, reportId)
       .then(() => {
         alert('제보가 삭제됩니다.');
@@ -57,7 +56,7 @@ const SetAccount = () => {
         console.error('Error deleting report:', err);
         alert('제보 삭제에 실패했습니다.');
       });
-  };
+  }, [token]);
 
   const handleLike = async (placeId) => {
     const likeCount = await getLikesCountAPI(placeId);
